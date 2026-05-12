@@ -29,7 +29,6 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(74, 124, 89, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(74, 124, 89, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 124, 89, 0); } }
-        @keyframes leafSway { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(15deg); } }
 
         /* Navbar */
         .navbar { 
@@ -41,7 +40,7 @@
             position: sticky; top: 0; z-index: 1000; 
         }
         .logo { font-size: 26px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
-        .logo i { color: var(--primary-color); animation: leafSway 3s infinite ease-in-out; display: inline-block;}
+        .logo img { height: 45px; width: auto; display: inline-block; }
         .nav-links { display: flex; gap: 15px; }
         
         /* Buttons */
@@ -59,8 +58,8 @@
 
         /* Home Page - Hero */
         .hero-container {
-            /* استخدمنا صورة منتجات طبيعية من Unsplash */
-            background: linear-gradient(to left, rgba(45, 74, 34, 0.85), rgba(45, 74, 34, 0.6)), url('https://images.unsplash.com/photo-1611078443204-6380cb035978?q=80&w=1920&auto=format&fit=crop') center/cover;
+            /* إضافة الصورة المطلوبة كخلفية */
+            background: linear-gradient(to left, rgba(45, 74, 34, 0.85), rgba(45, 74, 34, 0.6)), url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimeSlUfda_Cz-UfGCCI3_G9OdbQ_9tswQovi8kvnwQqYpt0vZHn2EDae79J4Sr6Ody2i3BnPExcjjNZiMWt0aMylcvlLII7yZBD6usWrqgPvEARyzq9Sc8GGiPChqYwoSYk3DiPnKdZLAMPkWiANEIhXFo11NKmRZkCOGL3aYCGXhzhEN12FkxXcyvY88/s1280/1000016917.jpg') center/cover;
             background-attachment: fixed;
             min-height: 80vh;
             display: flex; align-items: center; justify-content: center;
@@ -154,7 +153,9 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
-            <i class="fa-solid fa-leaf"></i> Tirourda
+            <!-- إضافة اللوغو المطلوب -->
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtoRNcCVuxBldSgy979b6gMDD0hLMq8FFh7tthMpi6BVERuxMqU1jicjr6AiDIkOCVtjXDP85gWfO8pE1SDzbn4505WWn0aKYmwPjhL_hY14doK10IDMq0E8JtoH-ZMW9Z6c_KtzmLlJpuCjRKnFi5MFhR7Rhy5hG26t0GFXv4vTS9mxfMutYyp_oTUWc/s502/1000016916.png" alt="Tirourda Logo"> 
+            Tirourda
         </div>
         <div class="nav-links" id="navLinks">
             <button class="btn btn-outline" onclick="navigateTo('home')">الرئيسية</button>
@@ -436,7 +437,7 @@
         ];
 
         let products = JSON.parse(localStorage.getItem('tirourda_products')) || defaultProducts;
-        let users = JSON.parse(localStorage.getItem('tirourda_users')) || [];
+        let users = JSON.parse(localStorage.getItem('tirourda_users')) ||[];
         let withdrawals = JSON.parse(localStorage.getItem('tirourda_withdrawals')) ||[];
         let currentUser = JSON.parse(localStorage.getItem('tirourda_currentUser')) || null;
 
