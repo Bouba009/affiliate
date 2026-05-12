@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tirourda Affiliate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4ade80; /* أخضر فاتح */
+            --primary-dark: #22c55e;
+            --bg-color: #f8fafc;
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --border-radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        
+        /* Navbar */
+        .navbar { background: var(--white); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; gap: 20px; }
+        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 15px; }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-dark); }
+        .btn-outline:hover { background: var(--primary-color); color: white; }
+
+        /* Sections */
+        .section { display: none; padding: 40px 50px; min-height: 80vh; }
+        .section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Home Page */
+        .hero { text-align: center; padding: 80px 20px; background: linear-gradient(135deg, var(--white) 0%, #e2f7ea 100%); border-radius: var(--border-radius); margin-top: 20px; box-shadow: var(--shadow); }
+        .hero h1 { font-size: 48px; color: var(--primary-dark); margin-bottom: 20px; }
+        .hero p { font-size: 18px; color: var(--text-light); margin-bottom: 30px; max-width: 600px; margin-inline: auto; }
+
+        /* Forms */
+        .form-container { background: var(--white); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); max-width: 450px; margin: 40px auto; }
+        .form-container h2 { text-align: center; margin-bottom: 25px; color: var(--primary-dark); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; transition: 0.3s; }
+        .form-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2); }
+        
+        /* Dashboard Layout */
+        .dashboard-layout { display: grid; grid-template-columns: 250px 1fr; gap: 30px; }
+        .sidebar { background: var(--white); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow); height: fit-content; }
+        .sidebar-menu li { padding: 12px 15px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600; color: var(--text-light); display: flex; align-items: center; gap: 10px; }
+        .sidebar-menu li:hover, .sidebar-menu li.active { background: #e2f7ea; color: var(--primary-dark); }
+        
+        /* Dashboard Content */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--white); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow); text-align: center; border-bottom: 4px solid var(--primary-color); }
+        .stat-card i { font-size: 30px; color: var(--primary-color); margin-bottom: 10px; }
+        .stat-card h3 { font-size: 24px; margin-bottom: 5px; }
+        .stat-card p { color: var(--text-light); font-size: 14px; }
+
+        /* Products Grid */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .product-card { background: var(--white); border-radius: var(--border-radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid #e2e8f0; }
+        .product-card h3 { margin-bottom: 10px; color: var(--text-main); }
+        .commission-badge { background: #e2f7ea; color: var(--primary-dark); padding: 5px 10px; border-radius: 20px; font-size: 13px; font-weight: bold; display: inline-block; margin-bottom: 15px; }
+        .copy-link-box { display: flex; background: var(--bg-color); border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1; }
+        .copy-link-box input { flex: 1; border: none; padding: 10px; outline: none; background: transparent; font-size: 12px; }
+        .copy-link-box button { background: var(--primary-color); color: white; border: none; padding: 0 15px; cursor: pointer; }
+
+        /* Tables (Admin) */
+        .admin-table { width: 100%; border-collapse: collapse; background: var(--white); box-shadow: var(--shadow); border-radius: var(--border-radius); overflow: hidden; }
+        .admin-table th, .admin-table td { padding: 15px; text-align: right; border-bottom: 1px solid #e2e8f0; }
+        .admin-table th { background: var(--primary-color); color: white; }
+        
+        .dash-section { display: none; }
+        .dash-section.active { display: block; animation: fadeIn 0.3s; }
+
+        .withdraw-box { background: var(--white); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-top: 20px; text-align: center; }
+        .withdraw-box input { width: 70%; padding: 12px; margin: 15px 0; border: 2px dashed var(--primary-color); border-radius: 8px; outline: none; text-align: center; font-size: 18px; letter-spacing: 2px;}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-layout { grid-template-columns: 1fr; }
+            .navbar { flex-direction: column; gap: 15px; padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-leaf"></i> Tirourda Affiliate
+        </div>
+        <div class="nav-links" id="navLinks">
+            <button class="btn btn-outline" onclick="navigateTo('home')">الرئيسية</button>
+            <button class="btn btn-outline" onclick="navigateTo('login')">تسجيل الدخول</button>
+            <button class="btn btn-primary" onclick="navigateTo('register')">حساب جديد</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Page -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <h1>مرحباً بك في Tirourda Affiliate</h1>
+                <p>المنصة الاحترافية الأولى للتسويق بالعمولة. سوّق لمنتجاتنا واحصل على أرباح ممتازة مقابل كل مبيعة تتم عن طريق رابطك الخاص.</p>
+                <button class="btn btn-primary" style="font-size: 18px; padding: 15px 30px;" onclick="navigateTo('register')">ابدأ رحلة الأرباح الآن</button>
+            </div>
+        </section>
+
+        <!-- Login Page -->
+        <section id="login" class="section">
+            <div class="form-container">
+                <h2>تسجيل الدخول</h2>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">دخول</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Register Page -->
+        <section id="register" class="section">
+            <div class="form-container">
+                <h2>إنشاء حساب جديد</h2>
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <input type="text" id="regName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="tel" id="regPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="regPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">تسجيل</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- User Dashboard -->
+        <section id="user-dashboard" class="section">
+            <div class="dashboard-layout">
+                <div class="sidebar">
+                    <h3 style="margin-bottom: 20px; color: var(--primary-dark);" id="userNameDisplay">مرحباً</h3>
+                    <ul class="sidebar-menu">
+                        <li class="active" onclick="switchUserTab('u-stats')"><i class="fa-solid fa-chart-pie"></i> الإحصائيات</li>
+                        <li onclick="switchUserTab('u-products')"><i class="fa-solid fa-box-open"></i> المنتجات (الروابط)</li>
+                        <li onclick="switchUserTab('u-withdraw')"><i class="fa-solid fa-money-bill-transfer"></i> سحب الأرباح</li>
+                        <li style="color: #ef4444;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج</li>
+                    </ul>
+                </div>
+                <div class="dashboard-content">
+                    
+                    <!-- User Stats Tab -->
+                    <div id="u-stats" class="dash-section active">
+                        <h2>لوحة التحكم</h2>
+                        <br>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <i class="fa-solid fa-eye"></i>
+                                <h3 id="statDaily">0</h3>
+                                <p>الزيارات اليومية</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fa-solid fa-calendar-days"></i>
+                                <h3 id="statMonthly">0</h3>
+                                <p>الزيارات الشهرية</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <h3 id="statOrders">0</h3>
+                                <p>طلبات جديدة</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fa-solid fa-wallet"></i>
+                                <h3 id="statEarnings">0.00 دج</h3>
+                                <p>الأرباح المتاحة</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Products Tab -->
+                    <div id="u-products" class="dash-section">
+                        <h2>المنتجات المتاحة للتسويق</h2>
+                        <br>
+                        <div class="products-grid" id="userProductsList">
+                            <!-- Products generated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- User Withdraw Tab -->
+                    <div id="u-withdraw" class="dash-section">
+                        <h2>سحب الأرباح</h2>
+                        <div class="withdraw-box">
+                            <i class="fa-solid fa-building-columns" style="font-size: 50px; color: var(--primary-color); margin-bottom: 15px;"></i>
+                            <h3>أدخل بيانات الدفع (RIP / CCP)</h3>
+                            <p style="color: var(--text-light); margin-top: 10px;">سيتم تحويل أرباحك مباشرة إلى حسابك البريدي</p>
+                            <input type="text" id="withdrawRip" placeholder="مثال: 00799999000012345678" maxlength="20">
+                            <br>
+                            <button class="btn btn-primary" onclick="requestWithdrawal()">طلب السحب الآن</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Admin Login Page -->
+        <section id="admin-login" class="section">
+            <div class="form-container" style="border-top: 5px solid #ef4444;">
+                <h2 style="color: #ef4444;">تسجيل دخول الإدارة (Admin)</h2>
+                <form onsubmit="handleAdminLogin(event)">
+                    <div class="form-group">
+                        <label>كلمة مرور الأدمن</label>
+                        <input type="password" id="adminPassword" placeholder="abobob123#" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; background: #ef4444;">دخول للوحة التحكم</button>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- Admin Dashboard -->
+        <section id="admin-dashboard" class="section">
+            <div class="dashboard-layout">
+                <div class="sidebar" style="border-right: 4px solid #ef4444;">
+                    <h3 style="margin-bottom: 20px; color: #ef4444;">Tirourda Admin</h3>
+                    <ul class="sidebar-menu" id="adminMenu">
+                        <li class="active" onclick="switchAdminTab('a-users')"><i class="fa-solid fa-users"></i> المستخدمين</li>
+                        <li onclick="switchAdminTab('a-withdrawals')"><i class="fa-solid fa-money-check-dollar"></i> طلبات السحب</li>
+                        <li onclick="switchAdminTab('a-products')"><i class="fa-solid fa-box"></i> إدارة المنتجات</li>
+                        <li onclick="switchAdminTab('a-settings')"><i class="fa-solid fa-gears"></i> إعدادات الموقع</li>
+                        <li style="color: #ef4444;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج</li>
+                    </ul>
+                </div>
+                <div class="dashboard-content">
+                    
+                    <!-- Admin Users Tab -->
+                    <div id="a-users" class="dash-section active">
+                        <h2>قائمة المسوقين</h2><br>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>الإيميل</th>
+                                    <th>رقم الهاتف</th>
+                                    <th>الأرباح</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersTable"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Admin Withdrawals Tab -->
+                    <div id="a-withdrawals" class="dash-section">
+                        <h2>طلبات السحب</h2><br>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>المسوق</th>
+                                    <th>رقم RIP/CCP</th>
+                                    <th>المبلغ المطلوب</th>
+                                    <th>الإجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminWithdrawTable"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Admin Products Tab -->
+                    <div id="a-products" class="dash-section">
+                        <h2>إضافة منتج جديد</h2>
+                        <div class="form-container" style="margin: 20px 0; max-width: 100%;">
+                            <div style="display: flex; gap: 15px;">
+                                <input type="text" id="newProdName" placeholder="اسم المنتج" class="form-group input" style="flex:1; padding: 10px;">
+                                <input type="text" id="newProdComm" placeholder="نسبة الربح (مثال: 500 دج)" class="form-group input" style="flex:1; padding: 10px;">
+                                <button class="btn btn-primary" onclick="addProduct()">إضافة</button>
+                            </div>
+                        </div>
+                        <h2>المنتجات الحالية</h2><br>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>اسم المنتج</th>
+                                    <th>العمولة</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminProductsTable"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Admin Settings Tab -->
+                    <div id="a-settings" class="dash-section">
+                        <h2>إعدادات وأدوات الموقع</h2><br>
+                        <div class="products-grid">
+                            <div class="product-card">
+                                <h3>تعديل نصوص الموقع</h3>
+                                <p style="font-size: 14px; color: gray; margin-bottom: 10px;">تغيير رسالة الترحيب والشروط</p>
+                                <button class="btn btn-outline" style="width: 100%;">تعديل</button>
+                            </div>
+                            <div class="product-card">
+                                <h3>ربط مع موقع آخر (API)</h3>
+                                <p style="font-size: 14px; color: gray; margin-bottom: 10px;">إدخال مفاتيح الربط مع منصات المبيعات</p>
+                                <button class="btn btn-outline" style="width: 100%;">إدارة الربط</button>
+                            </div>
+                            <div class="product-card">
+                                <h3>أدوات الإدمن الإضافية</h3>
+                                <p style="font-size: 14px; color: gray; margin-bottom: 10px;">تحميل التقارير، إرسال إيميلات جماعية</p>
+                                <button class="btn btn-outline" style="width: 100%;">فتح الأدوات</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- داتا وهمية ومخزن البيانات (Local Storage Simulation) ---
+        
+        let products = JSON.parse(localStorage.getItem('tirourda_products')) ||[
+            { id: 1, name: "ساعة ذكية عصرية", commission: "800 دج" },
+            { id: 2, name: "حقيبة ظهر للسفر", commission: "600 دج" },
+            { id: 3, name: "سماعات بلوتوث لاسلكية", commission: "500 دج" }
+        ];
+
+        let users = JSON.parse(localStorage.getItem('tirourda_users')) ||[];
+        let withdrawals = JSON.parse(localStorage.getItem('tirourda_withdrawals')) ||[];
+        
+        let currentUser = JSON.parse(localStorage.getItem('tirourda_currentUser')) || null;
+
+        // حفظ الداتا
+        function saveData() {
+            localStorage.setItem('tirourda_products', JSON.stringify(products));
+            localStorage.setItem('tirourda_users', JSON.stringify(users));
+            localStorage.setItem('tirourda_withdrawals', JSON.stringify(withdrawals));
+        }
+
+        // --- نظام التوجيه (Routing) ---
+        function navigateTo(sectionId) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            updateNavbar();
+        }
+
+        function updateNavbar() {
+            const navLinks = document.getElementById('navLinks');
+            if (currentUser) {
+                navLinks.innerHTML = `
+                    <button class="btn btn-primary" onclick="navigateTo('user-dashboard')">لوحة التحكم</button>
+                    <button class="btn btn-outline" onclick="logout()">خروج</button>
+                `;
+            } else {
+                navLinks.innerHTML = `
+                    <button class="btn btn-outline" onclick="navigateTo('home')">الرئيسية</button>
+                    <button class="btn btn-outline" onclick="navigateTo('login')">تسجيل الدخول</button>
+                    <button class="btn btn-primary" onclick="navigateTo('register')">حساب جديد</button>
+                `;
+            }
+        }
+
+        // --- التحقق من مسار الإدمن (#admin09) ---
+        function checkAdminURL() {
+            if (window.location.hash === '#admin09') {
+                navigateTo('admin-login');
+                document.getElementById('navLinks').style.display = 'none'; // إخفاء النافبار للإدمن
+            }
+        }
+        window.addEventListener('hashchange', checkAdminURL);
+
+        // --- وظائف المستخدم (Auth) ---
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const password = document.getElementById('regPassword').value;
+
+            if(users.find(u => u.email === email)){
+                alert("هذا البريد مسجل مسبقاً!");
+                return;
+            }
+
+            const newUser = {
+                id: 'u_' + Date.now(),
+                name, email, phone, password,
+                earnings: Math.floor(Math.random() * 5000), // أرباح وهمية للتجربة
+                visitsDaily: Math.floor(Math.random() * 100),
+                visitsMonthly: Math.floor(Math.random() * 1000),
+                orders: Math.floor(Math.random() * 10)
+            };
+
+            users.push(newUser);
+            saveData();
+            alert("تم التسجيل بنجاح!");
+            navigateTo('login');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.email === email && u.password === password);
+            if(user) {
+                currentUser = user;
+                localStorage.setItem('tirourda_currentUser', JSON.stringify(currentUser));
+                initUserDashboard();
+                navigateTo('user-dashboard');
+            } else {
+                alert("بيانات الدخول خاطئة!");
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('tirourda_currentUser');
+            window.location.hash = ''; // إزالة هاش الإدمن إن وجد
+            document.getElementById('navLinks').style.display = 'flex';
+            navigateTo('home');
+        }
+
+        // --- لوحة تحكم المستخدم ---
+        function initUserDashboard() {
+            if(!currentUser) return;
+            document.getElementById('userNameDisplay').innerText = `مرحباً، ${currentUser.name}`;
+            document.getElementById('statDaily').innerText = currentUser.visitsDaily;
+            document.getElementById('statMonthly').innerText = currentUser.visitsMonthly;
+            document.getElementById('statOrders').innerText = currentUser.orders;
+            document.getElementById('statEarnings').innerText = `${currentUser.earnings} دج`;
+
+            renderUserProducts();
+        }
+
+        function renderUserProducts() {
+            const container = document.getElementById('userProductsList');
+            container.innerHTML = '';
+            products.forEach(p => {
+                const affiliateLink = `https://tirourda.com/p/${p.id}?ref=${currentUser.id}`;
+                container.innerHTML += `
+                    <div class="product-card">
+                        <h3>${p.name}</h3>
+                        <div class="commission-badge">ربحك: ${p.commission}</div>
+                        <p style="font-size: 14px; margin-bottom: 5px;">رابط التسويق الخاص بك:</p>
+                        <div class="copy-link-box">
+                            <input type="text" value="${affiliateLink}" readonly id="link_${p.id}">
+                            <button onclick="copyLink('link_${p.id}')"><i class="fa-regular fa-copy"></i> نسخ</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function copyLink(inputId) {
+            const input = document.getElementById(inputId);
+            input.select();
+            document.execCommand("copy");
+            alert("تم نسخ الرابط بنجاح!");
+        }
+
+        function switchUserTab(tabId) {
+            document.querySelectorAll('#user-dashboard .dash-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            // تغيير ستايل القائمة الجانبية
+            const lis = document.querySelectorAll('#user-dashboard .sidebar-menu li');
+            lis.forEach(li => li.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function requestWithdrawal() {
+            const rip = document.getElementById('withdrawRip').value;
+            if(rip.length < 10) {
+                alert("يرجى إدخال رقم RIP / CCP صحيح");
+                return;
+            }
+            if(currentUser.earnings <= 0) {
+                alert("رصيدك غير كافٍ للسحب.");
+                return;
+            }
+
+            withdrawals.push({
+                userId: currentUser.id,
+                userName: currentUser.name,
+                rip: rip,
+                amount: currentUser.earnings,
+                status: 'قيد المعالجة'
+            });
+
+            currentUser.earnings = 0; // تصفير الرصيد بعد السحب
+            
+            // تحديث المستخدم في المصفوفة الرئيسية
+            const index = users.findIndex(u => u.id === currentUser.id);
+            if(index !== -1) users[index] = currentUser;
+
+            saveData();
+            localStorage.setItem('tirourda_currentUser', JSON.stringify(currentUser));
+            
+            alert("تم إرسال طلب السحب بنجاح!");
+            initUserDashboard();
+            document.getElementById('withdrawRip').value = '';
+        }
+
+        // --- وظائف الإدمن ---
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('adminPassword').value;
+            if(pass === 'abobob123#') {
+                initAdminDashboard();
+                navigateTo('admin-dashboard');
+            } else {
+                alert("كلمة المرور خاطئة!");
+            }
+        }
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('#admin-dashboard .dash-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            const lis = document.querySelectorAll('#admin-dashboard .sidebar-menu li');
+            lis.forEach(li => li.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function initAdminDashboard() {
+            // رندر المستخدمين
+            const usersTbody = document.getElementById('adminUsersTable');
+            usersTbody.innerHTML = '';
+            users.forEach(u => {
+                usersTbody.innerHTML += `
+                    <tr>
+                        <td>${u.name}</td>
+                        <td>${u.email}</td>
+                        <td>${u.phone}</td>
+                        <td><strong style="color:var(--primary-dark)">${u.earnings} دج</strong></td>
+                    </tr>
+                `;
+            });
+
+            // رندر طلبات السحب
+            const withdrawTbody = document.getElementById('adminWithdrawTable');
+            withdrawTbody.innerHTML = '';
+            withdrawals.forEach((w, index) => {
+                withdrawTbody.innerHTML += `
+                    <tr>
+                        <td>${w.userName}</td>
+                        <td>${w.rip}</td>
+                        <td>${w.amount} دج</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 5px 10px; font-size:12px;" onclick="acceptWithdrawal(${index})">تم الدفع</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            renderAdminProducts();
+        }
+
+        function renderAdminProducts() {
+            const prodTbody = document.getElementById('adminProductsTable');
+            prodTbody.innerHTML = '';
+            products.forEach((p, index) => {
+                prodTbody.innerHTML += `
+                    <tr>
+                        <td>${p.name}</td>
+                        <td>${p.commission}</td>
+                        <td>
+                            <button class="btn btn-outline" style="color: #ef4444; border-color:#ef4444; padding: 5px 10px; font-size:12px;" onclick="deleteProduct(${index})">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function addProduct() {
+            const name = document.getElementById('newProdName').value;
+            const comm = document.getElementById('newProdComm').value;
+            if(!name || !comm) { alert("أدخل بيانات المنتج"); return; }
+            
+            products.push({ id: Date.now(), name, commission: comm });
+            saveData();
+            renderAdminProducts();
+            document.getElementById('newProdName').value = '';
+            document.getElementById('newProdComm').value = '';
+        }
+
+        function deleteProduct(index) {
+            if(confirm("هل أنت متأكد من حذف المنتج؟")) {
+                products.splice(index, 1);
+                saveData();
+                renderAdminProducts();
+            }
+        }
+
+        function acceptWithdrawal(index) {
+            withdrawals.splice(index, 1);
+            saveData();
+            initAdminDashboard();
+            alert("تم التأشير على الطلب كمدفوع وإزالته من القائمة.");
+        }
+
+        // --- تهيئة أولية عند فتح الصفحة ---
+        window.onload = () => {
+            checkAdminURL();
+            if(currentUser && window.location.hash !== '#admin09') {
+                initUserDashboard();
+                navigateTo('user-dashboard');
+            } else if (window.location.hash !== '#admin09'){
+                updateNavbar();
+            }
+        };
+
+    </script>
+</body>
+</html>
