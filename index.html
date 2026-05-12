@@ -3,91 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tirourda Affiliate</title>
+    <title>Tirourda Affiliate | منتجات طبيعية</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #4ade80; /* أخضر فاتح */
-            --primary-dark: #22c55e;
-            --bg-color: #f8fafc;
+            --primary-dark: #2d4a22; /* أخضر زيتوني داكن */
+            --primary-color: #4a7c59; /* أخضر طبيعي */
+            --accent-color: #d4af37; /* ذهبي/عسلي */
+            --bg-light: #f4f7f6;
             --white: #ffffff;
-            --text-main: #1e293b;
-            --text-light: #64748b;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --border-radius: 12px;
+            --text-main: #1f292e;
+            --text-light: #5a7364;
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --border-radius: 16px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); }
+        body { background-color: var(--bg-light); color: var(--text-main); overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
-        
+
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(74, 124, 89, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(74, 124, 89, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 124, 89, 0); } }
+        @keyframes leafSway { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(15deg); } }
+
         /* Navbar */
-        .navbar { background: var(--white); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 24px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
-        .nav-links { display: flex; gap: 20px; }
-        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 15px; }
+        .navbar { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            padding: 15px 50px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            position: sticky; top: 0; z-index: 1000; 
+        }
+        .logo { font-size: 26px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
+        .logo i { color: var(--primary-color); animation: leafSway 3s infinite ease-in-out; display: inline-block;}
+        .nav-links { display: flex; gap: 15px; }
+        
+        /* Buttons */
+        .btn { padding: 12px 25px; border-radius: 30px; border: none; cursor: pointer; font-weight: 700; transition: var(--transition); font-size: 16px; display: inline-flex; align-items: center; gap: 8px; justify-content: center;}
         .btn-primary { background: var(--primary-color); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-outline { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-dark); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(45, 74, 34, 0.3); }
+        .btn-accent { background: var(--accent-color); color: white; animation: pulse 2s infinite; }
+        .btn-accent:hover { background: #b8972e; transform: scale(1.05); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
         .btn-outline:hover { background: var(--primary-color); color: white; }
 
         /* Sections */
-        .section { display: none; padding: 40px 50px; min-height: 80vh; }
-        .section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .section { display: none; min-height: 85vh; animation: fadeInUp 0.5s ease-out forwards; }
+        .section.active { display: block; }
 
-        /* Home Page */
-        .hero { text-align: center; padding: 80px 20px; background: linear-gradient(135deg, var(--white) 0%, #e2f7ea 100%); border-radius: var(--border-radius); margin-top: 20px; box-shadow: var(--shadow); }
-        .hero h1 { font-size: 48px; color: var(--primary-dark); margin-bottom: 20px; }
-        .hero p { font-size: 18px; color: var(--text-light); margin-bottom: 30px; max-width: 600px; margin-inline: auto; }
+        /* Home Page - Hero */
+        .hero-container {
+            /* استخدمنا صورة منتجات طبيعية من Unsplash */
+            background: linear-gradient(to left, rgba(45, 74, 34, 0.85), rgba(45, 74, 34, 0.6)), url('https://images.unsplash.com/photo-1611078443204-6380cb035978?q=80&w=1920&auto=format&fit=crop') center/cover;
+            background-attachment: fixed;
+            min-height: 80vh;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: white; padding: 40px 20px;
+        }
+        .hero-content { max-width: 800px; animation: float 6s ease-in-out infinite; }
+        .hero-content h1 { font-size: 55px; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); font-weight: 800;}
+        .hero-content p { font-size: 22px; margin-bottom: 40px; color: #eef2ef; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        
+        /* How Affiliate Works Section */
+        .how-it-works { padding: 60px 20px; background: white; text-align: center; }
+        .how-it-works h2 { color: var(--primary-dark); font-size: 36px; margin-bottom: 40px; }
+        .steps-container { display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
+        .step-box { background: var(--bg-light); padding: 30px; border-radius: var(--border-radius); width: 220px; transition: var(--transition); position: relative; border: 2px solid transparent;}
+        .step-box:hover { transform: translateY(-10px); border-color: var(--primary-color); box-shadow: var(--shadow); background: white;}
+        .step-icon { width: 80px; height: 80px; background: #e8f0eb; color: var(--primary-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; margin: 0 auto 15px; transition: var(--transition);}
+        .step-box:hover .step-icon { background: var(--primary-color); color: white; transform: rotate(10deg);}
+        .step-arrow { font-size: 30px; color: var(--text-light); }
 
         /* Forms */
-        .form-container { background: var(--white); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); max-width: 450px; margin: 40px auto; }
+        .form-wrapper { padding: 50px 20px; display: flex; justify-content: center; align-items: center; }
+        .form-container { background: var(--white); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); width: 100%; max-width: 450px; position: relative; overflow: hidden;}
+        .form-container::before { content: ''; position: absolute; top: 0; right: 0; width: 100%; height: 6px; background: var(--primary-color); }
         .form-container h2 { text-align: center; margin-bottom: 25px; color: var(--primary-dark); }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; transition: 0.3s; }
-        .form-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2); }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark);}
+        .form-group input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; outline: none; transition: var(--transition); background: #f8fafc;}
+        .form-group input:focus { border-color: var(--primary-color); background: white; box-shadow: 0 0 0 4px rgba(74, 124, 89, 0.1); }
         
         /* Dashboard Layout */
-        .dashboard-layout { display: grid; grid-template-columns: 250px 1fr; gap: 30px; }
-        .sidebar { background: var(--white); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow); height: fit-content; }
-        .sidebar-menu li { padding: 12px 15px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600; color: var(--text-light); display: flex; align-items: center; gap: 10px; }
-        .sidebar-menu li:hover, .sidebar-menu li.active { background: #e2f7ea; color: var(--primary-dark); }
+        .dashboard-container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+        .dashboard-layout { display: grid; grid-template-columns: 280px 1fr; gap: 30px; }
+        .sidebar { background: var(--white); padding: 30px 20px; border-radius: var(--border-radius); box-shadow: var(--shadow); height: fit-content; position: sticky; top: 100px;}
+        .sidebar-menu li { padding: 15px; margin-bottom: 10px; border-radius: 10px; cursor: pointer; transition: var(--transition); font-weight: 600; color: var(--text-light); display: flex; align-items: center; gap: 12px; }
+        .sidebar-menu li i { font-size: 20px; width: 25px; text-align: center;}
+        .sidebar-menu li:hover, .sidebar-menu li.active { background: var(--primary-color); color: white; transform: translateX(-5px); box-shadow: 0 4px 10px rgba(74, 124, 89, 0.2);}
         
         /* Dashboard Content */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--white); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow); text-align: center; border-bottom: 4px solid var(--primary-color); }
-        .stat-card i { font-size: 30px; color: var(--primary-color); margin-bottom: 10px; }
-        .stat-card h3 { font-size: 24px; margin-bottom: 5px; }
-        .stat-card p { color: var(--text-light); font-size: 14px; }
+        .dash-section { display: none; animation: fadeInUp 0.4s ease; }
+        .dash-section.active { display: block; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--white); padding: 25px; border-radius: var(--border-radius); box-shadow: var(--shadow); text-align: center; position: relative; overflow: hidden; transition: var(--transition); border: 1px solid #eef2ef;}
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 100%; height: 4px; background: var(--primary-color); }
+        .stat-card.gold::after { background: var(--accent-color); }
+        .stat-card i { font-size: 35px; color: var(--primary-color); margin-bottom: 15px; }
+        .stat-card.gold i { color: var(--accent-color); }
+        .stat-card h3 { font-size: 28px; margin-bottom: 5px; color: var(--primary-dark);}
+        .stat-card p { color: var(--text-light); font-size: 15px; font-weight: 500;}
 
         /* Products Grid */
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .product-card { background: var(--white); border-radius: var(--border-radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid #e2e8f0; }
-        .product-card h3 { margin-bottom: 10px; color: var(--text-main); }
-        .commission-badge { background: #e2f7ea; color: var(--primary-dark); padding: 5px 10px; border-radius: 20px; font-size: 13px; font-weight: bold; display: inline-block; margin-bottom: 15px; }
-        .copy-link-box { display: flex; background: var(--bg-color); border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1; }
-        .copy-link-box input { flex: 1; border: none; padding: 10px; outline: none; background: transparent; font-size: 12px; }
-        .copy-link-box button { background: var(--primary-color); color: white; border: none; padding: 0 15px; cursor: pointer; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .product-card { background: var(--white); border-radius: var(--border-radius); padding: 25px; box-shadow: var(--shadow); border: 1px solid #eef2ef; transition: var(--transition); text-align: center;}
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--primary-color);}
+        .product-icon { font-size: 50px; color: var(--primary-color); margin-bottom: 15px;}
+        .product-card h3 { margin-bottom: 10px; color: var(--primary-dark); font-size: 22px;}
+        .commission-badge { background: #fcf4d9; color: #9c7b16; padding: 8px 15px; border-radius: 30px; font-size: 15px; font-weight: 800; display: inline-block; margin-bottom: 20px; border: 1px dashed #d4af37;}
+        .copy-link-box { display: flex; background: var(--bg-light); border-radius: 10px; overflow: hidden; border: 1px solid #d1d5db; }
+        .copy-link-box input { flex: 1; border: none; padding: 12px; outline: none; background: transparent; font-size: 13px; color: var(--text-light);}
+        .copy-link-box button { background: var(--primary-color); color: white; border: none; padding: 0 20px; cursor: pointer; transition: var(--transition); font-weight: bold;}
+        .copy-link-box button:hover { background: var(--primary-dark); }
+
+        /* Withdraw Box */
+        .withdraw-box { background: var(--white); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); text-align: center; max-width: 600px; margin: 0 auto; border: 2px dashed var(--primary-color);}
+        .withdraw-box input { width: 80%; padding: 15px; margin: 20px 0; border: 2px solid #e2e8f0; border-radius: 10px; outline: none; text-align: center; font-size: 20px; letter-spacing: 3px; font-weight: bold; color: var(--primary-dark);}
+        .withdraw-box input:focus { border-color: var(--accent-color); }
 
         /* Tables (Admin) */
-        .admin-table { width: 100%; border-collapse: collapse; background: var(--white); box-shadow: var(--shadow); border-radius: var(--border-radius); overflow: hidden; }
-        .admin-table th, .admin-table td { padding: 15px; text-align: right; border-bottom: 1px solid #e2e8f0; }
-        .admin-table th { background: var(--primary-color); color: white; }
-        
-        .dash-section { display: none; }
-        .dash-section.active { display: block; animation: fadeIn 0.3s; }
-
-        .withdraw-box { background: var(--white); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-top: 20px; text-align: center; }
-        .withdraw-box input { width: 70%; padding: 12px; margin: 15px 0; border: 2px dashed var(--primary-color); border-radius: 8px; outline: none; text-align: center; font-size: 18px; letter-spacing: 2px;}
+        .table-container { overflow-x: auto; background: white; border-radius: var(--border-radius); box-shadow: var(--shadow); padding: 20px;}
+        .admin-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .admin-table th, .admin-table td { padding: 18px 15px; text-align: right; border-bottom: 1px solid #f1f5f9; }
+        .admin-table th { background: var(--bg-light); color: var(--primary-dark); font-weight: 800; }
+        .admin-table tr:hover { background-color: #f8fafc; }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .dashboard-layout { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+            .step-arrow { transform: rotate(90deg); margin: 10px 0; }
+        }
+        @media (max-width: 600px) {
             .navbar { flex-direction: column; gap: 15px; padding: 15px; }
+            .hero-content h1 { font-size: 35px; }
+            .steps-container { flex-direction: column; }
         }
     </style>
 </head>
@@ -96,7 +154,7 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
-            <i class="fa-solid fa-leaf"></i> Tirourda Affiliate
+            <i class="fa-solid fa-leaf"></i> Tirourda
         </div>
         <div class="nav-links" id="navLinks">
             <button class="btn btn-outline" onclick="navigateTo('home')">الرئيسية</button>
@@ -105,237 +163,263 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main>
         <!-- Home Page -->
         <section id="home" class="section active">
-            <div class="hero">
-                <h1>مرحباً بك في Tirourda Affiliate</h1>
-                <p>المنصة الاحترافية الأولى للتسويق بالعمولة. سوّق لمنتجاتنا واحصل على أرباح ممتازة مقابل كل مبيعة تتم عن طريق رابطك الخاص.</p>
-                <button class="btn btn-primary" style="font-size: 18px; padding: 15px 30px;" onclick="navigateTo('register')">ابدأ رحلة الأرباح الآن</button>
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1>منتجات طبيعية... لحياة صحية أفضل</h1>
+                    <p>انضم إلى برنامج الأفيليت الخاص بنا، شارك روابط منتجاتنا الموثوقة (زيت زيتون، عسل، أعشاب) واربح عمولات مجزية بسهولة تامة.</p>
+                    <button class="btn btn-accent" style="font-size: 18px; padding: 15px 40px;" onclick="navigateTo('register')">
+                        <i class="fa-solid fa-seedling"></i> انضم الآن وابدأ الربح
+                    </button>
+                </div>
+            </div>
+
+            <div class="how-it-works">
+                <h2>AFFILIATE SYSTEM <br><span style="font-size: 20px; color: var(--text-light);">كيف يعمل نظامنا؟</span></h2>
+                <div class="steps-container">
+                    <div class="step-box">
+                        <div class="step-icon"><i class="fa-solid fa-user-plus"></i></div>
+                        <h3>1. سجل حسابك</h3>
+                        <p style="font-size: 14px; color: gray; margin-top: 10px;">أنشئ حساب مسوق مجاناً في ثوانٍ معدودة.</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-left step-arrow"></i>
+                    <div class="step-box">
+                        <div class="step-icon"><i class="fa-solid fa-link"></i></div>
+                        <h3>2. شارك رابطك</h3>
+                        <p style="font-size: 14px; color: gray; margin-top: 10px;">انسخ رابط المنتج وشاركه مع أصدقائك أو متابعينك.</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-left step-arrow"></i>
+                    <div class="step-box">
+                        <div class="step-icon"><i class="fa-solid fa-cart-arrow-down"></i></div>
+                        <h3>3. تحقق المبيعات</h3>
+                        <p style="font-size: 14px; color: gray; margin-top: 10px;">يقوم العميل بالشراء من خلال الرابط الخاص بك.</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-left step-arrow"></i>
+                    <div class="step-box">
+                        <div class="step-icon" style="color: var(--accent-color);"><i class="fa-solid fa-sack-dollar"></i></div>
+                        <h3>4. احصل على عمولتك</h3>
+                        <p style="font-size: 14px; color: gray; margin-top: 10px;">تضاف الأرباح لرصيدك ويمكنك سحبها مباشرة.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Login Page -->
         <section id="login" class="section">
-            <div class="form-container">
-                <h2>تسجيل الدخول</h2>
-                <form id="loginForm" onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label>البريد الإلكتروني</label>
-                        <input type="email" id="loginEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label>كلمة المرور</label>
-                        <input type="password" id="loginPassword" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">دخول</button>
-                </form>
+            <div class="form-wrapper">
+                <div class="form-container">
+                    <h2>تسجيل الدخول</h2>
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>البريد الإلكتروني</label>
+                            <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required>
+                        </div>
+                        <div class="form-group">
+                            <label>كلمة المرور</label>
+                            <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 18px;">تسجيل الدخول</button>
+                    </form>
+                </div>
             </div>
         </section>
 
         <!-- Register Page -->
         <section id="register" class="section">
-            <div class="form-container">
-                <h2>إنشاء حساب جديد</h2>
-                <form id="registerForm" onsubmit="handleRegister(event)">
-                    <div class="form-group">
-                        <label>الاسم الكامل</label>
-                        <input type="text" id="regName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>البريد الإلكتروني</label>
-                        <input type="email" id="regEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label>رقم الهاتف</label>
-                        <input type="tel" id="regPhone" required>
-                    </div>
-                    <div class="form-group">
-                        <label>كلمة المرور</label>
-                        <input type="password" id="regPassword" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">تسجيل</button>
-                </form>
+            <div class="form-wrapper">
+                <div class="form-container">
+                    <h2>إنشاء حساب مسوق جديد</h2>
+                    <form id="registerForm" onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label>الاسم الكامل</label>
+                            <input type="text" id="regName" placeholder="الاسم واللقب" required>
+                        </div>
+                        <div class="form-group">
+                            <label>البريد الإلكتروني</label>
+                            <input type="email" id="regEmail" placeholder="example@mail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهاتف</label>
+                            <input type="tel" id="regPhone" placeholder="0555xxxxxx" required>
+                        </div>
+                        <div class="form-group">
+                            <label>كلمة المرور</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-accent" style="width: 100%; padding: 15px; font-size: 18px;">تسجيل وبدء الربح</button>
+                    </form>
+                </div>
             </div>
         </section>
 
         <!-- User Dashboard -->
         <section id="user-dashboard" class="section">
-            <div class="dashboard-layout">
-                <div class="sidebar">
-                    <h3 style="margin-bottom: 20px; color: var(--primary-dark);" id="userNameDisplay">مرحباً</h3>
-                    <ul class="sidebar-menu">
-                        <li class="active" onclick="switchUserTab('u-stats')"><i class="fa-solid fa-chart-pie"></i> الإحصائيات</li>
-                        <li onclick="switchUserTab('u-products')"><i class="fa-solid fa-box-open"></i> المنتجات (الروابط)</li>
-                        <li onclick="switchUserTab('u-withdraw')"><i class="fa-solid fa-money-bill-transfer"></i> سحب الأرباح</li>
-                        <li style="color: #ef4444;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج</li>
-                    </ul>
-                </div>
-                <div class="dashboard-content">
-                    
-                    <!-- User Stats Tab -->
-                    <div id="u-stats" class="dash-section active">
-                        <h2>لوحة التحكم</h2>
-                        <br>
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <i class="fa-solid fa-eye"></i>
-                                <h3 id="statDaily">0</h3>
-                                <p>الزيارات اليومية</p>
+            <div class="dashboard-container">
+                <div class="dashboard-layout">
+                    <div class="sidebar">
+                        <div style="text-align: center; margin-bottom: 25px;">
+                            <div style="width: 70px; height: 70px; background: #e8f0eb; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; color: var(--primary-color); margin-bottom: 10px;">
+                                <i class="fa-solid fa-user"></i>
                             </div>
-                            <div class="stat-card">
-                                <i class="fa-solid fa-calendar-days"></i>
-                                <h3 id="statMonthly">0</h3>
-                                <p>الزيارات الشهرية</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                                <h3 id="statOrders">0</h3>
-                                <p>طلبات جديدة</p>
-                            </div>
-                            <div class="stat-card">
-                                <i class="fa-solid fa-wallet"></i>
-                                <h3 id="statEarnings">0.00 دج</h3>
-                                <p>الأرباح المتاحة</p>
+                            <h3 id="userNameDisplay" style="color: var(--primary-dark);">مرحباً</h3>
+                        </div>
+                        <ul class="sidebar-menu">
+                            <li class="active" onclick="switchUserTab('u-stats')"><i class="fa-solid fa-chart-pie"></i> لوحة الإحصائيات</li>
+                            <li onclick="switchUserTab('u-products')"><i class="fa-solid fa-box-open"></i> منتجات الطبيعة (روابطي)</li>
+                            <li onclick="switchUserTab('u-withdraw')"><i class="fa-solid fa-money-bill-transfer"></i> سحب الأرباح</li>
+                            <li style="color: #ef4444; margin-top: 30px;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج</li>
+                        </ul>
+                    </div>
+                    <div class="dashboard-content">
+                        
+                        <!-- User Stats -->
+                        <div id="u-stats" class="dash-section active">
+                            <h2 style="color: var(--primary-dark); margin-bottom: 20px;">نظرة عامة على نشاطك</h2>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <h3 id="statDaily">0</h3>
+                                    <p>نقرات اليوم</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                    <h3 id="statMonthly">0</h3>
+                                    <p>نقرات الشهر</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fa-solid fa-bag-shopping"></i>
+                                    <h3 id="statOrders">0</h3>
+                                    <p>المبيعات المحققة</p>
+                                </div>
+                                <div class="stat-card gold">
+                                    <i class="fa-solid fa-wallet"></i>
+                                    <h3 id="statEarnings">0.00 دج</h3>
+                                    <p>الأرباح القابلة للسحب</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- User Products Tab -->
-                    <div id="u-products" class="dash-section">
-                        <h2>المنتجات المتاحة للتسويق</h2>
-                        <br>
-                        <div class="products-grid" id="userProductsList">
-                            <!-- Products generated by JS -->
+                        <!-- User Products -->
+                        <div id="u-products" class="dash-section">
+                            <h2 style="color: var(--primary-dark); margin-bottom: 20px;">المنتجات الطبيعية المتاحة للتسويق</h2>
+                            <div class="products-grid" id="userProductsList">
+                                <!-- Products injected by JS -->
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- User Withdraw Tab -->
-                    <div id="u-withdraw" class="dash-section">
-                        <h2>سحب الأرباح</h2>
-                        <div class="withdraw-box">
-                            <i class="fa-solid fa-building-columns" style="font-size: 50px; color: var(--primary-color); margin-bottom: 15px;"></i>
-                            <h3>أدخل بيانات الدفع (RIP / CCP)</h3>
-                            <p style="color: var(--text-light); margin-top: 10px;">سيتم تحويل أرباحك مباشرة إلى حسابك البريدي</p>
-                            <input type="text" id="withdrawRip" placeholder="مثال: 00799999000012345678" maxlength="20">
-                            <br>
-                            <button class="btn btn-primary" onclick="requestWithdrawal()">طلب السحب الآن</button>
+                        <!-- User Withdraw -->
+                        <div id="u-withdraw" class="dash-section">
+                            <h2 style="color: var(--primary-dark); margin-bottom: 20px;">سحب الأرباح</h2>
+                            <div class="withdraw-box">
+                                <div style="font-size: 60px; color: var(--accent-color); margin-bottom: 20px; animation: float 3s infinite;"><i class="fa-solid fa-building-columns"></i></div>
+                                <h3>أدخل رقم الحساب البريدي (RIP / CCP)</h3>
+                                <p style="color: var(--text-light); margin-top: 10px;">سيتم تحويل أرباحك مباشرة وبكل أمان إلى حسابك</p>
+                                <input type="text" id="withdrawRip" placeholder="مثال: 00799999000012345678" maxlength="20">
+                                <br>
+                                <button class="btn btn-primary" style="padding: 15px 40px; font-size: 18px;" onclick="requestWithdrawal()">تأكيد طلب السحب</button>
+                            </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </section>
 
-
-        <!-- Admin Login Page -->
+        <!-- Admin Login -->
         <section id="admin-login" class="section">
-            <div class="form-container" style="border-top: 5px solid #ef4444;">
-                <h2 style="color: #ef4444;">تسجيل دخول الإدارة (Admin)</h2>
-                <form onsubmit="handleAdminLogin(event)">
-                    <div class="form-group">
-                        <label>كلمة مرور الأدمن</label>
-                        <input type="password" id="adminPassword" placeholder="abobob123#" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; background: #ef4444;">دخول للوحة التحكم</button>
-                </form>
+            <div class="form-wrapper">
+                <div class="form-container" style="border-top: 6px solid #ef4444;">
+                    <h2 style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> دخول الإدارة</h2>
+                    <form onsubmit="handleAdminLogin(event)">
+                        <div class="form-group">
+                            <label>كلمة مرور الأدمن</label>
+                            <input type="password" id="adminPassword" placeholder="abobob123#" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; background: #ef4444; border:none;">دخول للوحة التحكم</button>
+                    </form>
+                </div>
             </div>
         </section>
-
 
         <!-- Admin Dashboard -->
         <section id="admin-dashboard" class="section">
-            <div class="dashboard-layout">
-                <div class="sidebar" style="border-right: 4px solid #ef4444;">
-                    <h3 style="margin-bottom: 20px; color: #ef4444;">Tirourda Admin</h3>
-                    <ul class="sidebar-menu" id="adminMenu">
-                        <li class="active" onclick="switchAdminTab('a-users')"><i class="fa-solid fa-users"></i> المستخدمين</li>
-                        <li onclick="switchAdminTab('a-withdrawals')"><i class="fa-solid fa-money-check-dollar"></i> طلبات السحب</li>
-                        <li onclick="switchAdminTab('a-products')"><i class="fa-solid fa-box"></i> إدارة المنتجات</li>
-                        <li onclick="switchAdminTab('a-settings')"><i class="fa-solid fa-gears"></i> إعدادات الموقع</li>
-                        <li style="color: #ef4444;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج</li>
-                    </ul>
-                </div>
-                <div class="dashboard-content">
-                    
-                    <!-- Admin Users Tab -->
-                    <div id="a-users" class="dash-section active">
-                        <h2>قائمة المسوقين</h2><br>
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>الاسم</th>
-                                    <th>الإيميل</th>
-                                    <th>رقم الهاتف</th>
-                                    <th>الأرباح</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminUsersTable"></tbody>
-                        </table>
+            <div class="dashboard-container">
+                <div class="dashboard-layout">
+                    <div class="sidebar" style="border-right: 4px solid #ef4444;">
+                        <h3 style="margin-bottom: 20px; color: #ef4444; text-align: center;">Tirourda Admin</h3>
+                        <ul class="sidebar-menu" id="adminMenu">
+                            <li class="active" onclick="switchAdminTab('a-users')"><i class="fa-solid fa-users"></i> المسوقين</li>
+                            <li onclick="switchAdminTab('a-withdrawals')"><i class="fa-solid fa-money-check-dollar"></i> طلبات السحب</li>
+                            <li onclick="switchAdminTab('a-products')"><i class="fa-solid fa-leaf"></i> إدارة المنتجات</li>
+                            <li style="color: #ef4444; margin-top: 30px;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج</li>
+                        </ul>
                     </div>
-
-                    <!-- Admin Withdrawals Tab -->
-                    <div id="a-withdrawals" class="dash-section">
-                        <h2>طلبات السحب</h2><br>
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>المسوق</th>
-                                    <th>رقم RIP/CCP</th>
-                                    <th>المبلغ المطلوب</th>
-                                    <th>الإجراء</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminWithdrawTable"></tbody>
-                        </table>
-                    </div>
-
-                    <!-- Admin Products Tab -->
-                    <div id="a-products" class="dash-section">
-                        <h2>إضافة منتج جديد</h2>
-                        <div class="form-container" style="margin: 20px 0; max-width: 100%;">
-                            <div style="display: flex; gap: 15px;">
-                                <input type="text" id="newProdName" placeholder="اسم المنتج" class="form-group input" style="flex:1; padding: 10px;">
-                                <input type="text" id="newProdComm" placeholder="نسبة الربح (مثال: 500 دج)" class="form-group input" style="flex:1; padding: 10px;">
-                                <button class="btn btn-primary" onclick="addProduct()">إضافة</button>
+                    <div class="dashboard-content">
+                        
+                        <!-- Admin Users -->
+                        <div id="a-users" class="dash-section active">
+                            <h2 style="margin-bottom: 20px;">قائمة المسوقين</h2>
+                            <div class="table-container">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>الاسم</th>
+                                            <th>الإيميل</th>
+                                            <th>رقم الهاتف</th>
+                                            <th>الأرباح الحالية</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminUsersTable"></tbody>
+                                </table>
                             </div>
                         </div>
-                        <h2>المنتجات الحالية</h2><br>
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>اسم المنتج</th>
-                                    <th>العمولة</th>
-                                    <th>إجراء</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminProductsTable"></tbody>
-                        </table>
-                    </div>
 
-                    <!-- Admin Settings Tab -->
-                    <div id="a-settings" class="dash-section">
-                        <h2>إعدادات وأدوات الموقع</h2><br>
-                        <div class="products-grid">
-                            <div class="product-card">
-                                <h3>تعديل نصوص الموقع</h3>
-                                <p style="font-size: 14px; color: gray; margin-bottom: 10px;">تغيير رسالة الترحيب والشروط</p>
-                                <button class="btn btn-outline" style="width: 100%;">تعديل</button>
-                            </div>
-                            <div class="product-card">
-                                <h3>ربط مع موقع آخر (API)</h3>
-                                <p style="font-size: 14px; color: gray; margin-bottom: 10px;">إدخال مفاتيح الربط مع منصات المبيعات</p>
-                                <button class="btn btn-outline" style="width: 100%;">إدارة الربط</button>
-                            </div>
-                            <div class="product-card">
-                                <h3>أدوات الإدمن الإضافية</h3>
-                                <p style="font-size: 14px; color: gray; margin-bottom: 10px;">تحميل التقارير، إرسال إيميلات جماعية</p>
-                                <button class="btn btn-outline" style="width: 100%;">فتح الأدوات</button>
+                        <!-- Admin Withdrawals -->
+                        <div id="a-withdrawals" class="dash-section">
+                            <h2 style="margin-bottom: 20px;">طلبات السحب المعلقة</h2>
+                            <div class="table-container">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>المسوق</th>
+                                            <th>رقم RIP/CCP</th>
+                                            <th>المبلغ المطلوب</th>
+                                            <th>الإجراء</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminWithdrawTable"></tbody>
+                                </table>
                             </div>
                         </div>
-                    </div>
 
+                        <!-- Admin Products -->
+                        <div id="a-products" class="dash-section">
+                            <h2 style="margin-bottom: 20px;">إضافة منتج طبيعي جديد</h2>
+                            <div class="form-container" style="max-width: 100%; margin-bottom: 30px;">
+                                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                    <input type="text" id="newProdName" placeholder="اسم المنتج (مثال: زيت زيتون بكر)" class="form-group input" style="flex:1; padding: 15px; border-radius:10px; border:1px solid #ccc;">
+                                    <input type="text" id="newProdComm" placeholder="نسبة الربح (مثال: 500 دج)" class="form-group input" style="flex:1; padding: 15px; border-radius:10px; border:1px solid #ccc;">
+                                    <button class="btn btn-primary" onclick="addProduct()">إضافة المنتج</button>
+                                </div>
+                            </div>
+                            <h2 style="margin-bottom: 20px;">المنتجات الحالية</h2>
+                            <div class="table-container">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>اسم المنتج</th>
+                                            <th>العمولة للمسوق</th>
+                                            <th>إجراء</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminProductsTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </section>
@@ -343,30 +427,30 @@
     </main>
 
     <script>
-        // --- داتا وهمية ومخزن البيانات (Local Storage Simulation) ---
-        
-        let products = JSON.parse(localStorage.getItem('tirourda_products')) ||[
-            { id: 1, name: "ساعة ذكية عصرية", commission: "800 دج" },
-            { id: 2, name: "حقيبة ظهر للسفر", commission: "600 دج" },
-            { id: 3, name: "سماعات بلوتوث لاسلكية", commission: "500 دج" }
+        // --- داتا منتجات طبيعية (Default Data) ---
+        let defaultProducts =[
+            { id: 1, name: "زيت زيتون بكر ممتاز 100% طبيعي", commission: "800 دج", icon: "fa-bottle-droplet" },
+            { id: 2, name: "عسل نحل طبيعي مضمون", commission: "1000 دج", icon: "fa-jar" },
+            { id: 3, name: "خلطة أعشاب طبيعية للصحة", commission: "400 دج", icon: "fa-seedling" },
+            { id: 4, name: "صابون طبيعي بخلاصة الزيتون", commission: "200 دج", icon: "fa-soap" }
         ];
 
-        let users = JSON.parse(localStorage.getItem('tirourda_users')) ||[];
+        let products = JSON.parse(localStorage.getItem('tirourda_products')) || defaultProducts;
+        let users = JSON.parse(localStorage.getItem('tirourda_users')) || [];
         let withdrawals = JSON.parse(localStorage.getItem('tirourda_withdrawals')) ||[];
-        
         let currentUser = JSON.parse(localStorage.getItem('tirourda_currentUser')) || null;
 
-        // حفظ الداتا
         function saveData() {
             localStorage.setItem('tirourda_products', JSON.stringify(products));
             localStorage.setItem('tirourda_users', JSON.stringify(users));
             localStorage.setItem('tirourda_withdrawals', JSON.stringify(withdrawals));
         }
 
-        // --- نظام التوجيه (Routing) ---
+        // --- Routing ---
         function navigateTo(sectionId) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             updateNavbar();
         }
 
@@ -374,8 +458,8 @@
             const navLinks = document.getElementById('navLinks');
             if (currentUser) {
                 navLinks.innerHTML = `
-                    <button class="btn btn-primary" onclick="navigateTo('user-dashboard')">لوحة التحكم</button>
-                    <button class="btn btn-outline" onclick="logout()">خروج</button>
+                    <button class="btn btn-primary" onclick="navigateTo('user-dashboard')"><i class="fa-solid fa-table-columns"></i> لوحتي</button>
+                    <button class="btn btn-outline" style="color: #ef4444; border-color: #ef4444;" onclick="logout()">خروج</button>
                 `;
             } else {
                 navLinks.innerHTML = `
@@ -386,16 +470,15 @@
             }
         }
 
-        // --- التحقق من مسار الإدمن (#admin09) ---
         function checkAdminURL() {
             if (window.location.hash === '#admin09') {
                 navigateTo('admin-login');
-                document.getElementById('navLinks').style.display = 'none'; // إخفاء النافبار للإدمن
+                document.getElementById('navLinks').style.display = 'none';
             }
         }
         window.addEventListener('hashchange', checkAdminURL);
 
-        // --- وظائف المستخدم (Auth) ---
+        // --- Auth ---
         function handleRegister(e) {
             e.preventDefault();
             const name = document.getElementById('regName').value;
@@ -403,23 +486,18 @@
             const phone = document.getElementById('regPhone').value;
             const password = document.getElementById('regPassword').value;
 
-            if(users.find(u => u.email === email)){
-                alert("هذا البريد مسجل مسبقاً!");
-                return;
-            }
+            if(users.find(u => u.email === email)){ alert("هذا البريد مسجل مسبقاً!"); return; }
 
             const newUser = {
-                id: 'u_' + Date.now(),
-                name, email, phone, password,
-                earnings: Math.floor(Math.random() * 5000), // أرباح وهمية للتجربة
+                id: 'u_' + Date.now(), name, email, phone, password,
+                earnings: Math.floor(Math.random() * 5000), // Random for demo
                 visitsDaily: Math.floor(Math.random() * 100),
                 visitsMonthly: Math.floor(Math.random() * 1000),
-                orders: Math.floor(Math.random() * 10)
+                orders: Math.floor(Math.random() * 15)
             };
 
-            users.push(newUser);
-            saveData();
-            alert("تم التسجيل بنجاح!");
+            users.push(newUser); saveData();
+            alert("مرحباً بك في عائلة Tirourda! تم التسجيل بنجاح.");
             navigateTo('login');
         }
 
@@ -427,35 +505,29 @@
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-
             const user = users.find(u => u.email === email && u.password === password);
+            
             if(user) {
                 currentUser = user;
                 localStorage.setItem('tirourda_currentUser', JSON.stringify(currentUser));
-                initUserDashboard();
-                navigateTo('user-dashboard');
-            } else {
-                alert("بيانات الدخول خاطئة!");
-            }
+                initUserDashboard(); navigateTo('user-dashboard');
+            } else { alert("بيانات الدخول غير صحيحة!"); }
         }
 
         function logout() {
-            currentUser = null;
-            localStorage.removeItem('tirourda_currentUser');
-            window.location.hash = ''; // إزالة هاش الإدمن إن وجد
-            document.getElementById('navLinks').style.display = 'flex';
+            currentUser = null; localStorage.removeItem('tirourda_currentUser');
+            window.location.hash = ''; document.getElementById('navLinks').style.display = 'flex';
             navigateTo('home');
         }
 
-        // --- لوحة تحكم المستخدم ---
+        // --- User Dashboard ---
         function initUserDashboard() {
             if(!currentUser) return;
-            document.getElementById('userNameDisplay').innerText = `مرحباً، ${currentUser.name}`;
+            document.getElementById('userNameDisplay').innerText = currentUser.name;
             document.getElementById('statDaily').innerText = currentUser.visitsDaily;
             document.getElementById('statMonthly').innerText = currentUser.visitsMonthly;
             document.getElementById('statOrders').innerText = currentUser.orders;
             document.getElementById('statEarnings').innerText = `${currentUser.earnings} دج`;
-
             renderUserProducts();
         }
 
@@ -463,15 +535,16 @@
             const container = document.getElementById('userProductsList');
             container.innerHTML = '';
             products.forEach(p => {
-                const affiliateLink = `https://tirourda.com/p/${p.id}?ref=${currentUser.id}`;
+                const iconClass = p.icon ? p.icon : 'fa-box';
+                const link = `https://tirourda.com/p/${p.id}?ref=${currentUser.id}`;
                 container.innerHTML += `
                     <div class="product-card">
+                        <div class="product-icon"><i class="fa-solid ${iconClass}"></i></div>
                         <h3>${p.name}</h3>
-                        <div class="commission-badge">ربحك: ${p.commission}</div>
-                        <p style="font-size: 14px; margin-bottom: 5px;">رابط التسويق الخاص بك:</p>
+                        <div class="commission-badge"><i class="fa-solid fa-coins"></i> عمولتك: ${p.commission}</div>
                         <div class="copy-link-box">
-                            <input type="text" value="${affiliateLink}" readonly id="link_${p.id}">
-                            <button onclick="copyLink('link_${p.id}')"><i class="fa-regular fa-copy"></i> نسخ</button>
+                            <input type="text" value="${link}" readonly id="link_${p.id}">
+                            <button onclick="copyLink('link_${p.id}')">نسخ</button>
                         </div>
                     </div>
                 `;
@@ -480,16 +553,13 @@
 
         function copyLink(inputId) {
             const input = document.getElementById(inputId);
-            input.select();
-            document.execCommand("copy");
-            alert("تم نسخ الرابط بنجاح!");
+            input.select(); document.execCommand("copy");
+            alert("تم نسخ رابط التسويق بنجاح! شاركه الآن.");
         }
 
         function switchUserTab(tabId) {
             document.querySelectorAll('#user-dashboard .dash-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            
-            // تغيير ستايل القائمة الجانبية
             const lis = document.querySelectorAll('#user-dashboard .sidebar-menu li');
             lis.forEach(li => li.classList.remove('active'));
             event.currentTarget.classList.add('active');
@@ -497,146 +567,81 @@
 
         function requestWithdrawal() {
             const rip = document.getElementById('withdrawRip').value;
-            if(rip.length < 10) {
-                alert("يرجى إدخال رقم RIP / CCP صحيح");
-                return;
-            }
-            if(currentUser.earnings <= 0) {
-                alert("رصيدك غير كافٍ للسحب.");
-                return;
-            }
+            if(rip.length < 10) { alert("يرجى إدخال رقم حساب صحيح"); return; }
+            if(currentUser.earnings <= 0) { alert("عذراً، رصيدك الحالي غير كافٍ للسحب."); return; }
 
-            withdrawals.push({
-                userId: currentUser.id,
-                userName: currentUser.name,
-                rip: rip,
-                amount: currentUser.earnings,
-                status: 'قيد المعالجة'
-            });
-
-            currentUser.earnings = 0; // تصفير الرصيد بعد السحب
-            
-            // تحديث المستخدم في المصفوفة الرئيسية
+            withdrawals.push({ userId: currentUser.id, userName: currentUser.name, rip: rip, amount: currentUser.earnings, status: 'قيد المعالجة' });
+            currentUser.earnings = 0;
             const index = users.findIndex(u => u.id === currentUser.id);
             if(index !== -1) users[index] = currentUser;
 
-            saveData();
-            localStorage.setItem('tirourda_currentUser', JSON.stringify(currentUser));
-            
-            alert("تم إرسال طلب السحب بنجاح!");
-            initUserDashboard();
-            document.getElementById('withdrawRip').value = '';
+            saveData(); localStorage.setItem('tirourda_currentUser', JSON.stringify(currentUser));
+            alert("تم تسجيل طلب السحب بنجاح! سيتم التحويل قريباً.");
+            initUserDashboard(); document.getElementById('withdrawRip').value = '';
         }
 
-        // --- وظائف الإدمن ---
+        // --- Admin Functions ---
         function handleAdminLogin(e) {
             e.preventDefault();
-            const pass = document.getElementById('adminPassword').value;
-            if(pass === 'abobob123#') {
-                initAdminDashboard();
-                navigateTo('admin-dashboard');
-            } else {
-                alert("كلمة المرور خاطئة!");
-            }
+            if(document.getElementById('adminPassword').value === 'abobob123#') {
+                initAdminDashboard(); navigateTo('admin-dashboard');
+            } else { alert("كلمة المرور خاطئة!"); }
         }
 
         function switchAdminTab(tabId) {
             document.querySelectorAll('#admin-dashboard .dash-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            
             const lis = document.querySelectorAll('#admin-dashboard .sidebar-menu li');
             lis.forEach(li => li.classList.remove('active'));
             event.currentTarget.classList.add('active');
         }
 
         function initAdminDashboard() {
-            // رندر المستخدمين
             const usersTbody = document.getElementById('adminUsersTable');
             usersTbody.innerHTML = '';
             users.forEach(u => {
-                usersTbody.innerHTML += `
-                    <tr>
-                        <td>${u.name}</td>
-                        <td>${u.email}</td>
-                        <td>${u.phone}</td>
-                        <td><strong style="color:var(--primary-dark)">${u.earnings} دج</strong></td>
-                    </tr>
-                `;
+                usersTbody.innerHTML += `<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone}</td><td><strong style="color:var(--primary-dark)">${u.earnings} دج</strong></td></tr>`;
             });
 
-            // رندر طلبات السحب
             const withdrawTbody = document.getElementById('adminWithdrawTable');
             withdrawTbody.innerHTML = '';
-            withdrawals.forEach((w, index) => {
-                withdrawTbody.innerHTML += `
-                    <tr>
-                        <td>${w.userName}</td>
-                        <td>${w.rip}</td>
-                        <td>${w.amount} دج</td>
-                        <td>
-                            <button class="btn btn-primary" style="padding: 5px 10px; font-size:12px;" onclick="acceptWithdrawal(${index})">تم الدفع</button>
-                        </td>
-                    </tr>
-                `;
+            withdrawals.forEach((w, i) => {
+                withdrawTbody.innerHTML += `<tr><td>${w.userName}</td><td style="letter-spacing:1px; font-weight:bold;">${w.rip}</td><td><span style="color:#eab308; font-weight:bold;">${w.amount} دج</span></td><td><button class="btn btn-primary" style="padding: 5px 15px; font-size:13px;" onclick="acceptWithdrawal(${i})">تأكيد الدفع</button></td></tr>`;
             });
-
             renderAdminProducts();
         }
 
         function renderAdminProducts() {
             const prodTbody = document.getElementById('adminProductsTable');
             prodTbody.innerHTML = '';
-            products.forEach((p, index) => {
-                prodTbody.innerHTML += `
-                    <tr>
-                        <td>${p.name}</td>
-                        <td>${p.commission}</td>
-                        <td>
-                            <button class="btn btn-outline" style="color: #ef4444; border-color:#ef4444; padding: 5px 10px; font-size:12px;" onclick="deleteProduct(${index})">حذف</button>
-                        </td>
-                    </tr>
-                `;
+            products.forEach((p, i) => {
+                prodTbody.innerHTML += `<tr><td>${p.name}</td><td><span style="color:var(--primary-color); font-weight:bold;">${p.commission}</span></td><td><button class="btn btn-outline" style="color:#ef4444; border-color:#ef4444; padding:5px 15px;" onclick="deleteProduct(${i})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
             });
         }
 
         function addProduct() {
             const name = document.getElementById('newProdName').value;
             const comm = document.getElementById('newProdComm').value;
-            if(!name || !comm) { alert("أدخل بيانات المنتج"); return; }
-            
-            products.push({ id: Date.now(), name, commission: comm });
-            saveData();
-            renderAdminProducts();
-            document.getElementById('newProdName').value = '';
-            document.getElementById('newProdComm').value = '';
+            if(!name || !comm) { alert("يرجى تعبئة بيانات المنتج"); return; }
+            products.push({ id: Date.now(), name, commission: comm, icon: "fa-leaf" });
+            saveData(); renderAdminProducts();
+            document.getElementById('newProdName').value = ''; document.getElementById('newProdComm').value = '';
         }
 
         function deleteProduct(index) {
-            if(confirm("هل أنت متأكد من حذف المنتج؟")) {
-                products.splice(index, 1);
-                saveData();
-                renderAdminProducts();
-            }
+            if(confirm("تأكيد حذف المنتج؟")) { products.splice(index, 1); saveData(); renderAdminProducts(); }
         }
 
         function acceptWithdrawal(index) {
-            withdrawals.splice(index, 1);
-            saveData();
-            initAdminDashboard();
-            alert("تم التأشير على الطلب كمدفوع وإزالته من القائمة.");
+            withdrawals.splice(index, 1); saveData(); initAdminDashboard();
+            alert("تم تأكيد دفع الأرباح للمسوق.");
         }
 
-        // --- تهيئة أولية عند فتح الصفحة ---
         window.onload = () => {
             checkAdminURL();
-            if(currentUser && window.location.hash !== '#admin09') {
-                initUserDashboard();
-                navigateTo('user-dashboard');
-            } else if (window.location.hash !== '#admin09'){
-                updateNavbar();
-            }
+            if(currentUser && window.location.hash !== '#admin09') { initUserDashboard(); navigateTo('user-dashboard'); }
+            else if (window.location.hash !== '#admin09') { updateNavbar(); }
         };
-
     </script>
 </body>
 </html>
