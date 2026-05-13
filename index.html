@@ -127,6 +127,33 @@
         </div>
     </div>
 
+    <!-- NEW ORDER MODAL -->
+    <div id="order-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4 w-full h-full">
+        <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="order-modal-content">
+            <button onclick="window.closeOrderModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-xl"></i></button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-100 text-blue-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4"><i class="fas fa-shopping-cart"></i></div>
+                <h2 class="text-xl font-black">تسجيل طلبية للزبون</h2>
+                <p class="text-gray-500 text-xs mt-1" id="order-product-name">اسم المنتج</p>
+                <div class="mt-2 inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold">العمولة: 500 دج</div>
+            </div>
+            <form id="order-form" onsubmit="window.submitCustomerOrder(event)">
+                <input type="hidden" id="order-product-id">
+                <div class="space-y-4 mb-6">
+                    <div><input type="text" id="order-customer-name" placeholder="اسم الزبون الكامل" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required></div>
+                    <div><input type="tel" id="order-customer-phone" placeholder="رقم الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 text-right" dir="ltr" required></div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><input type="text" id="order-customer-state" placeholder="الولاية" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required></div>
+                        <div><input type="number" id="order-qty" value="1" min="1" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 text-center" required></div>
+                    </div>
+                </div>
+                <button type="submit" id="order-submit-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                    <span id="order-btn-text">تأكيد وتسجيل الطلب</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- NEW: PRODUCT LANDING PAGE VIEW (للزبائن عند الضغط على رابط المسوق) -->
     <div id="product-landing-view" class="view min-h-screen bg-bgLight dark:bg-bgDark w-full relative">
         <header class="bg-white dark:bg-cardDark shadow-sm py-4 border-b border-gray-100 dark:border-gray-800">
@@ -313,18 +340,21 @@
             </div>
         </section>
         
+        <!-- MODIFIED: تم تغيير لوغوات طرق السحب وإضافة الصور المطلوبة -->
         <section class="py-16 bg-gray-50 dark:bg-bgDark text-center">
             <h2 class="text-3xl font-black mb-10">طرق سحب <span class="text-primary">متعددة ومحلية</span></h2>
             <div class="flex flex-col sm:flex-row justify-center gap-6 max-w-3xl mx-auto px-6">
+                <!-- CCP / BaridiMob -->
                 <div class="flex-1 bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center justify-center gap-4">
                     <span class="font-black text-xl">CCP / BaridiMob</span>
-                    <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-800"><i class="fas fa-money-check-alt"></i></div>
+                    <img src="https://ebourse.dz/wp-content/uploads/2017/12/AlgeriePoste.svg_.png" alt="Algérie Poste" class="h-10 object-contain bg-white rounded p-1">
                 </div>
+                <!-- Flexy -->
                 <div class="flex-1 bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-4">
-                    <div class="flex gap-4 items-center justify-center text-lg">
-                        <span class="text-red-500 font-black px-2 border dark:border-gray-700 rounded-lg">ooredoo</span>
-                        <span class="text-red-600 font-black px-2 border dark:border-gray-700 rounded-lg">Djezzy</span>
-                        <span class="text-green-500 font-black px-2 border dark:border-gray-700 rounded-lg">Mobilis</span>
+                    <div class="flex gap-4 items-center justify-center">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFM2lbUhHLa_c7IrFn2oMdC8j1zXX7xZ4tkZPQI1Q7YqRk2i7rgNDDPjQV&s=10" alt="Ooredoo" class="h-8 object-contain rounded">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Djezzy_Logo_2015.svg" alt="Djezzy" class="h-8 object-contain">
+                        <div class="bg-green-500 px-2 py-1 rounded-lg flex items-center justify-center"><img src="https://mobilis.dz/logowhite.png" alt="Mobilis" class="h-5 object-contain"></div>
                     </div>
                     <span class="font-bold text-gray-500">Flexy (رصيد هاتف)</span>
                 </div>
@@ -570,7 +600,6 @@
             }
         };
 
-        // NEW: Load the product landing page dynamically
         async function loadProductLandingPage(prodId, refId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById('product-landing-view').classList.add('active');
@@ -592,7 +621,6 @@
                 document.getElementById('lp-ref-id').value = refId;
                 document.getElementById('lp-prod-name').value = p.name;
 
-                // تسجيل النقرة للمسوق بصمت
                 if(refId) {
                     db.collection('users').doc(refId).update({ clicks: firebase.firestore.FieldValue.increment(1) }).catch(e => console.log("Click tracking error", e));
                 }
@@ -602,16 +630,14 @@
             }
         }
 
-        // MODIFIED: Handle routing including the new Landing Page Params
         function handleRouting() {
-            // Check for Product Affiliate Link
             const urlParams = new URLSearchParams(window.location.search);
             const prodId = urlParams.get('prod');
             const refId = urlParams.get('ref');
 
             if (prodId && refId) {
                 loadProductLandingPage(prodId, refId);
-                return; // Stop normal routing, we stay in product landing page
+                return; 
             }
 
             if(!isAuthReady) return; 
@@ -775,13 +801,11 @@
                 document.getElementById('user-orders-count').innerText = conf;
             });
 
-            // MODIFIED: Affiliate Products UI (Removed Order Button, Added nice Copy UI)
             db.collection("products").onSnapshot(snap => {
                 let html = '';
                 if(snap.empty) html = `<div class="text-center col-span-full py-6 text-gray-400">لا منتجات حاليا</div>`;
                 snap.forEach(doc => {
                     const p = doc.data();
-                    // Generate Unique Link for this affiliate
                     const productLink = `${window.location.origin}${window.location.pathname}?prod=${doc.id}&ref=${currentUser.uid}`;
                     
                     html += `
@@ -805,7 +829,6 @@
             });
         }
 
-        // NEW: Copy Generated Link
         window.copyGeneratedLink = async (link) => {
             try {
                 await navigator.clipboard.writeText(link);
@@ -815,7 +838,6 @@
             }
         };
 
-        // NEW: Submit Landing Page Order
         window.submitLandingOrder = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('lp-submit-btn');
@@ -826,7 +848,6 @@
             try {
                 const refId = document.getElementById('lp-ref-id').value;
                 
-                // Get Affiliate Name for Admin DB
                 let affiliateName = 'مسوق';
                 if(refId) {
                     const userDoc = await db.collection('users').doc(refId).get();
@@ -839,7 +860,7 @@
                     customerName: document.getElementById('lp-customer-name').value, 
                     customerPhone: document.getElementById('lp-customer-phone').value,
                     customerState: document.getElementById('lp-customer-state').value, 
-                    quantity: 1, // Fixed to 1 for simplicity based on prompt
+                    quantity: 1, 
                     affiliateId: refId || 'direct', 
                     affiliateName: affiliateName, 
                     commission: FIXED_COMMISSION, 
@@ -854,7 +875,7 @@
                     confirmButtonText: 'حسناً',
                     confirmButtonColor: '#10b981'
                 }).then(() => {
-                    window.location.href = window.location.pathname; // Redirect to main page
+                    window.location.href = window.location.pathname; 
                 });
                 
             } catch(e) { 
@@ -879,7 +900,6 @@
             e.preventDefault(); Swal.fire('تم الاستلام', 'ستتم المراجعة', 'success'); e.target.reset();
         };
 
-        // --- ADMIN ---
         window.handleAdminLogin = (e) => {
             e.preventDefault();
             if (document.getElementById('admin-password').value === 'abobob123#') {
@@ -980,7 +1000,7 @@
                             const img = new Image();
                             img.onload = () => {
                                 const cvs = document.createElement('canvas');
-                                let w = img.width, h = img.height, max = 500; // Increased resolution slightly for Landing Page
+                                let w = img.width, h = img.height, max = 500; 
                                 if(w>h && w>max){ h*=max/w; w=max; } else if(h>max){ w*=max/h; h=max; }
                                 cvs.width=w; cvs.height=h;
                                 cvs.getContext('2d').drawImage(img,0,0,w,h);
@@ -1041,7 +1061,6 @@
             }
         };
         
-        // Initial routing check (to catch URL params before Firebase init finishes)
         handleRouting();
     </script>
 </body>
