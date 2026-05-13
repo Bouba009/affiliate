@@ -52,9 +52,13 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
         
-        .view { display: none; opacity: 0; transition: opacity 0.4s ease; width: 100%; min-h: 100vh; }
-        .view.active { display: block; opacity: 1; }
+        /* Fix Layout Visibility and Flex */
+        .view { display: none !important; opacity: 0; transition: opacity 0.4s ease; width: 100%; min-h: 100vh; }
+        .view.active { display: block !important; opacity: 1; }
+        .view.active.flex-view { display: flex !important; opacity: 1; }
+        
         .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to left, #10b981, #34d399); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
         
         .loader { border: 4px solid rgba(16, 185, 129, 0.2); border-left-color: #10b981; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -75,7 +79,7 @@
 </head>
 <body class="bg-bgLight dark:bg-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-300 relative w-full h-full">
 
-    <button onclick="window.toggleTheme()" class="fixed bottom-6 right-6 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all text-xl border border-gray-100 dark:border-gray-800">
+    <button onclick="window.toggleTheme()" class="fixed bottom-6 left-6 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all text-xl border border-gray-100 dark:border-gray-800 opacity-90 hover:opacity-100">
         <i id="theme-icon" class="fas fa-moon text-gray-800 dark:text-yellow-400"></i>
     </button>
 
@@ -346,9 +350,9 @@
 
 
     <!-- 2. USER DASHBOARD VIEW -->
-    <div id="user-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden w-full h-full">
+    <div id="user-dashboard-view" class="view flex-view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden w-full h-full">
         <div id="mobile-sidebar-overlay" onclick="window.toggleUserSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
-        <aside id="user-sidebar" class="w-64 bg-white dark:bg-cardDark border-l border-gray-100 dark:border-gray-800 fixed h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
+        <aside id="user-sidebar" class="w-64 bg-white dark:bg-cardDark border-l border-gray-100 dark:border-gray-800 fixed top-0 h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
             <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center text-lg font-black">
                 <div class="flex items-center gap-2"><i class="fas fa-leaf text-primary"></i> مسوق Tirourda</div>
                 <button onclick="window.toggleUserSidebar()" class="md:hidden text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
@@ -493,7 +497,7 @@
 
 
     <!-- 3. ADMIN LOGIN VIEW -->
-    <div id="admin-login-view" class="view min-h-screen flex items-center justify-center bg-bgLight dark:bg-bgDark relative p-4 w-full h-full">
+    <div id="admin-login-view" class="view flex-view min-h-screen flex items-center justify-center bg-bgLight dark:bg-bgDark relative p-4 w-full h-full">
         <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 w-full max-w-md relative z-10 text-center">
             <div class="w-16 h-16 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-6 shadow-xl"><i class="fas fa-shield-alt"></i></div>
             <h2 class="text-xl md:text-2xl font-black mb-6">الإدارة العامة <span class="text-primary">Tirourda</span></h2>
@@ -508,9 +512,9 @@
 
 
     <!-- 4. ADMIN DASHBOARD VIEW -->
-    <div id="admin-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden w-full h-full">
-        <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden transition-opacity"></div>
-        <aside id="admin-sidebar" class="w-64 bg-gray-900 text-white fixed h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
+    <div id="admin-dashboard-view" class="view flex-view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden w-full h-full">
+        <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 top-0 bg-black/60 z-40 hidden md:hidden transition-opacity"></div>
+        <aside id="admin-sidebar" class="w-64 bg-gray-900 text-white fixed top-0 h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
             <div class="p-6 border-b border-gray-800 flex justify-between items-center text-lg font-black">
                 <div class="flex items-center gap-2"><i class="fas fa-cogs text-primary"></i> الإدارة</div>
                 <button onclick="window.toggleAdminSidebar()" class="md:hidden text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
@@ -537,7 +541,7 @@
                 <span class="bg-green-100 text-green-700 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold border border-green-200"><i class="fas fa-wifi"></i> متصل بـ Firebase</span>
             </header>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 animate-fade-in">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6 animate-fade-in">
                 <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-primary relative overflow-hidden">
                     <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">العمولات المدفوعة</div>
                     <div class="text-lg md:text-2xl font-black" id="admin-total-paid">0 دج</div>
@@ -554,6 +558,13 @@
                     <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">المسوقين</div>
                     <div class="text-lg md:text-2xl font-black" id="admin-users-count">0</div>
                 </div>
+            </div>
+
+            <!-- أزرار وصول سريع للأقسام -->
+            <div class="flex gap-2 md:gap-4 mb-6 overflow-x-auto pb-2 scrollbar-hide w-full">
+                <button onclick="window.switchAdminTab('products')" class="whitespace-nowrap bg-blue-500 hover:bg-blue-600 text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-md flex items-center gap-2 transition-transform transform hover:scale-105"><i class="fas fa-plus"></i> إضافة/تعديل منتج</button>
+                <button onclick="window.switchAdminTab('users')" class="whitespace-nowrap bg-purple-500 hover:bg-purple-600 text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-md flex items-center gap-2 transition-transform transform hover:scale-105"><i class="fas fa-users"></i> حظر المسوقين</button>
+                <button onclick="window.switchAdminTab('support')" class="whitespace-nowrap bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-md flex items-center gap-2 transition-transform transform hover:scale-105"><i class="fas fa-flag"></i> الإبلاغات والدعم</button>
             </div>
 
             <!-- ADMIN TAB: HOME (Orders) -->
@@ -676,8 +687,10 @@
             document.getElementById('mobile-admin-overlay').classList.toggle('hidden');
         };
         
-        // Navigation & Routing (Fixed Redirect Logic)
+        // Navigation & Routing
         window.navigate = (target) => {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(target + '-view').classList.add('active');
             
@@ -714,22 +727,18 @@
             const hash = window.location.hash;
             const isAdminAuth = sessionStorage.getItem('tirourda_admin') === 'true';
 
-            // Admin Routes
             if (hash === '#admin09' || hash === '#admin-dashboard' || hash === '#admin-login') {
                 return isAdminAuth ? window.navigate('admin-dashboard') : window.navigate('admin-login');
             }
 
-            // Affiliate Dashboard Route
             if (hash === '#user-dashboard') {
                 return currentUser ? window.navigate('user-dashboard') : window.navigate('landing');
             }
 
-            // If hash is empty/landing, auto-redirect to dashboard IF user is logged in
             if (currentUser) {
                 return window.navigate('user-dashboard');
             }
 
-            // Fallback
             window.navigate('landing'); 
         }
 
@@ -799,8 +808,6 @@
                     Swal.fire({icon: 'success', title: 'تم تسجيل الدخول', showConfirmButton: false, timer: 1500});
                 }
                 window.closeAuthModal();
-                // Fix for the screen not updating properly
-                window.navigate('user-dashboard'); 
             } catch (error) {
                 let msg = error.message;
                 if(error.message === "empty_name") msg = "يرجى إدخال الاسم الكامل.";
@@ -826,7 +833,6 @@
                 }
                 Swal.fire({icon: 'success', title: 'تم الدخول بنجاح', showConfirmButton: false, timer: 1500});
                 window.closeAuthModal();
-                window.navigate('user-dashboard'); 
             } catch (error) {
                 if(error.code !== 'auth/popup-closed-by-user') Swal.fire('خطأ', error.message, 'error');
             } finally {
@@ -834,8 +840,8 @@
             }
         };
 
-        // Firebase Auth State Listener
         auth.onAuthStateChanged(async (user) => {
+            currentUser = user; 
             if (user) {
                 try {
                     const docSnap = await db.collection("users").doc(user.uid).get();
@@ -849,7 +855,6 @@
                     }
                 } catch(e) {}
             }
-            currentUser = user;
             isAuthReady = true;
             handleRouting();
         });
@@ -889,6 +894,7 @@
             }
 
             if(tabId === 'home') renderUserChart();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         let unsubUser, unsubOrders, unsubProducts;
@@ -1060,7 +1066,6 @@
             }, 1000);
         };
 
-
         // --- ADMIN LOGIC ---
         window.switchAdminTab = (tabId, event) => {
             if(event) event.preventDefault();
@@ -1085,6 +1090,7 @@
                 document.getElementById('admin-sidebar').classList.add('translate-x-full');
                 document.getElementById('mobile-admin-overlay').classList.add('hidden');
             }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.handleAdminLogin = (e) => {
@@ -1102,7 +1108,7 @@
         window.logoutAdmin = () => { sessionStorage.removeItem('tirourda_admin'); window.navigate('landing'); };
 
         let unsubAdminOrders, unsubAdminProds, unsubAdminUsers, unsubAdminSupport;
-        let adminProductsCache = {}; // لتخزين المنتجات بأمان لتجنب أخطاء النصوص (Quotes)
+        let adminProductsCache = {}; 
 
         function loadAdminDashboardData() {
             if(unsubAdminOrders) unsubAdminOrders();
@@ -1160,7 +1166,7 @@
                 adminProductsCache = {};
                 snap.forEach(doc => {
                     const p = doc.data();
-                    adminProductsCache[doc.id] = p; // حفظ بأمان في المتغير العام
+                    adminProductsCache[doc.id] = p; 
                     html += `
                     <tr class="border-b dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
                         <td class="p-3"><img src="${p.image || 'https://via.placeholder.com/150'}" class="w-10 h-10 rounded object-cover"></td>
@@ -1221,7 +1227,7 @@
                                 <div class="text-[10px] text-gray-500">${t.email}</div>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-cardDark p-3 rounded-lg border border-gray-100 dark:border-gray-800 leading-relaxed">${t.description}</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-cardDark p-3 rounded-lg border border-gray-100 dark:border-gray-800 leading-relaxed break-words">${t.description}</p>
                     </div>`;
                 });
                 document.getElementById('admin-support-list').innerHTML = html;
@@ -1283,6 +1289,7 @@
             document.getElementById('prod-desc').value = p.description || '';
             document.getElementById('prod-submit-btn').innerHTML = '<i class="fas fa-save"></i> تحديث المنتج';
             document.getElementById('prod-name').focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.deleteProduct = async (id) => {
