@@ -526,18 +526,35 @@
             finally { setAuthLoading(false, true); }
         };
 
+        // التعديل الرئيسي هنا لمنع الطرد المفاجئ وإصلاح الحسابات الناقصة
         auth.onAuthStateChanged(async (user) => {
-            currentUser = user; 
             if (user) {
                 try {
-                    const docSnap = await db.collection("users").doc(user.uid).get();
-                    if(docSnap.exists && docSnap.data().isBanned) {
+                    const docRef = db.collection("users").doc(user.uid);
+                    const docSnap = await docRef.get();
+                    
+                    // إذا كان الحساب موجوداً في الـ Auth لكن لم يُسجل له ملف بسبب حظر الصلاحيات سابقاً سنقوم بإنشاءه الآن
+                    if (!docSnap.exists) {
+                        await docRef.set({ 
+                            name: user.displayName || 'مسوق', 
+                            email: user.email, 
+                            phone: '', 
+                            balance: 0, 
+                            clicks: 0, 
+                            isBanned: false, 
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+                        });
+                    } else if (docSnap.data().isBanned) {
                         await auth.signOut();
                         Swal.fire('حساب محظور', 'لقد تم حظر حسابك.', 'error');
-                        currentUser = null;
+                        user = null;
                     }
-                } catch(e) {}
+                } catch(e) {
+                    console.error("Error with auth sync:", e);
+                }
             }
+            
+            currentUser = user; 
             isAuthReady = true;
             handleRouting();
         });
@@ -564,12 +581,15 @@
 
         function loadUserDashboardData() {
             if(!currentUser) return;
+            
+            // تم إزالة الطرد التلقائي وإصلاح خطأ الكود الصامت (dash-avatar null error)
             db.collection("users").doc(currentUser.uid).onSnapshot(doc => {
-                if(!doc.exists || doc.data().isBanned) { auth.signOut(); return; }
+                if(!doc.exists) return; // ننتظر حتى يتم إنشاءه تلقائياً
+                if(doc.data().isBanned) { auth.signOut(); return; }
+                
                 currentUserData = doc.data();
                 document.getElementById('dash-name').innerText = currentUserData.name || 'مسوق';
                 document.getElementById('dash-email').innerText = currentUserData.email;
-                document.getElementById('dash-avatar').innerText = (currentUserData.name || 'م').charAt(0);
                 document.getElementById('user-balance').innerText = currentUserData.balance || 0;
                 document.getElementById('user-total').innerText = currentUserData.balance || 0;
                 document.getElementById('withdraw-available-balance').innerText = (currentUserData.balance || 0) + ' دج';
@@ -790,7 +810,6 @@
                 document.getElementById('prod-id').value = '';
                 Swal.fire('نجاح', 'تم الحفظ', 'success');
             } catch(err) { 
-                // التعديل الوحيد المضاف: توضيح أن الخطأ من إعدادات سيرفر فايربيس وليس من الكود
                 if (err.message.includes('Missing or insufficient permissions')) {
                     Swal.fire('تم الرفض من الخادم', 'صلاحيات الفايربيس منتهية. يرجى الذهاب لحساب Firebase الخاص بك وتحديث قواعد Firestore Rules كما هو مشروح.', 'error');
                 } else {
