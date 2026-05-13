@@ -1,648 +1,776 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tirourda Affiliate | منتجات طبيعية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <title>Tirourda Affiliate - اربح معنا</title>
+    
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { cairo: ['Cairo', 'sans-serif'] },
+                    colors: {
+                        primary: '#10b981', // Light Green
+                        primaryDark: '#059669',
+                        bgLight: '#f8fafc',
+                        bgDark: '#0f172a',
+                        cardLight: '#ffffff',
+                        cardDark: '#1e293b'
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 10px #10b981' },
+                            '100%': { boxShadow: '0 0 30px #10b981' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        :root {
-            --primary-dark: #2d4a22; /* أخضر زيتوني داكن */
-            --primary-color: #4a7c59; /* أخضر طبيعي */
-            --accent-color: #d4af37; /* ذهبي/عسلي */
-            --bg-light: #f4f7f6;
-            --white: #ffffff;
-            --text-main: #1f292e;
-            --text-light: #5a7364;
-            --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
-            --border-radius: 16px;
+        body { font-family: 'Cairo', sans-serif; }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-main); overflow-x: hidden; }
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-
-        /* Animations */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(74, 124, 89, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(74, 124, 89, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 124, 89, 0); } }
-
-        /* Navbar */
-        .navbar { 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px);
-            padding: 15px 50px; 
-            display: flex; justify-content: space-between; align-items: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
-            position: sticky; top: 0; z-index: 1000; 
+        .dark .glass {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .logo { font-size: 26px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
-        .logo img { height: 45px; width: auto; display: inline-block; }
-        .nav-links { display: flex; gap: 15px; }
         
-        /* Buttons */
-        .btn { padding: 12px 25px; border-radius: 30px; border: none; cursor: pointer; font-weight: 700; transition: var(--transition); font-size: 16px; display: inline-flex; align-items: center; gap: 8px; justify-content: center;}
-        .btn-primary { background: var(--primary-color); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(45, 74, 34, 0.3); }
-        .btn-accent { background: var(--accent-color); color: white; animation: pulse 2s infinite; }
-        .btn-accent:hover { background: #b8972e; transform: scale(1.05); }
-        .btn-outline { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
-        .btn-outline:hover { background: var(--primary-color); color: white; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
 
-        /* Sections */
-        .section { display: none; min-height: 85vh; animation: fadeInUp 0.5s ease-out forwards; }
-        .section.active { display: block; }
+        /* Hide Views */
+        .view { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        .view.active { display: block; opacity: 1; }
 
-        /* Home Page - Hero */
-        .hero-container {
-            /* إضافة الصورة المطلوبة كخلفية */
-            background: linear-gradient(to left, rgba(45, 74, 34, 0.85), rgba(45, 74, 34, 0.6)), url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimeSlUfda_Cz-UfGCCI3_G9OdbQ_9tswQovi8kvnwQqYpt0vZHn2EDae79J4Sr6Ody2i3BnPExcjjNZiMWt0aMylcvlLII7yZBD6usWrqgPvEARyzq9Sc8GGiPChqYwoSYk3DiPnKdZLAMPkWiANEIhXFo11NKmRZkCOGL3aYCGXhzhEN12FkxXcyvY88/s1280/1000016917.jpg') center/cover;
-            background-attachment: fixed;
-            min-height: 80vh;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; color: white; padding: 40px 20px;
-        }
-        .hero-content { max-width: 800px; animation: float 6s ease-in-out infinite; }
-        .hero-content h1 { font-size: 55px; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); font-weight: 800;}
-        .hero-content p { font-size: 22px; margin-bottom: 40px; color: #eef2ef; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
-        
-        /* How Affiliate Works Section */
-        .how-it-works { padding: 60px 20px; background: white; text-align: center; }
-        .how-it-works h2 { color: var(--primary-dark); font-size: 36px; margin-bottom: 40px; }
-        .steps-container { display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
-        .step-box { background: var(--bg-light); padding: 30px; border-radius: var(--border-radius); width: 220px; transition: var(--transition); position: relative; border: 2px solid transparent;}
-        .step-box:hover { transform: translateY(-10px); border-color: var(--primary-color); box-shadow: var(--shadow); background: white;}
-        .step-icon { width: 80px; height: 80px; background: #e8f0eb; color: var(--primary-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; margin: 0 auto 15px; transition: var(--transition);}
-        .step-box:hover .step-icon { background: var(--primary-color); color: white; transform: rotate(10deg);}
-        .step-arrow { font-size: 30px; color: var(--text-light); }
-
-        /* Forms */
-        .form-wrapper { padding: 50px 20px; display: flex; justify-content: center; align-items: center; }
-        .form-container { background: var(--white); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); width: 100%; max-width: 450px; position: relative; overflow: hidden;}
-        .form-container::before { content: ''; position: absolute; top: 0; right: 0; width: 100%; height: 6px; background: var(--primary-color); }
-        .form-container h2 { text-align: center; margin-bottom: 25px; color: var(--primary-dark); }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark);}
-        .form-group input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; outline: none; transition: var(--transition); background: #f8fafc;}
-        .form-group input:focus { border-color: var(--primary-color); background: white; box-shadow: 0 0 0 4px rgba(74, 124, 89, 0.1); }
-        
-        /* Dashboard Layout */
-        .dashboard-container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
-        .dashboard-layout { display: grid; grid-template-columns: 280px 1fr; gap: 30px; }
-        .sidebar { background: var(--white); padding: 30px 20px; border-radius: var(--border-radius); box-shadow: var(--shadow); height: fit-content; position: sticky; top: 100px;}
-        .sidebar-menu li { padding: 15px; margin-bottom: 10px; border-radius: 10px; cursor: pointer; transition: var(--transition); font-weight: 600; color: var(--text-light); display: flex; align-items: center; gap: 12px; }
-        .sidebar-menu li i { font-size: 20px; width: 25px; text-align: center;}
-        .sidebar-menu li:hover, .sidebar-menu li.active { background: var(--primary-color); color: white; transform: translateX(-5px); box-shadow: 0 4px 10px rgba(74, 124, 89, 0.2);}
-        
-        /* Dashboard Content */
-        .dash-section { display: none; animation: fadeInUp 0.4s ease; }
-        .dash-section.active { display: block; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--white); padding: 25px; border-radius: var(--border-radius); box-shadow: var(--shadow); text-align: center; position: relative; overflow: hidden; transition: var(--transition); border: 1px solid #eef2ef;}
-        .stat-card:hover { transform: translateY(-5px); }
-        .stat-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 100%; height: 4px; background: var(--primary-color); }
-        .stat-card.gold::after { background: var(--accent-color); }
-        .stat-card i { font-size: 35px; color: var(--primary-color); margin-bottom: 15px; }
-        .stat-card.gold i { color: var(--accent-color); }
-        .stat-card h3 { font-size: 28px; margin-bottom: 5px; color: var(--primary-dark);}
-        .stat-card p { color: var(--text-light); font-size: 15px; font-weight: 500;}
-
-        /* Products Grid */
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .product-card { background: var(--white); border-radius: var(--border-radius); padding: 25px; box-shadow: var(--shadow); border: 1px solid #eef2ef; transition: var(--transition); text-align: center;}
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--primary-color);}
-        .product-icon { font-size: 50px; color: var(--primary-color); margin-bottom: 15px;}
-        .product-card h3 { margin-bottom: 10px; color: var(--primary-dark); font-size: 22px;}
-        .commission-badge { background: #fcf4d9; color: #9c7b16; padding: 8px 15px; border-radius: 30px; font-size: 15px; font-weight: 800; display: inline-block; margin-bottom: 20px; border: 1px dashed #d4af37;}
-        .copy-link-box { display: flex; background: var(--bg-light); border-radius: 10px; overflow: hidden; border: 1px solid #d1d5db; }
-        .copy-link-box input { flex: 1; border: none; padding: 12px; outline: none; background: transparent; font-size: 13px; color: var(--text-light);}
-        .copy-link-box button { background: var(--primary-color); color: white; border: none; padding: 0 20px; cursor: pointer; transition: var(--transition); font-weight: bold;}
-        .copy-link-box button:hover { background: var(--primary-dark); }
-
-        /* Withdraw Box */
-        .withdraw-box { background: var(--white); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); text-align: center; max-width: 600px; margin: 0 auto; border: 2px dashed var(--primary-color);}
-        .withdraw-box input { width: 80%; padding: 15px; margin: 20px 0; border: 2px solid #e2e8f0; border-radius: 10px; outline: none; text-align: center; font-size: 20px; letter-spacing: 3px; font-weight: bold; color: var(--primary-dark);}
-        .withdraw-box input:focus { border-color: var(--accent-color); }
-
-        /* Tables (Admin) */
-        .table-container { overflow-x: auto; background: white; border-radius: var(--border-radius); box-shadow: var(--shadow); padding: 20px;}
-        .admin-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        .admin-table th, .admin-table td { padding: 18px 15px; text-align: right; border-bottom: 1px solid #f1f5f9; }
-        .admin-table th { background: var(--bg-light); color: var(--primary-dark); font-weight: 800; }
-        .admin-table tr:hover { background-color: #f8fafc; }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .dashboard-layout { grid-template-columns: 1fr; }
-            .sidebar { position: static; }
-            .step-arrow { transform: rotate(90deg); margin: 10px 0; }
-        }
-        @media (max-width: 600px) {
-            .navbar { flex-direction: column; gap: 15px; padding: 15px; }
-            .hero-content h1 { font-size: 35px; }
-            .steps-container { flex-direction: column; }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to left, #10b981, #34d399);
         }
     </style>
 </head>
-<body>
+<body class="bg-bgLight dark:bg-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">
-            <!-- إضافة اللوغو المطلوب -->
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtoRNcCVuxBldSgy979b6gMDD0hLMq8FFh7tthMpi6BVERuxMqU1jicjr6AiDIkOCVtjXDP85gWfO8pE1SDzbn4505WWn0aKYmwPjhL_hY14doK10IDMq0E8JtoH-ZMW9Z6c_KtzmLlJpuCjRKnFi5MFhR7Rhy5hG26t0GFXv4vTS9mxfMutYyp_oTUWc/s502/1000016916.png" alt="Tirourda Logo"> 
-            Tirourda
-        </div>
-        <div class="nav-links" id="navLinks">
-            <button class="btn btn-outline" onclick="navigateTo('home')">الرئيسية</button>
-            <button class="btn btn-outline" onclick="navigateTo('login')">تسجيل الدخول</button>
-            <button class="btn btn-primary" onclick="navigateTo('register')">حساب جديد</button>
-        </div>
-    </nav>
+    <!-- Theme Toggle Fixed Button -->
+    <button onclick="toggleTheme()" class="fixed bottom-6 left-6 z-50 bg-white dark:bg-cardDark p-3 rounded-full shadow-xl hover:shadow-primary/50 transition-all text-xl">
+        <i id="theme-icon" class="fas fa-moon text-gray-800 dark:text-yellow-400"></i>
+    </button>
 
-    <main>
-        <!-- Home Page -->
-        <section id="home" class="section active">
-            <div class="hero-container">
-                <div class="hero-content">
-                    <h1>منتجات طبيعية... لحياة صحية أفضل</h1>
-                    <p>انضم إلى برنامج الأفيليت الخاص بنا، شارك روابط منتجاتنا الموثوقة (زيت زيتون، عسل، أعشاب) واربح عمولات مجزية بسهولة تامة.</p>
-                    <button class="btn btn-accent" style="font-size: 18px; padding: 15px 40px;" onclick="navigateTo('register')">
-                        <i class="fa-solid fa-seedling"></i> انضم الآن وابدأ الربح
-                    </button>
+    <!-- =========================
+         LANDING PAGE VIEW
+    ========================== -->
+    <div id="landing-view" class="view active">
+        <!-- Header -->
+        <header class="fixed top-0 w-full glass z-40">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-2 text-2xl font-bold">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-green-400 flex items-center justify-center text-white">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    Tirourda <span class="text-primary">Affiliate</span>
+                </div>
+                <nav class="hidden md:flex gap-6 font-semibold">
+                    <a href="#" class="hover:text-primary transition-colors">الرئيسية</a>
+                    <a href="#how-it-works" class="hover:text-primary transition-colors">كيف يعمل</a>
+                    <a href="#features" class="hover:text-primary transition-colors">المميزات</a>
+                    <a href="#commissions" class="hover:text-primary transition-colors">العمولات</a>
+                    <a href="#faq" class="hover:text-primary transition-colors">الأسئلة الشائعة</a>
+                </nav>
+                <div class="flex gap-3">
+                    <button onclick="navigate('user-dashboard')" class="text-gray-600 dark:text-gray-300 hover:text-primary font-semibold px-4">تسجيل الدخول</button>
+                    <button onclick="navigate('user-dashboard')" class="bg-primary hover:bg-primaryDark text-white px-6 py-2 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 font-semibold">إنشاء حساب</button>
                 </div>
             </div>
+        </header>
 
-            <div class="how-it-works">
-                <h2>AFFILIATE SYSTEM <br><span style="font-size: 20px; color: var(--text-light);">كيف يعمل نظامنا؟</span></h2>
-                <div class="steps-container">
-                    <div class="step-box">
-                        <div class="step-icon"><i class="fa-solid fa-user-plus"></i></div>
-                        <h3>1. سجل حسابك</h3>
-                        <p style="font-size: 14px; color: gray; margin-top: 10px;">أنشئ حساب مسوق مجاناً في ثوانٍ معدودة.</p>
-                    </div>
-                    <i class="fa-solid fa-arrow-left step-arrow"></i>
-                    <div class="step-box">
-                        <div class="step-icon"><i class="fa-solid fa-link"></i></div>
-                        <h3>2. شارك رابطك</h3>
-                        <p style="font-size: 14px; color: gray; margin-top: 10px;">انسخ رابط المنتج وشاركه مع أصدقائك أو متابعينك.</p>
-                    </div>
-                    <i class="fa-solid fa-arrow-left step-arrow"></i>
-                    <div class="step-box">
-                        <div class="step-icon"><i class="fa-solid fa-cart-arrow-down"></i></div>
-                        <h3>3. تحقق المبيعات</h3>
-                        <p style="font-size: 14px; color: gray; margin-top: 10px;">يقوم العميل بالشراء من خلال الرابط الخاص بك.</p>
-                    </div>
-                    <i class="fa-solid fa-arrow-left step-arrow"></i>
-                    <div class="step-box">
-                        <div class="step-icon" style="color: var(--accent-color);"><i class="fa-solid fa-sack-dollar"></i></div>
-                        <h3>4. احصل على عمولتك</h3>
-                        <p style="font-size: 14px; color: gray; margin-top: 10px;">تضاف الأرباح لرصيدك ويمكنك سحبها مباشرة.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Login Page -->
-        <section id="login" class="section">
-            <div class="form-wrapper">
-                <div class="form-container">
-                    <h2>تسجيل الدخول</h2>
-                    <form id="loginForm" onsubmit="handleLogin(event)">
-                        <div class="form-group">
-                            <label>البريد الإلكتروني</label>
-                            <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required>
-                        </div>
-                        <div class="form-group">
-                            <label>كلمة المرور</label>
-                            <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 18px;">تسجيل الدخول</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- Register Page -->
-        <section id="register" class="section">
-            <div class="form-wrapper">
-                <div class="form-container">
-                    <h2>إنشاء حساب مسوق جديد</h2>
-                    <form id="registerForm" onsubmit="handleRegister(event)">
-                        <div class="form-group">
-                            <label>الاسم الكامل</label>
-                            <input type="text" id="regName" placeholder="الاسم واللقب" required>
-                        </div>
-                        <div class="form-group">
-                            <label>البريد الإلكتروني</label>
-                            <input type="email" id="regEmail" placeholder="example@mail.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label>رقم الهاتف</label>
-                            <input type="tel" id="regPhone" placeholder="0555xxxxxx" required>
-                        </div>
-                        <div class="form-group">
-                            <label>كلمة المرور</label>
-                            <input type="password" id="regPassword" required>
-                        </div>
-                        <button type="submit" class="btn btn-accent" style="width: 100%; padding: 15px; font-size: 18px;">تسجيل وبدء الربح</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- User Dashboard -->
-        <section id="user-dashboard" class="section">
-            <div class="dashboard-container">
-                <div class="dashboard-layout">
-                    <div class="sidebar">
-                        <div style="text-align: center; margin-bottom: 25px;">
-                            <div style="width: 70px; height: 70px; background: #e8f0eb; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; color: var(--primary-color); margin-bottom: 10px;">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <h3 id="userNameDisplay" style="color: var(--primary-dark);">مرحباً</h3>
-                        </div>
-                        <ul class="sidebar-menu">
-                            <li class="active" onclick="switchUserTab('u-stats')"><i class="fa-solid fa-chart-pie"></i> لوحة الإحصائيات</li>
-                            <li onclick="switchUserTab('u-products')"><i class="fa-solid fa-box-open"></i> منتجات الطبيعة (روابطي)</li>
-                            <li onclick="switchUserTab('u-withdraw')"><i class="fa-solid fa-money-bill-transfer"></i> سحب الأرباح</li>
-                            <li style="color: #ef4444; margin-top: 30px;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج</li>
-                        </ul>
-                    </div>
-                    <div class="dashboard-content">
-                        
-                        <!-- User Stats -->
-                        <div id="u-stats" class="dash-section active">
-                            <h2 style="color: var(--primary-dark); margin-bottom: 20px;">نظرة عامة على نشاطك</h2>
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <i class="fa-solid fa-eye"></i>
-                                    <h3 id="statDaily">0</h3>
-                                    <p>نقرات اليوم</p>
-                                </div>
-                                <div class="stat-card">
-                                    <i class="fa-solid fa-chart-line"></i>
-                                    <h3 id="statMonthly">0</h3>
-                                    <p>نقرات الشهر</p>
-                                </div>
-                                <div class="stat-card">
-                                    <i class="fa-solid fa-bag-shopping"></i>
-                                    <h3 id="statOrders">0</h3>
-                                    <p>المبيعات المحققة</p>
-                                </div>
-                                <div class="stat-card gold">
-                                    <i class="fa-solid fa-wallet"></i>
-                                    <h3 id="statEarnings">0.00 دج</h3>
-                                    <p>الأرباح القابلة للسحب</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- User Products -->
-                        <div id="u-products" class="dash-section">
-                            <h2 style="color: var(--primary-dark); margin-bottom: 20px;">المنتجات الطبيعية المتاحة للتسويق</h2>
-                            <div class="products-grid" id="userProductsList">
-                                <!-- Products injected by JS -->
-                            </div>
-                        </div>
-
-                        <!-- User Withdraw -->
-                        <div id="u-withdraw" class="dash-section">
-                            <h2 style="color: var(--primary-dark); margin-bottom: 20px;">سحب الأرباح</h2>
-                            <div class="withdraw-box">
-                                <div style="font-size: 60px; color: var(--accent-color); margin-bottom: 20px; animation: float 3s infinite;"><i class="fa-solid fa-building-columns"></i></div>
-                                <h3>أدخل رقم الحساب البريدي (RIP / CCP)</h3>
-                                <p style="color: var(--text-light); margin-top: 10px;">سيتم تحويل أرباحك مباشرة وبكل أمان إلى حسابك</p>
-                                <input type="text" id="withdrawRip" placeholder="مثال: 00799999000012345678" maxlength="20">
-                                <br>
-                                <button class="btn btn-primary" style="padding: 15px 40px; font-size: 18px;" onclick="requestWithdrawal()">تأكيد طلب السحب</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Admin Login -->
-        <section id="admin-login" class="section">
-            <div class="form-wrapper">
-                <div class="form-container" style="border-top: 6px solid #ef4444;">
-                    <h2 style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> دخول الإدارة</h2>
-                    <form onsubmit="handleAdminLogin(event)">
-                        <div class="form-group">
-                            <label>كلمة مرور الأدمن</label>
-                            <input type="password" id="adminPassword" placeholder="abobob123#" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; background: #ef4444; border:none;">دخول للوحة التحكم</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- Admin Dashboard -->
-        <section id="admin-dashboard" class="section">
-            <div class="dashboard-container">
-                <div class="dashboard-layout">
-                    <div class="sidebar" style="border-right: 4px solid #ef4444;">
-                        <h3 style="margin-bottom: 20px; color: #ef4444; text-align: center;">Tirourda Admin</h3>
-                        <ul class="sidebar-menu" id="adminMenu">
-                            <li class="active" onclick="switchAdminTab('a-users')"><i class="fa-solid fa-users"></i> المسوقين</li>
-                            <li onclick="switchAdminTab('a-withdrawals')"><i class="fa-solid fa-money-check-dollar"></i> طلبات السحب</li>
-                            <li onclick="switchAdminTab('a-products')"><i class="fa-solid fa-leaf"></i> إدارة المنتجات</li>
-                            <li style="color: #ef4444; margin-top: 30px;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج</li>
-                        </ul>
-                    </div>
-                    <div class="dashboard-content">
-                        
-                        <!-- Admin Users -->
-                        <div id="a-users" class="dash-section active">
-                            <h2 style="margin-bottom: 20px;">قائمة المسوقين</h2>
-                            <div class="table-container">
-                                <table class="admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>الاسم</th>
-                                            <th>الإيميل</th>
-                                            <th>رقم الهاتف</th>
-                                            <th>الأرباح الحالية</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="adminUsersTable"></tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Admin Withdrawals -->
-                        <div id="a-withdrawals" class="dash-section">
-                            <h2 style="margin-bottom: 20px;">طلبات السحب المعلقة</h2>
-                            <div class="table-container">
-                                <table class="admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>المسوق</th>
-                                            <th>رقم RIP/CCP</th>
-                                            <th>المبلغ المطلوب</th>
-                                            <th>الإجراء</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="adminWithdrawTable"></tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Admin Products -->
-                        <div id="a-products" class="dash-section">
-                            <h2 style="margin-bottom: 20px;">إضافة منتج طبيعي جديد</h2>
-                            <div class="form-container" style="max-width: 100%; margin-bottom: 30px;">
-                                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                                    <input type="text" id="newProdName" placeholder="اسم المنتج (مثال: زيت زيتون بكر)" class="form-group input" style="flex:1; padding: 15px; border-radius:10px; border:1px solid #ccc;">
-                                    <input type="text" id="newProdComm" placeholder="نسبة الربح (مثال: 500 دج)" class="form-group input" style="flex:1; padding: 15px; border-radius:10px; border:1px solid #ccc;">
-                                    <button class="btn btn-primary" onclick="addProduct()">إضافة المنتج</button>
-                                </div>
-                            </div>
-                            <h2 style="margin-bottom: 20px;">المنتجات الحالية</h2>
-                            <div class="table-container">
-                                <table class="admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>اسم المنتج</th>
-                                            <th>العمولة للمسوق</th>
-                                            <th>إجراء</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="adminProductsTable"></tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <script>
-        // --- داتا منتجات طبيعية (Default Data) ---
-        let defaultProducts =[
-            { id: 1, name: "زيت زيتون بكر ممتاز 100% طبيعي", commission: "800 دج", icon: "fa-bottle-droplet" },
-            { id: 2, name: "عسل نحل طبيعي مضمون", commission: "1000 دج", icon: "fa-jar" },
-            { id: 3, name: "خلطة أعشاب طبيعية للصحة", commission: "400 دج", icon: "fa-seedling" },
-            { id: 4, name: "صابون طبيعي بخلاصة الزيتون", commission: "200 دج", icon: "fa-soap" }
-        ];
-
-        let products = JSON.parse(localStorage.getItem('tirourda_products')) || defaultProducts;
-        let users = JSON.parse(localStorage.getItem('tirourda_users')) ||[];
-        let withdrawals = JSON.parse(localStorage.getItem('tirourda_withdrawals')) ||[];
-        let currentUser = JSON.parse(localStorage.getItem('tirourda_currentUser')) || null;
-
-        function saveData() {
-            localStorage.setItem('tirourda_products', JSON.stringify(products));
-            localStorage.setItem('tirourda_users', JSON.stringify(users));
-            localStorage.setItem('tirourda_withdrawals', JSON.stringify(withdrawals));
-        }
-
-        // --- Routing ---
-        function navigateTo(sectionId) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            updateNavbar();
-        }
-
-        function updateNavbar() {
-            const navLinks = document.getElementById('navLinks');
-            if (currentUser) {
-                navLinks.innerHTML = `
-                    <button class="btn btn-primary" onclick="navigateTo('user-dashboard')"><i class="fa-solid fa-table-columns"></i> لوحتي</button>
-                    <button class="btn btn-outline" style="color: #ef4444; border-color: #ef4444;" onclick="logout()">خروج</button>
-                `;
-            } else {
-                navLinks.innerHTML = `
-                    <button class="btn btn-outline" onclick="navigateTo('home')">الرئيسية</button>
-                    <button class="btn btn-outline" onclick="navigateTo('login')">تسجيل الدخول</button>
-                    <button class="btn btn-primary" onclick="navigateTo('register')">حساب جديد</button>
-                `;
-            }
-        }
-
-        function checkAdminURL() {
-            if (window.location.hash === '#admin09') {
-                navigateTo('admin-login');
-                document.getElementById('navLinks').style.display = 'none';
-            }
-        }
-        window.addEventListener('hashchange', checkAdminURL);
-
-        // --- Auth ---
-        function handleRegister(e) {
-            e.preventDefault();
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const phone = document.getElementById('regPhone').value;
-            const password = document.getElementById('regPassword').value;
-
-            if(users.find(u => u.email === email)){ alert("هذا البريد مسجل مسبقاً!"); return; }
-
-            const newUser = {
-                id: 'u_' + Date.now(), name, email, phone, password,
-                earnings: Math.floor(Math.random() * 5000), // Random for demo
-                visitsDaily: Math.floor(Math.random() * 100),
-                visitsMonthly: Math.floor(Math.random() * 1000),
-                orders: Math.floor(Math.random() * 15)
-            };
-
-            users.push(newUser); saveData();
-            alert("مرحباً بك في عائلة Tirourda! تم التسجيل بنجاح.");
-            navigateTo('login');
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const user = users.find(u => u.email === email && u.password === password);
+        <!-- Hero Section -->
+        <section class="pt-32 pb-20 overflow-hidden relative">
+            <div class="absolute top-20 right-10 text-primary opacity-20 animate-float text-6xl"><i class="fas fa-coins"></i></div>
+            <div class="absolute bottom-20 left-10 text-primary opacity-20 animate-float delay-150 text-6xl" style="animation-delay: 1s;"><i class="fas fa-wallet"></i></div>
             
-            if(user) {
-                currentUser = user;
-                localStorage.setItem('tirourda_currentUser', JSON.stringify(currentUser));
-                initUserDashboard(); navigateTo('user-dashboard');
-            } else { alert("بيانات الدخول غير صحيحة!"); }
-        }
-
-        function logout() {
-            currentUser = null; localStorage.removeItem('tirourda_currentUser');
-            window.location.hash = ''; document.getElementById('navLinks').style.display = 'flex';
-            navigateTo('home');
-        }
-
-        // --- User Dashboard ---
-        function initUserDashboard() {
-            if(!currentUser) return;
-            document.getElementById('userNameDisplay').innerText = currentUser.name;
-            document.getElementById('statDaily').innerText = currentUser.visitsDaily;
-            document.getElementById('statMonthly').innerText = currentUser.visitsMonthly;
-            document.getElementById('statOrders').innerText = currentUser.orders;
-            document.getElementById('statEarnings').innerText = `${currentUser.earnings} دج`;
-            renderUserProducts();
-        }
-
-        function renderUserProducts() {
-            const container = document.getElementById('userProductsList');
-            container.innerHTML = '';
-            products.forEach(p => {
-                const iconClass = p.icon ? p.icon : 'fa-box';
-                const link = `https://tirourda.com/p/${p.id}?ref=${currentUser.id}`;
-                container.innerHTML += `
-                    <div class="product-card">
-                        <div class="product-icon"><i class="fa-solid ${iconClass}"></i></div>
-                        <h3>${p.name}</h3>
-                        <div class="commission-badge"><i class="fa-solid fa-coins"></i> عمولتك: ${p.commission}</div>
-                        <div class="copy-link-box">
-                            <input type="text" value="${link}" readonly id="link_${p.id}">
-                            <button onclick="copyLink('link_${p.id}')">نسخ</button>
+            <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-center md:text-right z-10">
+                    <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block border border-primary/20">🚀 أضخم منصة تسويق بالعمولة في الجزائر 2026</span>
+                    <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6">
+                        اربح المال مع <br> <span class="gradient-text">Tirourda Affiliate</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                        شارك منتجات Tirourda المتميزة واحصل على عمولات حقيقية بالدينار الجزائري. نظام حديث، سحب سريع، وتتبع مباشر لأرباحك.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <button onclick="navigate('user-dashboard')" class="bg-primary hover:bg-primaryDark text-white text-lg px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 transition-all transform hover:-translate-y-1 font-bold flex items-center justify-center gap-2">
+                            ابدأ الآن مجانا <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <button class="bg-white dark:bg-cardDark text-gray-800 dark:text-white text-lg px-8 py-4 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 hover:border-primary transition-all font-bold flex items-center justify-center gap-2">
+                            <i class="fas fa-play-circle text-primary text-2xl"></i> شاهد كيف يعمل
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="relative z-10 mt-10 md:mt-0">
+                    <!-- Modern 3D/Mockup Representation -->
+                    <div class="bg-white dark:bg-cardDark rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-4 transform rotate-2 hover:rotate-0 transition-all duration-500">
+                        <div class="bg-gray-100 dark:bg-bgDark rounded-2xl p-6 h-80 relative overflow-hidden flex flex-col justify-between">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="text-sm font-bold">لوحة التحكم</div>
+                                <div class="text-primary font-bold bg-primary/10 px-3 py-1 rounded-lg">رصيدك: 15,000 دج</div>
+                            </div>
+                            <!-- Mock Chart -->
+                            <div class="flex-1 flex items-end gap-2 px-2">
+                                <div class="w-1/6 bg-primary/40 rounded-t-lg h-1/3"></div>
+                                <div class="w-1/6 bg-primary/60 rounded-t-lg h-1/2"></div>
+                                <div class="w-1/6 bg-primary/80 rounded-t-lg h-3/4"></div>
+                                <div class="w-1/6 bg-primary rounded-t-lg h-full animate-glow"></div>
+                                <div class="w-1/6 bg-primary/60 rounded-t-lg h-2/3"></div>
+                                <div class="w-1/6 bg-primary/40 rounded-t-lg h-1/3"></div>
+                            </div>
+                            <div class="absolute bottom-4 left-4 bg-white dark:bg-cardDark px-4 py-2 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 text-xs flex items-center gap-2 animate-float">
+                                <i class="fas fa-check-circle text-primary"></i> تمت إضافة عمولة جديدة!
+                            </div>
                         </div>
                     </div>
-                `;
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="py-10 bg-white dark:bg-cardDark border-y border-gray-100 dark:border-gray-800">
+            <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-black text-primary mb-2">+10,000</div>
+                    <div class="text-gray-500 dark:text-gray-400 font-semibold">مسوق نشط</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-black text-primary mb-2">+50M</div>
+                    <div class="text-gray-500 dark:text-gray-400 font-semibold">دج مدفوعة</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-black text-primary mb-2">+1M</div>
+                    <div class="text-gray-500 dark:text-gray-400 font-semibold">طلب ناجح</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-black text-primary mb-2">+200</div>
+                    <div class="text-gray-500 dark:text-gray-400 font-semibold">منتج مميز</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section id="features" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">لماذا تختار <span class="text-primary">Tirourda</span>؟</h2>
+                    <p class="text-gray-600 dark:text-gray-400">نقدم لك أفضل الأدوات لضمان نجاحك وتحقيق أعلى الأرباح</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Feature Card -->
+                    <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-50 dark:border-gray-800 transition-all hover:-translate-y-2 group">
+                        <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-percent"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">عمولات مرتفعة</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">نقدم أعلى نسب العمولات في السوق الجزائري لتكافئ جهودك بشكل عادل.</p>
+                    </div>
+                    <!-- Feature Card -->
+                    <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-50 dark:border-gray-800 transition-all hover:-translate-y-2 group">
+                        <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">سحب سريع</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">احصل على أرباحك بسرعة وسهولة عبر بريديموب، CCP، أو حتى فليكسي.</p>
+                    </div>
+                    <!-- Feature Card -->
+                    <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-50 dark:border-gray-800 transition-all hover:-translate-y-2 group">
+                        <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">تتبع مباشر للإحصائيات</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">لوحة تحكم ذكية تعرض النقرات، التحويلات، والأرباح في الوقت الفعلي.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it works -->
+        <section id="how-it-works" class="py-20 bg-gray-50 dark:bg-bgDark/50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">كيف تبدأ <span class="text-primary">الربح</span>؟</h2>
+                    <p class="text-gray-600 dark:text-gray-400">4 خطوات بسيطة تفصلك عن أول دخل لك</p>
+                </div>
+                <div class="grid md:grid-cols-4 gap-6 relative">
+                    <div class="hidden md:block absolute top-1/2 right-0 w-full h-1 border-t-2 border-dashed border-gray-300 dark:border-gray-700 -z-10"></div>
+                    <!-- Step 1 -->
+                    <div class="text-center">
+                        <div class="w-20 h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-3xl font-black mb-4 shadow-lg">1</div>
+                        <h3 class="font-bold text-lg mb-2">إنشاء حساب</h3>
+                        <p class="text-sm text-gray-500">سجل مجاناً في ثوانٍ</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="text-center">
+                        <div class="w-20 h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-3xl font-black mb-4 shadow-lg">2</div>
+                        <h3 class="font-bold text-lg mb-2">رابط الإحالة</h3>
+                        <p class="text-sm text-gray-500">انسخ روابط المنتجات</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="text-center">
+                        <div class="w-20 h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-3xl font-black mb-4 shadow-lg">3</div>
+                        <h3 class="font-bold text-lg mb-2">شارك المنتجات</h3>
+                        <p class="text-sm text-gray-500">انشرها لمتابعيك</p>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="text-center">
+                        <div class="w-20 h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-3xl font-black mb-4 shadow-lg">4</div>
+                        <h3 class="font-bold text-lg mb-2">استلم أرباحك</h3>
+                        <p class="text-sm text-gray-500">اسحب أموالك بسهولة</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payout Methods -->
+        <section class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-12">طرق سحب <span class="text-primary">متعددة</span></h2>
+                <div class="flex flex-wrap justify-center gap-6">
+                    <div class="bg-white dark:bg-cardDark px-8 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-3 text-xl font-bold grayscale hover:grayscale-0 transition-all cursor-pointer">
+                        <i class="fas fa-envelope-open-text text-yellow-500"></i> CCP بريد الجزائر
+                    </div>
+                    <div class="bg-white dark:bg-cardDark px-8 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-3 text-xl font-bold grayscale hover:grayscale-0 transition-all cursor-pointer">
+                        <i class="fas fa-mobile-alt text-blue-500"></i> BaridiMob
+                    </div>
+                    <div class="bg-white dark:bg-cardDark px-8 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-3 text-xl font-bold grayscale hover:grayscale-0 transition-all cursor-pointer">
+                        <i class="fas fa-sim-card text-red-500"></i> Flexy
+                    </div>
+                    <div class="bg-white dark:bg-cardDark px-8 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-3 text-xl font-bold grayscale hover:grayscale-0 transition-all cursor-pointer">
+                        <i class="fab fa-cc-visa text-indigo-600"></i> Visa/Mastercard
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-white dark:bg-cardDark border-t border-gray-100 dark:border-gray-800 pt-16 pb-8">
+            <div class="container mx-auto px-6 grid md:grid-cols-4 gap-8 mb-10">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-2 text-2xl font-bold mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white text-sm"><i class="fas fa-chart-line"></i></div>
+                        Tirourda Affiliate
+                    </div>
+                    <p class="text-gray-500 text-sm mb-6 max-w-md">المنصة الأولى عربياً وجزائرياً للتسويق بالعمولة. نوفر لك أفضل المنتجات التكنولوجية والبرمجية لتسويقها بعمولات خيالية.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-bgDark flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-bgDark flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-bgDark flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 text-lg">روابط سريعة</h4>
+                    <ul class="space-y-2 text-gray-500 text-sm">
+                        <li><a href="#" class="hover:text-primary">الرئيسية</a></li>
+                        <li><a href="#" class="hover:text-primary">كيف يعمل</a></li>
+                        <li><a href="#" class="hover:text-primary">المنتجات</a></li>
+                        <li><a href="#admin09" class="hover:text-primary">دخول الإدارة</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 text-lg">تواصل معنا</h4>
+                    <ul class="space-y-2 text-gray-500 text-sm">
+                        <li><i class="fas fa-envelope ml-2 text-primary"></i> support@tirourda.com</li>
+                        <li><i class="fas fa-map-marker-alt ml-2 text-primary"></i> البليدة، الجزائر</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center text-gray-500 text-xs border-t border-gray-100 dark:border-gray-800 pt-8">
+                &copy; 2026 Tirourda Affiliate. جميع الحقوق محفوظة.
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- =========================
+         USER DASHBOARD VIEW
+    ========================== -->
+    <div id="user-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex">
+        
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white dark:bg-cardDark border-l border-gray-100 dark:border-gray-800 fixed h-full hidden md:flex flex-col">
+            <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center gap-2 text-xl font-bold cursor-pointer" onclick="navigate('landing')">
+                <i class="fas fa-chart-line text-primary"></i> Tirourda
+            </div>
+            <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+                <a href="#" class="flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-semibold"><i class="fas fa-home w-5"></i> الرئيسية</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark px-4 py-3 rounded-xl font-semibold text-gray-600 dark:text-gray-300 transition-colors"><i class="fas fa-chart-bar w-5"></i> الإحصائيات</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark px-4 py-3 rounded-xl font-semibold text-gray-600 dark:text-gray-300 transition-colors"><i class="fas fa-box w-5"></i> المنتجات</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark px-4 py-3 rounded-xl font-semibold text-gray-600 dark:text-gray-300 transition-colors"><i class="fas fa-link w-5"></i> روابط الإحالة</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark px-4 py-3 rounded-xl font-semibold text-gray-600 dark:text-gray-300 transition-colors"><i class="fas fa-shopping-cart w-5"></i> الطلبات</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark px-4 py-3 rounded-xl font-semibold text-gray-600 dark:text-gray-300 transition-colors"><i class="fas fa-money-bill-wave w-5"></i> السحب</a>
+            </nav>
+            <div class="p-4 border-t border-gray-100 dark:border-gray-800">
+                <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-xl p-4 text-white text-center shadow-lg">
+                    <div class="text-xs mb-1">المستوى الحالي</div>
+                    <div class="font-bold mb-2"><i class="fas fa-crown"></i> العضوية الذهبية</div>
+                    <div class="w-full bg-black/20 rounded-full h-2 mb-1">
+                        <div class="bg-white h-2 rounded-full" style="width: 80%"></div>
+                    </div>
+                    <div class="text-[10px]">باقي 20 طلب للبلاتينية</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 md:mr-64 p-4 md:p-8">
+            <!-- Topbar -->
+            <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 mb-8 flex justify-between items-center">
+                <h1 class="text-2xl font-bold">لوحة التحكم</h1>
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex bg-gray-50 dark:bg-bgDark px-4 py-2 rounded-xl border border-gray-100 dark:border-gray-700 items-center gap-2">
+                        <span class="text-sm text-gray-500">الرصيد المتاح:</span>
+                        <span class="font-bold text-primary">150,000 دج</span>
+                    </div>
+                    <button class="w-10 h-10 rounded-full bg-gray-50 dark:bg-bgDark flex items-center justify-center relative hover:text-primary transition-colors">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+                    </button>
+                    <div class="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold border border-primary/30">
+                        أ
+                    </div>
+                </div>
+            </header>
+
+            <!-- Quick Link -->
+            <div class="bg-white dark:bg-cardDark rounded-2xl p-6 mb-8 border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h3 class="font-bold mb-1">رابط الإحالة الخاص بك</h3>
+                    <p class="text-sm text-gray-500">شارك هذا الرابط واربح عمولة على كل تسجيل وطلب.</p>
+                </div>
+                <div class="flex gap-2 w-full md:w-auto">
+                    <input type="text" value="https://tirourda.com/ref/ahmed26" readonly class="bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 w-full md:w-64 text-left outline-none" dir="ltr">
+                    <button class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-xl transition-colors whitespace-nowrap"><i class="fas fa-copy ml-1"></i> نسخ</button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="text-gray-500 text-sm">الأرباح الإجمالية</div>
+                        <div class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center"><i class="fas fa-wallet"></i></div>
+                    </div>
+                    <div class="text-2xl font-black mb-1">245,500 دج</div>
+                    <div class="text-xs text-green-500 flex items-center gap-1"><i class="fas fa-arrow-up"></i> +12% هذا الشهر</div>
+                </div>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="text-gray-500 text-sm">الطلبات الناجحة</div>
+                        <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fas fa-shopping-bag"></i></div>
+                    </div>
+                    <div class="text-2xl font-black mb-1">124</div>
+                    <div class="text-xs text-blue-500 flex items-center gap-1"><i class="fas fa-arrow-up"></i> +5% هذا الشهر</div>
+                </div>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="text-gray-500 text-sm">النقرات</div>
+                        <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fas fa-mouse-pointer"></i></div>
+                    </div>
+                    <div class="text-2xl font-black mb-1">4,209</div>
+                    <div class="text-xs text-purple-500 flex items-center gap-1"><i class="fas fa-arrow-up"></i> +22% هذا الشهر</div>
+                </div>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="text-gray-500 text-sm">معدل التحويل</div>
+                        <div class="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center"><i class="fas fa-sync-alt"></i></div>
+                    </div>
+                    <div class="text-2xl font-black mb-1">3.2%</div>
+                    <div class="text-xs text-orange-500 flex items-center gap-1"><i class="fas fa-arrow-up"></i> +0.4% هذا الشهر</div>
+                </div>
+            </div>
+
+            <!-- Charts & Tables Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Chart -->
+                <div class="lg:col-span-2 bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <h3 class="font-bold mb-4">تطور الأرباح (دج)</h3>
+                    <canvas id="userChart" height="100"></canvas>
+                </div>
+                
+                <!-- Recent Conversions -->
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <h3 class="font-bold mb-4">أحدث العمولات</h3>
+                    <div class="space-y-4">
+                        <!-- Item -->
+                        <div class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-bgDark rounded-xl transition-colors border border-transparent dark:border-gray-800">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center"><i class="fas fa-laptop text-gray-500"></i></div>
+                                <div>
+                                    <div class="font-bold text-sm">لابتوب احترافي</div>
+                                    <div class="text-xs text-gray-500">منذ ساعتين</div>
+                                </div>
+                            </div>
+                            <div class="text-left">
+                                <div class="font-bold text-primary">+2,500 دج</div>
+                                <div class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full inline-block">مؤكد</div>
+                            </div>
+                        </div>
+                        <!-- Item -->
+                        <div class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-bgDark rounded-xl transition-colors border border-transparent dark:border-gray-800">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center"><i class="fas fa-headphones text-gray-500"></i></div>
+                                <div>
+                                    <div class="font-bold text-sm">سماعات لاسلكية</div>
+                                    <div class="text-xs text-gray-500">منذ 5 ساعات</div>
+                                </div>
+                            </div>
+                            <div class="text-left">
+                                <div class="font-bold text-yellow-500">+800 دج</div>
+                                <div class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full inline-block">قيد الانتظار</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-full mt-4 text-primary text-sm font-bold hover:underline">عرض الكل</button>
+                </div>
+            </div>
+
+            <!-- Products Showcase -->
+            <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-lg">منتجات مميزة للتسويق</h3>
+                    <button class="text-sm text-gray-500 hover:text-primary">عرض كل المنتجات <i class="fas fa-chevron-left text-xs"></i></button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Product Card -->
+                    <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-4 hover:shadow-lg transition-all group">
+                        <div class="bg-gray-50 dark:bg-bgDark h-32 rounded-xl mb-4 flex items-center justify-center text-4xl text-gray-300 group-hover:scale-105 transition-transform"><i class="fas fa-camera"></i></div>
+                        <h4 class="font-bold text-sm mb-1">كاميرا 4K ذكية</h4>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-gray-500">السعر: 45,000 دج</span>
+                            <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">عمولة: 10%</span>
+                        </div>
+                        <button class="w-full bg-gray-100 dark:bg-gray-800 hover:bg-primary hover:text-white dark:hover:bg-primary text-sm font-bold py-2 rounded-lg transition-colors">توليد الرابط</button>
+                    </div>
+                    <!-- Product Card -->
+                    <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-4 hover:shadow-lg transition-all group">
+                        <div class="bg-gray-50 dark:bg-bgDark h-32 rounded-xl mb-4 flex items-center justify-center text-4xl text-gray-300 group-hover:scale-105 transition-transform"><i class="fas fa-mobile-alt"></i></div>
+                        <h4 class="font-bold text-sm mb-1">هاتف T-Pro 2026</h4>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs text-gray-500">السعر: 85,000 دج</span>
+                            <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">عمولة: 5,000 دج</span>
+                        </div>
+                        <button class="w-full bg-gray-100 dark:bg-gray-800 hover:bg-primary hover:text-white dark:hover:bg-primary text-sm font-bold py-2 rounded-lg transition-colors">توليد الرابط</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <!-- =========================
+         ADMIN LOGIN VIEW
+    ========================== -->
+    <div id="admin-login-view" class="view min-h-screen flex items-center justify-center bg-bgLight dark:bg-bgDark relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-primary/5 z-0"></div>
+        <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 w-full max-w-md relative z-10">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-primary text-white rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg shadow-primary/40"><i class="fas fa-shield-alt"></i></div>
+                <h2 class="text-2xl font-black">إدارة Tirourda</h2>
+                <p class="text-gray-500 text-sm mt-2">تسجيل الدخول للنظام الإداري</p>
+            </div>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">كلمة المرور</label>
+                    <div class="relative">
+                        <input type="password" id="admin-password" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors text-left" dir="ltr" placeholder="••••••••">
+                        <i class="fas fa-lock absolute left-4 top-4 text-gray-400"></i>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-3 rounded-xl hover:bg-primary dark:hover:bg-primary transition-all mt-4">تسجيل الدخول</button>
+            </form>
+            <button onclick="navigate('landing')" class="w-full mt-4 text-sm text-gray-500 hover:text-primary">العودة للرئيسية</button>
+        </div>
+    </div>
+
+
+    <!-- =========================
+         ADMIN DASHBOARD VIEW
+    ========================== -->
+    <div id="admin-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex">
+        
+        <!-- Admin Sidebar -->
+        <aside class="w-64 bg-gray-900 text-white fixed h-full hidden md:flex flex-col z-20">
+            <div class="p-6 border-b border-gray-800 flex items-center gap-2 text-xl font-bold">
+                <i class="fas fa-cogs text-primary"></i> الإدارة العامة
+            </div>
+            <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+                <a href="#" class="flex items-center gap-3 bg-primary/20 text-primary px-4 py-3 rounded-xl font-semibold"><i class="fas fa-tachometer-alt w-5"></i> لوحة التحكم</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-800 px-4 py-3 rounded-xl font-semibold text-gray-300 transition-colors"><i class="fas fa-users w-5"></i> المسوقون</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-800 px-4 py-3 rounded-xl font-semibold text-gray-300 transition-colors"><i class="fas fa-box-open w-5"></i> المنتجات</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-800 px-4 py-3 rounded-xl font-semibold text-gray-300 transition-colors"><i class="fas fa-shopping-cart w-5"></i> الطلبات</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-800 px-4 py-3 rounded-xl font-semibold text-gray-300 transition-colors"><i class="fas fa-hand-holding-usd w-5"></i> السحوبات <span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full mr-auto">5</span></a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-800 px-4 py-3 rounded-xl font-semibold text-gray-300 transition-colors"><i class="fas fa-chart-pie w-5"></i> التقارير</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-gray-800 px-4 py-3 rounded-xl font-semibold text-gray-300 transition-colors"><i class="fas fa-cog w-5"></i> الإعدادات</a>
+            </nav>
+            <div class="p-4 border-t border-gray-800">
+                <button onclick="navigate('landing')" class="w-full flex items-center justify-center gap-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white py-2 rounded-xl transition-all">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
+        </aside>
+
+        <!-- Admin Main Content -->
+        <main class="flex-1 md:mr-64 p-4 md:p-8">
+            <!-- Topbar -->
+            <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 mb-8 flex justify-between items-center">
+                <h1 class="text-2xl font-bold">نظرة عامة على النظام</h1>
+                <div class="flex items-center gap-4">
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200"><i class="fas fa-check-circle"></i> النظام مستقر</span>
+                    <div class="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Admin Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-primary">
+                    <div class="text-gray-500 text-sm mb-2">إجمالي الإيرادات</div>
+                    <div class="text-3xl font-black">12.5M دج</div>
+                </div>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-blue-500">
+                    <div class="text-gray-500 text-sm mb-2">المسوقون النشطون</div>
+                    <div class="text-3xl font-black">8,432</div>
+                </div>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-red-500">
+                    <div class="text-gray-500 text-sm mb-2">سحوبات معلقة</div>
+                    <div class="text-3xl font-black">450,000 دج</div>
+                </div>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-purple-500">
+                    <div class="text-gray-500 text-sm mb-2">الطلبات اليومية</div>
+                    <div class="text-3xl font-black">342</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Revenue Chart -->
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <h3 class="font-bold mb-4">إحصائيات المبيعات والعمولات</h3>
+                    <canvas id="adminChart" height="150"></canvas>
+                </div>
+                
+                <!-- Pending Withdrawals Table -->
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-x-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold">طلبات السحب المعلقة</h3>
+                        <button class="text-primary text-sm">عرض الكل</button>
+                    </div>
+                    <table class="w-full text-sm text-right">
+                        <thead class="text-gray-500 bg-gray-50 dark:bg-bgDark rounded-xl">
+                            <tr>
+                                <th class="p-3 rounded-r-xl">المسوق</th>
+                                <th class="p-3">المبلغ</th>
+                                <th class="p-3">الطريقة</th>
+                                <th class="p-3 rounded-l-xl">إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-50 dark:border-gray-800">
+                                <td class="p-3 font-bold">أحمد م.</td>
+                                <td class="p-3 text-primary font-bold">15,000 دج</td>
+                                <td class="p-3"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs">CCP</span></td>
+                                <td class="p-3">
+                                    <button class="bg-primary text-white p-1.5 rounded hover:bg-primaryDark"><i class="fas fa-check"></i></button>
+                                    <button class="bg-red-500 text-white p-1.5 rounded hover:bg-red-600"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-50 dark:border-gray-800">
+                                <td class="p-3 font-bold">سارة ب.</td>
+                                <td class="p-3 text-primary font-bold">8,500 دج</td>
+                                <td class="p-3"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">BaridiMob</span></td>
+                                <td class="p-3">
+                                    <button class="bg-primary text-white p-1.5 rounded hover:bg-primaryDark"><i class="fas fa-check"></i></button>
+                                    <button class="bg-red-500 text-white p-1.5 rounded hover:bg-red-600"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // --- Theme Management ---
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            if (document.documentElement.classList.contains('dark')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+            updateChartsTheme();
+        }
+
+        // --- Navigation / SPA Routing ---
+        const views = ['landing-view', 'user-dashboard-view', 'admin-login-view', 'admin-dashboard-view'];
+        
+        function navigate(target) {
+            views.forEach(view => {
+                document.getElementById(view).classList.remove('active');
             });
+            document.getElementById(target + '-view').classList.add('active');
+            window.scrollTo(0,0);
+            
+            // Re-render charts when showing dashboards
+            if(target === 'user-dashboard') renderUserChart();
+            if(target === 'admin-dashboard') renderAdminChart();
+            
+            // Update hash without scrolling
+            history.pushState(null, null, '#' + target);
         }
 
-        function copyLink(inputId) {
-            const input = document.getElementById(inputId);
-            input.select(); document.execCommand("copy");
-            alert("تم نسخ رابط التسويق بنجاح! شاركه الآن.");
+        // Handle URL Hash for direct access
+        function handleHash() {
+            const hash = window.location.hash;
+            if(hash === '#admin09') {
+                navigate('admin-login');
+            } else if(hash === '#user-dashboard') {
+                navigate('user-dashboard');
+            } else if(hash === '#admin-dashboard') {
+                navigate('admin-dashboard');
+            } else {
+                navigate('landing');
+            }
         }
+        window.addEventListener('hashchange', handleHash);
+        window.addEventListener('load', handleHash);
 
-        function switchUserTab(tabId) {
-            document.querySelectorAll('#user-dashboard .dash-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            const lis = document.querySelectorAll('#user-dashboard .sidebar-menu li');
-            lis.forEach(li => li.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-
-        function requestWithdrawal() {
-            const rip = document.getElementById('withdrawRip').value;
-            if(rip.length < 10) { alert("يرجى إدخال رقم حساب صحيح"); return; }
-            if(currentUser.earnings <= 0) { alert("عذراً، رصيدك الحالي غير كافٍ للسحب."); return; }
-
-            withdrawals.push({ userId: currentUser.id, userName: currentUser.name, rip: rip, amount: currentUser.earnings, status: 'قيد المعالجة' });
-            currentUser.earnings = 0;
-            const index = users.findIndex(u => u.id === currentUser.id);
-            if(index !== -1) users[index] = currentUser;
-
-            saveData(); localStorage.setItem('tirourda_currentUser', JSON.stringify(currentUser));
-            alert("تم تسجيل طلب السحب بنجاح! سيتم التحويل قريباً.");
-            initUserDashboard(); document.getElementById('withdrawRip').value = '';
-        }
-
-        // --- Admin Functions ---
+        // --- Admin Authentication ---
         function handleAdminLogin(e) {
             e.preventDefault();
-            if(document.getElementById('adminPassword').value === 'abobob123#') {
-                initAdminDashboard(); navigateTo('admin-dashboard');
-            } else { alert("كلمة المرور خاطئة!"); }
+            const pass = document.getElementById('admin-password').value;
+            if(pass === 'abobob123#') {
+                navigate('admin-dashboard');
+                document.getElementById('admin-password').value = '';
+            } else {
+                alert('كلمة المرور غير صحيحة!');
+            }
         }
 
-        function switchAdminTab(tabId) {
-            document.querySelectorAll('#admin-dashboard .dash-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            const lis = document.querySelectorAll('#admin-dashboard .sidebar-menu li');
-            lis.forEach(li => li.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+        // --- Chart.js Instances ---
+        let userChartInst = null;
+        let adminChartInst = null;
+
+        function getChartColors() {
+            const isDark = document.documentElement.classList.contains('dark');
+            return {
+                text: isDark ? '#94a3b8' : '#64748b',
+                grid: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
+            };
         }
 
-        function initAdminDashboard() {
-            const usersTbody = document.getElementById('adminUsersTable');
-            usersTbody.innerHTML = '';
-            users.forEach(u => {
-                usersTbody.innerHTML += `<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone}</td><td><strong style="color:var(--primary-dark)">${u.earnings} دج</strong></td></tr>`;
+        function renderUserChart() {
+            const ctx = document.getElementById('userChart').getContext('2d');
+            const colors = getChartColors();
+            if(userChartInst) userChartInst.destroy();
+            
+            userChartInst = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4'],
+                    datasets: [{
+                        label: 'الأرباح (دج)',
+                        data: [15000, 25000, 22000, 45000],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: colors.grid }, ticks: { color: colors.text } },
+                        x: { grid: { display: false }, ticks: { color: colors.text } }
+                    }
+                }
             });
+        }
 
-            const withdrawTbody = document.getElementById('adminWithdrawTable');
-            withdrawTbody.innerHTML = '';
-            withdrawals.forEach((w, i) => {
-                withdrawTbody.innerHTML += `<tr><td>${w.userName}</td><td style="letter-spacing:1px; font-weight:bold;">${w.rip}</td><td><span style="color:#eab308; font-weight:bold;">${w.amount} دج</span></td><td><button class="btn btn-primary" style="padding: 5px 15px; font-size:13px;" onclick="acceptWithdrawal(${i})">تأكيد الدفع</button></td></tr>`;
+        function renderAdminChart() {
+            const ctx = document.getElementById('adminChart').getContext('2d');
+            const colors = getChartColors();
+            if(adminChartInst) adminChartInst.destroy();
+            
+            adminChartInst = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان'],
+                    datasets: [
+                        {
+                            label: 'المبيعات',
+                            data: [120, 190, 300, 250, 400, 450],
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'العمولات المدفوعة',
+                            data: [30, 45, 80, 60, 100, 120],
+                            backgroundColor: '#10b981',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { grid: { color: colors.grid }, ticks: { color: colors.text } },
+                        x: { grid: { display: false }, ticks: { color: colors.text } }
+                    }
+                }
             });
-            renderAdminProducts();
         }
 
-        function renderAdminProducts() {
-            const prodTbody = document.getElementById('adminProductsTable');
-            prodTbody.innerHTML = '';
-            products.forEach((p, i) => {
-                prodTbody.innerHTML += `<tr><td>${p.name}</td><td><span style="color:var(--primary-color); font-weight:bold;">${p.commission}</span></td><td><button class="btn btn-outline" style="color:#ef4444; border-color:#ef4444; padding:5px 15px;" onclick="deleteProduct(${i})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-            });
+        function updateChartsTheme() {
+            if(document.getElementById('user-dashboard-view').classList.contains('active')) renderUserChart();
+            if(document.getElementById('admin-dashboard-view').classList.contains('active')) renderAdminChart();
         }
-
-        function addProduct() {
-            const name = document.getElementById('newProdName').value;
-            const comm = document.getElementById('newProdComm').value;
-            if(!name || !comm) { alert("يرجى تعبئة بيانات المنتج"); return; }
-            products.push({ id: Date.now(), name, commission: comm, icon: "fa-leaf" });
-            saveData(); renderAdminProducts();
-            document.getElementById('newProdName').value = ''; document.getElementById('newProdComm').value = '';
-        }
-
-        function deleteProduct(index) {
-            if(confirm("تأكيد حذف المنتج؟")) { products.splice(index, 1); saveData(); renderAdminProducts(); }
-        }
-
-        function acceptWithdrawal(index) {
-            withdrawals.splice(index, 1); saveData(); initAdminDashboard();
-            alert("تم تأكيد دفع الأرباح للمسوق.");
-        }
-
-        window.onload = () => {
-            checkAdminURL();
-            if(currentUser && window.location.hash !== '#admin09') { initUserDashboard(); navigateTo('user-dashboard'); }
-            else if (window.location.hash !== '#admin09') { updateNavbar(); }
-        };
     </script>
 </body>
 </html>
