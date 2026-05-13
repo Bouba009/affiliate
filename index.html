@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tirourda Affiliate - متجر المنتجات الطبيعية</title>
     
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -21,229 +21,288 @@
                         primary: '#10b981', primaryDark: '#059669',
                         bgLight: '#f8fafc', bgDark: '#0f172a',
                         cardLight: '#ffffff', cardDark: '#1e293b'
+                    },
+                    animation: { 'float': 'float 3s ease-in-out infinite', 'glow': 'glow 2s ease-in-out infinite alternate' },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+                        glow: { '0%': { boxShadow: '0 0 10px #10b981' }, '100%': { boxShadow: '0 0 30px #10b981' } }
                     }
                 }
             }
         }
     </script>
+    <!-- Chart.js & SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         body { font-family: 'Cairo', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
-        .dark .glass { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); }
-        ::-webkit-scrollbar { width: 6px; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .dark .glass { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
         .view { display: none; opacity: 0; transition: opacity 0.4s ease; }
         .view.active { display: block; opacity: 1; }
         .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to left, #10b981, #34d399); }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #10b981; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-bgLight dark:bg-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
-    <!-- Theme Toggle Fixed Button -->
-    <button onclick="window.toggleTheme()" class="fixed bottom-6 left-6 z-50 bg-white dark:bg-cardDark p-3 rounded-full shadow-xl hover:shadow-primary/50 transition-all">
+    <!-- Theme Toggle -->
+    <button onclick="window.toggleTheme()" class="fixed bottom-6 left-6 z-50 bg-white dark:bg-cardDark p-3 rounded-full shadow-xl hover:shadow-primary/50 transition-all text-xl">
         <i id="theme-icon" class="fas fa-moon text-gray-800 dark:text-yellow-400"></i>
     </button>
 
-    <!-- LOADING OVERLAY -->
-    <div id="global-loader" class="fixed inset-0 bg-white dark:bg-bgDark z-[9999] flex items-center justify-center view active">
-        <div class="loader"></div>
+    <!-- Auth Modal (Login / Register) -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[99] hidden items-center justify-center">
+        <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-800 relative">
+            <button onclick="window.closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-primary/10 text-primary rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4"><i class="fas fa-leaf"></i></div>
+                <h2 id="auth-title" class="text-2xl font-bold">تسجيل الدخول</h2>
+            </div>
+            <form onsubmit="window.handleAuthSubmit(event)">
+                <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full mb-4 bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary" required>
+                <input type="password" id="auth-password" placeholder="كلمة المرور" class="w-full mb-4 bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary" required>
+                <button type="submit" id="auth-btn" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-primary/30">دخول</button>
+            </form>
+            <div class="text-center mt-4 text-sm">
+                <span class="text-gray-500 dark:text-gray-400">ليس لديك حساب؟</span> 
+                <button onclick="window.toggleAuthMode()" id="auth-toggle-btn" class="text-primary font-bold hover:underline">إنشاء حساب مجاني</button>
+            </div>
+        </div>
     </div>
 
     <!-- ========================= LANDING PAGE ========================== -->
-    <div id="landing-view" class="view">
+    <div id="landing-view" class="view active">
         <header class="fixed top-0 w-full glass z-40">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-                <div class="flex items-center gap-2 text-xl md:text-2xl font-bold">
-                    <i class="fas fa-leaf text-primary text-3xl"></i>
+                <div class="flex items-center gap-2 text-2xl font-bold">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-green-400 flex items-center justify-center text-white">
+                        <i class="fas fa-leaf"></i>
+                    </div>
                     Tirourda <span class="text-primary">Affiliate</span>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="window.navigate('auth')" class="bg-primary hover:bg-primaryDark text-white px-6 py-2 rounded-xl shadow-lg font-semibold">دخول / تسجيل</button>
+                    <button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-semibold px-4 hidden md:block">تسجيل الدخول</button>
+                    <button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-6 py-2 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 font-semibold">إنشاء حساب</button>
                 </div>
             </div>
         </header>
 
-        <section class="pt-32 pb-20 container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center text-center md:text-right">
-            <div>
-                <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">🍃 أفضل منصة للمنتجات الطبيعية</span>
-                <h1 class="text-4xl md:text-6xl font-black leading-tight mb-6">
-                    سوق للطبيعة، <br> واربح مع <span class="gradient-text">Tirourda</span>
-                </h1>
-                <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                    شارك منتجاتنا الطبيعية الأصلية (عسل، زيوت، مستحضرات تجميل عضوية) واحصل على عمولات حقيقية فور تأكيد الطلبات.
-                </p>
-                <button onclick="window.navigate('auth')" class="bg-primary text-white text-lg px-8 py-4 rounded-2xl font-bold">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button>
-            </div>
-            <div>
-                <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=800" alt="Natural Products" class="rounded-3xl shadow-2xl border-4 border-white dark:border-gray-800">
+        <section class="pt-32 pb-20 overflow-hidden relative">
+            <div class="absolute top-20 right-10 text-primary opacity-20 animate-float text-6xl"><i class="fas fa-coins"></i></div>
+            
+            <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-center md:text-right z-10">
+                    <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block border border-primary/20">🚀 برنامج الشركاء لمتجر Tirourda.store</span>
+                    <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6">
+                        سوق للطبيعة، <br> واربح مع <span class="gradient-text">Tirourda</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                        شارك منتجاتنا الطبيعية الأصلية (عسل، زيوت، مستحضرات تجميل) واحصل على عمولات حقيقية بالدينار الجزائري فور تأكيد الطلبات.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white text-lg px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 transition-all transform hover:-translate-y-1 font-bold flex items-center justify-center gap-2">
+                            ابدأ الآن مجانا <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="relative z-10 mt-10 md:mt-0">
+                    <div class="bg-white dark:bg-cardDark rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-4 transform rotate-2 hover:rotate-0 transition-all duration-500">
+                        <div class="bg-gray-100 dark:bg-bgDark rounded-2xl p-6 h-80 relative overflow-hidden flex flex-col justify-between">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="text-sm font-bold">أرباحك المباشرة</div>
+                                <div class="text-primary font-bold bg-primary/10 px-3 py-1 rounded-lg">رصيدك: 15,000 دج</div>
+                            </div>
+                            <div class="flex-1 flex items-end gap-2 px-2">
+                                <div class="w-1/6 bg-primary/40 rounded-t-lg h-1/3"></div>
+                                <div class="w-1/6 bg-primary/60 rounded-t-lg h-1/2"></div>
+                                <div class="w-1/6 bg-primary rounded-t-lg h-full animate-glow"></div>
+                                <div class="w-1/6 bg-primary/80 rounded-t-lg h-3/4"></div>
+                                <div class="w-1/6 bg-primary/60 rounded-t-lg h-2/3"></div>
+                            </div>
+                            <div class="absolute bottom-4 left-4 bg-white dark:bg-cardDark px-4 py-2 rounded-xl shadow-lg text-xs flex items-center gap-2 animate-float">
+                                <i class="fas fa-check-circle text-primary"></i> تم تأكيد طلبية عسل سدر!
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
 
-    <!-- ========================= AUTH VIEW (Login/Signup) ========================== -->
-    <div id="auth-view" class="view min-h-screen flex items-center justify-center">
-        <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 w-full max-w-md">
-            <h2 class="text-2xl font-bold text-center mb-6" id="auth-title">تسجيل الدخول</h2>
-            <form id="auth-form">
-                <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full mb-4 bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary" required>
-                <input type="password" id="auth-password" placeholder="كلمة المرور" class="w-full mb-4 bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary" required>
-                <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-primaryDark transition-all">دخول</button>
-            </form>
-            <div class="text-center mt-4 text-sm">
-                <span class="text-gray-500">ليس لديك حساب؟</span> 
-                <button onclick="window.toggleAuthMode()" class="text-primary font-bold">إنشاء حساب</button>
-            </div>
-            <button onclick="window.navigate('landing')" class="w-full mt-4 text-sm text-gray-400">العودة للرئيسية</button>
-        </div>
-    </div>
-
     <!-- ========================= USER DASHBOARD ========================== -->
     <div id="user-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex">
-        <aside class="w-64 bg-white dark:bg-cardDark border-l border-gray-100 dark:border-gray-800 fixed h-full hidden md:flex flex-col">
-            <div class="p-6 border-b font-bold text-xl flex items-center gap-2"><i class="fas fa-leaf text-primary"></i> Tirourda Aff</div>
-            <nav class="flex-1 p-4 space-y-2">
-                <a href="#" class="block bg-primary/10 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-home ml-2"></i> لوحة التحكم</a>
+        <aside class="w-64 bg-white dark:bg-cardDark border-l border-gray-100 dark:border-gray-800 fixed h-full hidden md:flex flex-col z-20">
+            <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center gap-2 text-xl font-bold">
+                <i class="fas fa-leaf text-primary"></i> مسوق Tirourda
+            </div>
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+                <a href="#" class="flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-semibold"><i class="fas fa-home w-5"></i> لوحة التحكم</a>
             </nav>
-            <div class="p-4 border-t">
-                <button onclick="window.logoutUser()" class="w-full bg-red-50 text-red-500 px-4 py-2 rounded-lg font-bold"><i class="fas fa-sign-out-alt"></i> خروج</button>
+            <div class="p-4 border-t border-gray-100 dark:border-gray-800">
+                <button onclick="window.logoutUser()" class="w-full flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-500 hover:text-white py-2 rounded-xl transition-all font-bold">
+                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                </button>
             </div>
         </aside>
 
-        <main class="flex-1 md:mr-64 p-4 md:p-8">
-            <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm p-4 mb-8 flex justify-between items-center border border-gray-100 dark:border-gray-800">
-                <h1 class="text-xl font-bold">أهلاً بك <span id="user-display-email" class="text-primary"></span></h1>
-                <div class="bg-gray-50 dark:bg-bgDark px-4 py-2 rounded-xl font-bold">
-                    الرصيد: <span id="user-balance" class="text-primary">0</span> دج
+        <main class="flex-1 md:mr-64 p-4 md:p-8 pt-20 md:pt-8">
+            <!-- Header -->
+            <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 mb-8 flex justify-between items-center">
+                <h1 class="text-xl md:text-2xl font-bold">أهلاً بك <span id="dash-email" class="text-primary text-sm"></span></h1>
+                <div class="flex items-center gap-4">
+                    <div class="bg-gray-50 dark:bg-bgDark px-4 py-2 rounded-xl border border-gray-100 dark:border-gray-700 font-bold">
+                        الرصيد: <span id="user-balance" class="text-primary">0</span> دج
+                    </div>
                 </div>
             </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                    <div class="text-gray-500 mb-2">أرباح قيد الانتظار</div>
-                    <div class="text-2xl font-black text-yellow-500"><span id="user-pending">0</span> دج</div>
+                    <div class="text-gray-500 text-sm mb-2">أرباح قيد الانتظار</div>
+                    <div class="text-2xl font-black text-yellow-500" id="user-pending">0 دج</div>
                 </div>
                 <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                    <div class="text-gray-500 mb-2">الطلبات الناجحة</div>
-                    <div class="text-2xl font-black text-green-500" id="user-confirmed-orders">0</div>
+                    <div class="text-gray-500 text-sm mb-2">إجمالي الأرباح المؤكدة</div>
+                    <div class="text-2xl font-black text-primary" id="user-total">0 دج</div>
                 </div>
                 <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                    <div class="text-gray-500 mb-2">إجمالي النقرات</div>
+                    <div class="text-gray-500 text-sm mb-2">الطلبات الناجحة</div>
+                    <div class="text-2xl font-black" id="user-orders-count">0</div>
+                </div>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <div class="text-gray-500 text-sm mb-2">النقرات (الزيارات)</div>
                     <div class="text-2xl font-black text-blue-500" id="user-clicks">0</div>
                 </div>
             </div>
 
-            <!-- Products Table for Affiliate -->
-            <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-8">
-                <h3 class="font-bold mb-4 text-lg">المنتجات المتاحة للتسويق (تيروردا ستور)</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="affiliate-products-list">
-                    <!-- Products injected via JS -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Visual Chart (Kept for premium feel) -->
+                <div class="lg:col-span-2 bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <h3 class="font-bold mb-4">تطور الأرباح</h3>
+                    <canvas id="userChart" height="100"></canvas>
+                </div>
+                
+                <!-- Recent Orders -->
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-y-auto max-h-80">
+                    <h3 class="font-bold mb-4">حالة طلباتي</h3>
+                    <div class="space-y-3" id="user-orders-list">
+                        <!-- Loaded from Firebase -->
+                    </div>
                 </div>
             </div>
 
-            <!-- Orders Tracking -->
+            <!-- Products to share -->
             <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                <h3 class="font-bold mb-4">تتبع طلباتي</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right">
-                        <thead class="bg-gray-50 dark:bg-bgDark">
-                            <tr>
-                                <th class="p-3">المنتج</th>
-                                <th class="p-3">العمولة</th>
-                                <th class="p-3">التاريخ</th>
-                                <th class="p-3">الحالة</th>
-                            </tr>
-                        </thead>
-                        <tbody id="user-orders-list">
-                            <!-- Orders injected via JS -->
-                        </tbody>
-                    </table>
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-lg">منتجات Tirourda المتاحة للتسويق</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" id="affiliate-products-list">
+                    <!-- Loaded from Firebase -->
                 </div>
             </div>
         </main>
     </div>
 
     <!-- ========================= ADMIN LOGIN ========================== -->
-    <div id="admin-login-view" class="view min-h-screen flex items-center justify-center">
-        <div class="bg-gray-900 text-white p-8 rounded-3xl shadow-2xl w-full max-w-md">
-            <h2 class="text-2xl font-black text-center mb-6 text-primary">إدارة Tirourda</h2>
+    <div id="admin-login-view" class="view min-h-screen flex items-center justify-center bg-bgLight dark:bg-bgDark relative">
+        <div class="absolute top-0 left-0 w-full h-full bg-primary/5 z-0"></div>
+        <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 w-full max-w-md relative z-10">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-primary text-white rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg shadow-primary/40"><i class="fas fa-shield-alt"></i></div>
+                <h2 class="text-2xl font-black">إدارة Tirourda</h2>
+            </div>
             <form onsubmit="window.handleAdminLogin(event)">
-                <input type="password" id="admin-pass" placeholder="كلمة مرور الإدارة" class="w-full mb-4 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 outline-none" required dir="ltr">
-                <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl">دخول الأدمن</button>
+                <input type="password" id="admin-password" placeholder="كلمة المرور الإدارية" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary mb-4 text-left" dir="ltr">
+                <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-3 rounded-xl hover:bg-primary transition-all">تسجيل الدخول</button>
             </form>
+            <button onclick="window.navigate('landing')" class="w-full mt-4 text-sm text-gray-500">العودة للرئيسية</button>
         </div>
     </div>
 
     <!-- ========================= ADMIN DASHBOARD ========================== -->
     <div id="admin-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex">
         <aside class="w-64 bg-gray-900 text-white fixed h-full hidden md:flex flex-col z-20">
-            <div class="p-6 border-b border-gray-800 font-bold text-xl text-primary"><i class="fas fa-shield-alt"></i> لوحة الإدارة</div>
-            <nav class="flex-1 p-4 space-y-2">
-                <a href="#" class="block bg-primary/20 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-chart-pie ml-2"></i> الإحصائيات الحقيقية</a>
+            <div class="p-6 border-b border-gray-800 flex items-center gap-2 text-xl font-bold">
+                <i class="fas fa-cogs text-primary"></i> الإدارة العامة
+            </div>
+            <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+                <a href="#" class="flex items-center gap-3 bg-primary/20 text-primary px-4 py-3 rounded-xl font-semibold"><i class="fas fa-tachometer-alt w-5"></i> نظرة عامة</a>
             </nav>
-            <div class="p-4"><button onclick="window.navigate('landing')" class="w-full bg-red-600 text-white px-4 py-2 rounded-lg">خروج</button></div>
+            <div class="p-4 border-t border-gray-800">
+                <button onclick="window.navigate('landing')" class="w-full flex items-center justify-center gap-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white py-2 rounded-xl transition-all">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
         </aside>
 
-        <main class="flex-1 md:mr-64 p-4 md:p-8">
-            <h1 class="text-2xl font-bold mb-6">نظرة عامة على المتجر والمسوقين</h1>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-white">
-                <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-2xl shadow">
-                    <div class="text-sm opacity-80">إجمالي الأرباح المدفوعة للمسوقين</div>
+        <main class="flex-1 md:mr-64 p-4 md:p-8 pt-20 md:pt-8">
+            <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 mb-8 flex justify-between items-center">
+                <h1 class="text-2xl font-bold">لوحة تحكم الأدمن</h1>
+            </header>
+
+            <!-- Admin Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-primary">
+                    <div class="text-gray-500 text-sm mb-2">إجمالي الأرباح المدفوعة للمسوقين</div>
                     <div class="text-3xl font-black" id="admin-total-paid">0 دج</div>
                 </div>
-                <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-2xl shadow">
-                    <div class="text-sm opacity-80">الطلبات المعلقة</div>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-yellow-500">
+                    <div class="text-gray-500 text-sm mb-2">طلبات قيد الانتظار</div>
                     <div class="text-3xl font-black" id="admin-pending-count">0</div>
                 </div>
-                <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-6 rounded-2xl shadow">
-                    <div class="text-sm opacity-80">عدد المنتجات</div>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-blue-500">
+                    <div class="text-gray-500 text-sm mb-2">عدد المنتجات النشطة</div>
                     <div class="text-3xl font-black" id="admin-products-count">0</div>
                 </div>
             </div>
 
-            <!-- Add Product CSV -->
+            <!-- CSV Upload Premium Area -->
             <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-8">
-                <h3 class="font-bold mb-4">إضافة منتجات عبر CSV</h3>
-                <p class="text-xs text-gray-500 mb-4">صيغة الملف: الاسم,السعر(دج),العمولة(دج),رابط الصورة</p>
-                <div class="flex gap-4">
-                    <input type="file" id="csv-file" accept=".csv" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
-                    <button onclick="window.importCSV()" class="bg-primary text-white px-6 py-2 rounded-xl font-bold">رفع</button>
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h3 class="font-bold text-lg mb-1"><i class="fas fa-file-csv text-primary ml-2"></i> إضافة منتجات (CSV)</h3>
+                        <p class="text-sm text-gray-500">الصيغة المطلوبة: الاسم,السعر(دج),العمولة(دج),رابط الصورة</p>
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <input type="file" id="csv-file" accept=".csv" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all cursor-pointer">
+                        <button onclick="window.importCSV()" class="bg-primary hover:bg-primaryDark text-white px-6 py-2 rounded-xl font-bold transition-all shadow-md">رفع الملف</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Orders Management -->
-            <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                <h3 class="font-bold mb-4">إدارة الطلبات وتأكيد العمولات</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right">
-                        <thead class="bg-gray-50 dark:bg-bgDark">
-                            <tr>
-                                <th class="p-3">كود الطلب</th>
-                                <th class="p-3">رقم المسوق</th>
-                                <th class="p-3">المنتج</th>
-                                <th class="p-3">العمولة</th>
-                                <th class="p-3">الإجراء (يضيف للمسوق)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-orders-list">
-                            <!-- Injected via JS -->
-                        </tbody>
-                    </table>
-                </div>
+            <!-- Orders Table (Pending Only) -->
+            <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-x-auto">
+                <h3 class="font-bold mb-4">الطلبات المعلقة (تحتاج لتأكيد الدفع)</h3>
+                <table class="w-full text-sm text-right">
+                    <thead class="text-gray-500 bg-gray-50 dark:bg-bgDark rounded-xl">
+                        <tr>
+                            <th class="p-3">رقم الطلب / المسوق</th>
+                            <th class="p-3">المنتج</th>
+                            <th class="p-3">قيمة العمولة</th>
+                            <th class="p-3">تأكيد وإضافة الرصيد</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders-list">
+                        <!-- Loaded from Firebase -->
+                    </tbody>
+                </table>
             </div>
         </main>
     </div>
 
-    <!-- ========================= FIREBASE & LOGIC ========================== -->
+    <!-- ========================= JAVASCRIPT & FIREBASE LOGIC ========================== -->
     <script type="module">
+        // --- 1. FIREBASE CONFIGURATION (V9) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc, onSnapshot, query, where, increment, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc, onSnapshot, query, where, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Configuration provided by user
         const firebaseConfig = {
             apiKey: "AIzaSyCkkVzBU-PTSNHFMQXQ6mUQ3EkYQd6kCkQ",
             authDomain: "affiliate-6e759.firebaseapp.com",
@@ -261,196 +320,176 @@
 
         let currentUser = null;
         let isSignupMode = false;
-        let unsubscribeOrders = null;
-        let unsubscribeProducts = null;
 
-        // --- GLOBAL UI FUNCTIONS ---
+        // --- 2. UI & NAVIGATION CONTROLS ---
         window.toggleTheme = () => {
             document.documentElement.classList.toggle('dark');
             const icon = document.getElementById('theme-icon');
-            if (document.documentElement.classList.contains('dark')) {
-                icon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                icon.classList.replace('fa-sun', 'fa-moon');
-            }
+            if(document.documentElement.classList.contains('dark')) icon.classList.replace('fa-moon', 'fa-sun');
+            else icon.classList.replace('fa-sun', 'fa-moon');
+            if(document.getElementById('user-dashboard-view').classList.contains('active')) renderUserChart();
         };
 
-        const views = ['landing-view', 'auth-view', 'user-dashboard-view', 'admin-login-view', 'admin-dashboard-view'];
+        const views = ['landing-view', 'user-dashboard-view', 'admin-login-view', 'admin-dashboard-view'];
         window.navigate = (target) => {
             views.forEach(v => document.getElementById(v).classList.remove('active'));
             document.getElementById(target + '-view').classList.add('active');
             window.location.hash = target;
+            if(target === 'user-dashboard') renderUserChart();
         };
 
-        window.toggleAuthMode = () => {
-            isSignupMode = !isSignupMode;
-            document.getElementById('auth-title').innerText = isSignupMode ? "إنشاء حساب مسوق" : "تسجيل الدخول";
-            document.querySelector('#auth-form button').innerText = isSignupMode ? "تسجيل" : "دخول";
-        };
-
-        // Router
-        window.addEventListener('hashchange', handleRoute);
-        window.addEventListener('load', () => {
-            document.getElementById('global-loader').classList.remove('active');
-            handleRoute();
-        });
-
-        function handleRoute() {
+        window.addEventListener('hashchange', () => {
             const hash = window.location.hash;
             if (hash === '#admin09') window.navigate('admin-login');
-            else if (hash === '#auth') window.navigate('auth');
             else if (hash === '#user-dashboard' && currentUser) window.navigate('user-dashboard');
             else if (hash === '#admin-dashboard') window.navigate('admin-dashboard');
             else window.navigate('landing');
-        }
+        });
 
-        // --- AUTHENTICATION ---
-        document.getElementById('auth-form').addEventListener('submit', async (e) => {
+        // --- 3. AUTHENTICATION LOGIC (MODAL) ---
+        window.openAuthModal = (signup) => {
+            isSignupMode = signup;
+            document.getElementById('auth-modal').style.display = 'flex';
+            document.getElementById('auth-title').innerText = signup ? "إنشاء حساب مسوق" : "تسجيل الدخول";
+            document.getElementById('auth-btn').innerText = signup ? "إنشاء حساب" : "دخول";
+            document.getElementById('auth-toggle-btn').innerText = signup ? "لدي حساب بالفعل" : "إنشاء حساب مجاني";
+        };
+        window.closeAuthModal = () => document.getElementById('auth-modal').style.display = 'none';
+        window.toggleAuthMode = () => window.openAuthModal(!isSignupMode);
+
+        window.handleAuthSubmit = async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
-            
             try {
                 if (isSignupMode) {
                     const cred = await createUserWithEmailAndPassword(auth, email, password);
-                    // Create user profile in Firestore
-                    await setDoc(doc(db, "users", cred.user.uid), {
-                        email: email,
-                        balance: 0,
-                        clicks: 0,
-                        role: 'affiliate',
-                        createdAt: serverTimestamp()
-                    });
-                    Swal.fire('نجاح!', 'تم إنشاء الحساب بنجاح', 'success');
+                    await setDoc(doc(db, "users", cred.user.uid), { email, balance: 0, clicks: 0, role: 'affiliate', createdAt: serverTimestamp() });
+                    Swal.fire({icon: 'success', title: 'تم إنشاء الحساب!', showConfirmButton: false, timer: 1500});
                 } else {
                     await signInWithEmailAndPassword(auth, email, password);
+                    Swal.fire({icon: 'success', title: 'تم تسجيل الدخول', showConfirmButton: false, timer: 1500});
                 }
+                window.closeAuthModal();
             } catch (error) {
                 Swal.fire('خطأ', error.message, 'error');
             }
-        });
+        };
 
-        onAuthStateChanged(auth, async (user) => {
+        onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
                 if(window.location.hash !== '#admin-dashboard') {
                     window.navigate('user-dashboard');
-                    loadUserDashboard();
+                    loadUserDashboardData();
                 }
             } else {
                 currentUser = null;
-                if(unsubscribeOrders) unsubscribeOrders();
                 if(window.location.hash === '#user-dashboard') window.navigate('landing');
             }
         });
 
-        window.logoutUser = async () => {
-            await signOut(auth);
-            window.navigate('landing');
-        };
+        window.logoutUser = async () => { await signOut(auth); window.navigate('landing'); };
 
+        // --- 4. ADMIN LOGIN ---
         window.handleAdminLogin = (e) => {
             e.preventDefault();
-            if (document.getElementById('admin-pass').value === 'abobob123#') {
+            if (document.getElementById('admin-password').value === 'abobob123#') {
                 window.navigate('admin-dashboard');
-                loadAdminDashboard();
+                loadAdminDashboardData();
             } else {
                 Swal.fire('خطأ', 'كلمة المرور غير صحيحة', 'error');
             }
         };
 
-        // --- AFFILIATE DASHBOARD LOGIC ---
-        function loadUserDashboard() {
-            document.getElementById('user-display-email').innerText = currentUser.email;
+        // --- 5. AFFILIATE DASHBOARD LOGIC (REALTIME) ---
+        function loadUserDashboardData() {
+            if(!currentUser) return;
+            document.getElementById('dash-email').innerText = currentUser.email;
 
-            // Realtime User Stats
+            // 5a. Listen to User profile (Balance, Clicks)
             onSnapshot(doc(db, "users", currentUser.uid), (docSnap) => {
-                if (docSnap.exists()) {
+                if(docSnap.exists()) {
                     const data = docSnap.data();
                     document.getElementById('user-balance').innerText = data.balance || 0;
+                    document.getElementById('user-total').innerText = (data.balance || 0) + ' دج';
                     document.getElementById('user-clicks').innerText = data.clicks || 0;
                 }
             });
 
-            // Realtime User Orders
+            // 5b. Listen to Orders
             const q = query(collection(db, "orders"), where("affiliateId", "==", currentUser.uid));
-            unsubscribeOrders = onSnapshot(q, (snapshot) => {
+            onSnapshot(q, (snapshot) => {
                 let pendingSum = 0;
                 let confirmedCount = 0;
                 let ordersHtml = '';
 
                 snapshot.forEach((docSnap) => {
                     const order = docSnap.data();
-                    if (order.status === 'pending') pendingSum += Number(order.commission);
-                    if (order.status === 'confirmed') confirmedCount++;
+                    if(order.status === 'pending') pendingSum += Number(order.commission);
+                    if(order.status === 'confirmed') confirmedCount++;
 
-                    let statusBadge = order.status === 'pending' 
-                        ? `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs">قيد الانتظار</span>`
-                        : `<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">مؤكد (تم الدفع)</span>`;
+                    let statusUI = order.status === 'pending' 
+                        ? `<div class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">قيد الانتظار</div>`
+                        : `<div class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full">مؤكد</div>`;
 
                     ordersHtml += `
-                        <tr class="border-b border-gray-100 dark:border-gray-800">
-                            <td class="p-3 font-bold">${order.productName}</td>
-                            <td class="p-3 text-primary">${order.commission} دج</td>
-                            <td class="p-3 text-sm">${new Date(order.date?.toDate() || Date.now()).toLocaleDateString('ar-DZ')}</td>
-                            <td class="p-3">${statusBadge}</td>
-                        </tr>
+                        <div class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-bgDark rounded-xl border border-gray-100 dark:border-gray-800 transition-colors">
+                            <div><div class="font-bold text-sm">${order.productName}</div></div>
+                            <div class="text-left">
+                                <div class="font-bold ${order.status === 'pending' ? 'text-yellow-500' : 'text-primary'}">+${order.commission} دج</div>
+                                ${statusUI}
+                            </div>
+                        </div>
                     `;
                 });
-
-                document.getElementById('user-pending').innerText = pendingSum;
-                document.getElementById('user-confirmed-orders').innerText = confirmedCount;
-                document.getElementById('user-orders-list').innerHTML = ordersHtml || '<tr><td colspan="4" class="text-center p-4">لا توجد طلبات بعد</td></tr>';
+                document.getElementById('user-pending').innerText = pendingSum + ' دج';
+                document.getElementById('user-orders-count').innerText = confirmedCount;
+                document.getElementById('user-orders-list').innerHTML = ordersHtml || '<p class="text-xs text-gray-500 text-center p-2">لا توجد طلبات</p>';
             });
 
-            // Load Products
+            // 5c. Load Products Grid
             onSnapshot(collection(db, "products"), (snapshot) => {
                 let productsHtml = '';
                 snapshot.forEach((pDoc) => {
                     const p = pDoc.data();
                     const refLink = `https://tirourda.store/product/${pDoc.id}?ref=${currentUser.uid}`;
                     productsHtml += `
-                        <div class="border border-gray-100 dark:border-gray-700 rounded-xl p-4 text-center">
-                            <img src="${p.image || 'https://via.placeholder.com/150'}" class="w-full h-32 object-cover rounded-lg mb-3">
+                        <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-4 hover:shadow-lg transition-all group bg-gray-50 dark:bg-bgDark">
+                            <img src="${p.image || 'https://via.placeholder.com/150'}" class="w-full h-32 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform">
                             <h4 class="font-bold text-sm mb-1">${p.name}</h4>
-                            <div class="text-xs text-gray-500 mb-2">السعر: ${p.price} دج</div>
-                            <div class="text-sm font-bold text-primary mb-3">عمولتك: ${p.commission} دج</div>
-                            <button onclick="window.copyLink('${refLink}', '${pDoc.id}')" class="w-full bg-gray-100 dark:bg-gray-800 hover:bg-primary hover:text-white py-2 rounded-lg text-sm font-bold transition-colors">
-                                نسخ رابط الإحالة
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-xs text-gray-500">السعر: ${p.price} دج</span>
+                                <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">عمولة: ${p.commission} دج</span>
+                            </div>
+                            <button onclick="window.copyReferralLink('${refLink}', '${pDoc.id}')" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 hover:border-primary hover:text-primary text-sm font-bold py-2 rounded-lg transition-colors mb-2">
+                                <i class="fas fa-copy"></i> نسخ الرابط
                             </button>
-                            <!-- TEST BUTTON ONLY -->
-                            <button onclick="window.testAddOrder('${pDoc.id}', '${p.name}', ${p.commission})" class="w-full mt-2 border border-dashed border-primary text-primary py-1 rounded-lg text-xs hover:bg-primary/10">
-                                🧪 محاكاة شراء من الرابط
+                            <button onclick="window.testSimulateOrder('${pDoc.id}', '${p.name}', ${p.commission})" class="w-full text-xs text-blue-500 bg-blue-50 py-1 rounded hover:bg-blue-100 transition-colors border border-dashed border-blue-200">
+                                🧪 تسجيل طلبية (للتجربة)
                             </button>
                         </div>
                     `;
                 });
-                document.getElementById('affiliate-products-list').innerHTML = productsHtml || '<p class="text-gray-500 text-sm">لا توجد منتجات حالياً</p>';
+                document.getElementById('affiliate-products-list').innerHTML = productsHtml || '<p class="text-sm text-gray-500">لا توجد منتجات</p>';
             });
         }
 
-        window.copyLink = async (link, productId) => {
+        window.copyReferralLink = async (link) => {
             navigator.clipboard.writeText(link);
-            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم نسخ الرابط بنجاح!', showConfirmButton: false, timer: 1500 });
-            // Simulate click tracking
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم نسخ رابط الإحالة!', showConfirmButton: false, timer: 1500 });
             await updateDoc(doc(db, "users", currentUser.uid), { clicks: increment(1) });
         };
 
-        window.testAddOrder = async (productId, productName, commission) => {
+        window.testSimulateOrder = async (productId, productName, commission) => {
             await addDoc(collection(db, "orders"), {
-                productId: productId,
-                productName: productName,
-                affiliateId: currentUser.uid,
-                commission: Number(commission),
-                status: 'pending',
-                date: serverTimestamp()
+                productId, productName, affiliateId: currentUser.uid, commission: Number(commission), status: 'pending', date: serverTimestamp()
             });
-            Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'تم تسجيل طلبية تجريبية!', showConfirmButton: false, timer: 1500 });
+            Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'سجلت طلبية بانتظار أدمن!', showConfirmButton: false, timer: 1500 });
         };
 
-        // --- ADMIN DASHBOARD LOGIC ---
-        function loadAdminDashboard() {
-            // Load all stats
+        // --- 6. ADMIN DASHBOARD LOGIC (REALTIME) ---
+        function loadAdminDashboardData() {
             onSnapshot(collection(db, "orders"), (snapshot) => {
                 let pendingCount = 0;
                 let totalPaid = 0;
@@ -458,57 +497,51 @@
 
                 snapshot.forEach((docSnap) => {
                     const order = docSnap.data();
-                    if (order.status === 'pending') {
+                    if(order.status === 'confirmed') totalPaid += Number(order.commission);
+                    else if(order.status === 'pending') {
                         pendingCount++;
                         ordersHtml += `
-                            <tr class="border-b border-gray-100 dark:border-gray-800">
-                                <td class="p-3 text-xs font-mono">${docSnap.id.slice(0,6)}</td>
-                                <td class="p-3 text-xs font-mono">${order.affiliateId.slice(0,6)}...</td>
+                            <tr class="border-b border-gray-50 dark:border-gray-800">
+                                <td class="p-3 text-xs">
+                                    <div class="font-bold text-gray-700 dark:text-gray-300">ط: ${docSnap.id.slice(0,5)}</div>
+                                    <div class="text-gray-400">م: ${order.affiliateId.slice(0,5)}</div>
+                                </td>
                                 <td class="p-3 font-bold">${order.productName}</td>
                                 <td class="p-3 text-primary font-bold">${order.commission} دج</td>
                                 <td class="p-3">
-                                    <button onclick="window.confirmOrder('${docSnap.id}', '${order.affiliateId}', ${order.commission})" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm font-bold">تأكيد ودفع</button>
+                                    <button onclick="window.confirmAdminOrder('${docSnap.id}', '${order.affiliateId}', ${order.commission})" class="bg-primary hover:bg-primaryDark text-white px-3 py-1.5 rounded-lg text-sm font-bold shadow-md"><i class="fas fa-check"></i> تأكيد ودفع</button>
                                 </td>
                             </tr>
                         `;
-                    } else if (order.status === 'confirmed') {
-                        totalPaid += Number(order.commission);
                     }
                 });
-
                 document.getElementById('admin-pending-count').innerText = pendingCount;
                 document.getElementById('admin-total-paid').innerText = totalPaid + ' دج';
-                document.getElementById('admin-orders-list').innerHTML = ordersHtml || '<tr><td colspan="5" class="text-center p-4">لا توجد طلبات معلقة</td></tr>';
+                document.getElementById('admin-orders-list').innerHTML = ordersHtml || '<tr><td colspan="4" class="text-center p-4 text-gray-500">لا توجد طلبات معلقة</td></tr>';
             });
 
-            onSnapshot(collection(db, "products"), (snapshot) => {
-                document.getElementById('admin-products-count').innerText = snapshot.size;
+            onSnapshot(collection(db, "products"), (snap) => {
+                document.getElementById('admin-products-count').innerText = snap.size;
             });
         }
 
-        window.confirmOrder = async (orderId, affiliateId, commission) => {
+        window.confirmAdminOrder = async (orderId, affiliateId, commission) => {
             try {
-                // 1. Update Order Status
                 await updateDoc(doc(db, "orders", orderId), { status: 'confirmed' });
-                // 2. Add Balance to Affiliate
                 await updateDoc(doc(db, "users", affiliateId), { balance: increment(commission) });
                 Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم تأكيد الطلب بنجاح وإضافة الرصيد للمسوق', showConfirmButton: false, timer: 2000 });
-            } catch(e) {
-                Swal.fire('خطأ', e.message, 'error');
-            }
+            } catch(e) { Swal.fire('خطأ', e.message, 'error'); }
         };
 
-        // CSV Import logic
         window.importCSV = () => {
             const fileInput = document.getElementById('csv-file');
-            if(!fileInput.files.length) return Swal.fire('خطأ', 'يرجى اختيار ملف CSV أولاً', 'error');
+            if(!fileInput.files.length) return Swal.fire('خطأ', 'الرجاء تحديد ملف CSV', 'error');
 
             const reader = new FileReader();
             reader.onload = async (e) => {
-                const text = e.target.result;
-                const lines = text.split('\n');
+                const lines = e.target.result.split('\n');
                 let count = 0;
-                for(let i=1; i<lines.length; i++) { // Skip header if exists
+                for(let i=1; i<lines.length; i++) { // تخطي الرأس
                     if(!lines[i].trim()) continue;
                     const cols = lines[i].split(',');
                     if(cols.length >= 3) {
@@ -528,6 +561,29 @@
             reader.readAsText(fileInput.files[0]);
         };
 
+        // --- Chart.js Visuals ---
+        let userChartInst = null;
+        function renderUserChart() {
+            const ctx = document.getElementById('userChart');
+            if(!ctx) return;
+            const isDark = document.documentElement.classList.contains('dark');
+            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+            
+            if(userChartInst) userChartInst.destroy();
+            userChartInst = new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['أسبوع 1', 'أسبوع 2', 'أسبوع 3', 'أسبوع 4'],
+                    datasets: [{ label: 'معدل التفاعل', data: [12, 19, 15, 25], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderWidth: 3, fill: true, tension: 0.4 }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { grid: { color: gridColor }, ticks: { color: textColor } }, x: { grid: { display: false }, ticks: { color: textColor } } }
+                }
+            });
+        }
     </script>
 </body>
 </html>
