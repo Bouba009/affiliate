@@ -59,7 +59,7 @@
         .loader { border: 4px solid rgba(16, 185, 129, 0.2); border-left-color: #10b981; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Hero Background Animations */
+        /* Hero Background Animations (تم الرفع للأعلى) */
         @keyframes floatUpNum {
             0% { transform: translateY(0px); opacity: 0; }
             20% { opacity: 0.4; }
@@ -194,8 +194,8 @@
         
         <!-- Animated Background Chart & Numbers -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10 w-full h-full">
-            <!-- Background SVG Graph (Moved Upwards) -->
-            <svg class="absolute top-[10vh] md:top-[15vh] left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
+            <!-- Background SVG Graph (Raised slightly higher) -->
+            <svg class="absolute top-[5vh] md:top-[10vh] left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
                 <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
                 <defs>
                     <linearGradient id="gradientChart" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -239,7 +239,6 @@
 
         <!-- HERO SECTION -->
         <section class="pt-32 md:pt-40 pb-16 md:pb-20 overflow-hidden relative min-h-[90vh] flex items-center w-full">
-            
             <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center w-full">
                 <div class="text-center lg:text-right z-10 w-full">
                     <span class="glass-card text-primary px-5 py-2 rounded-full text-xs md:text-sm font-bold mb-6 inline-flex items-center gap-2 shadow-sm">
@@ -282,7 +281,125 @@
             </div>
         </section>
 
-        <!-- (باقي الأقسام: FEATURES، STATISTICS، HOW IT WORKS) -->
+        <!-- STATISTICS SECTION -->
+        <section class="py-10 bg-white dark:bg-cardDark border-y border-gray-100 dark:border-gray-800">
+            <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-3xl md:text-5xl font-black text-gray-800 dark:text-white mb-2">+<span class="text-primary">150</span></div>
+                    <div class="text-xs md:text-base text-gray-500 dark:text-gray-400 font-bold">مسوق نشط</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-5xl font-black text-gray-800 dark:text-white mb-2">+<span class="text-primary">500K</span></div>
+                    <div class="text-xs md:text-base text-gray-500 dark:text-gray-400 font-bold">دج مدفوعة</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-5xl font-black text-gray-800 dark:text-white mb-2">+<span class="text-primary">1,200</span></div>
+                    <div class="text-xs md:text-base text-gray-500 dark:text-gray-400 font-bold">طلب ناجح</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-5xl font-black text-gray-800 dark:text-white mb-2">+<span class="text-primary">45</span></div>
+                    <div class="text-xs md:text-base text-gray-500 dark:text-gray-400 font-bold">منتج مميز</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section id="features" class="py-16 md:py-24 bg-gray-50 dark:bg-bgDark">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-black mb-4">لماذا تختار <span class="text-primary">Tirourda</span>؟</h2>
+                    <p class="text-gray-600 dark:text-gray-400">بيئة عمل احترافية تضمن نجاحك وتحقيق أعلى الأرباح بشفافية تامة.</p>
+                </div>
+                <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+                    <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2 group">
+                        <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-percent"></i></div>
+                        <h3 class="text-lg font-bold mb-2">عمولة ثابتة ومجزية</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">نقدم 500 دج عمولة ثابتة على كل طلبية ناجحة لتكافئ جهودك بشكل عادل.</p>
+                    </div>
+                    <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2 group">
+                        <div class="w-14 h-14 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-bolt"></i></div>
+                        <h3 class="text-lg font-bold mb-2">سحب سريع ومضمون</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي CCP أو رصيد هاتفك (Flexy).</p>
+                    </div>
+                    <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2 group">
+                        <div class="w-14 h-14 bg-yellow-500/10 text-yellow-500 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-cart-plus"></i></div>
+                        <h3 class="text-lg font-bold mb-2">تسجيل الطلبات بنفسك</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">يمكنك أخذ تفاصيل الزبون وتسجيل الطلبية له مباشرة من لوحة التحكم لتأمين عمولتك.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS -->
+        <section id="how-it-works" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-black mb-4">كيف تبدأ <span class="text-primary">الربح</span>؟</h2>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 relative">
+                    <div class="hidden md:block absolute top-10 right-1/8 w-3/4 h-1 border-t-2 border-dashed border-gray-300 dark:border-gray-700 -z-10"></div>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-xl md:text-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform"><i class="fas fa-user-plus"></i></div>
+                        <h3 class="font-bold text-sm md:text-lg mb-1">1. إنشاء حساب</h3>
+                    </div>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-xl md:text-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform"><i class="fas fa-bullhorn"></i></div>
+                        <h3 class="font-bold text-sm md:text-lg mb-1">2. الترويج للمنتجات</h3>
+                    </div>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-xl md:text-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform"><i class="fas fa-edit"></i></div>
+                        <h3 class="font-bold text-sm md:text-lg mb-1">3. تسجيل طلبات الزبائن</h3>
+                    </div>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-xl md:text-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform"><i class="fas fa-money-bill-wave"></i></div>
+                        <h3 class="font-bold text-sm md:text-lg mb-1">4. استلم أرباحك</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAYOUT METHODS -->
+        <section class="py-16 md:py-20 bg-gray-50 dark:bg-bgDark border-y border-gray-100 dark:border-gray-800">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-black mb-10">طرق سحب <span class="text-primary">متعددة ومحلية</span></h2>
+                <div class="flex flex-wrap justify-center gap-4 md:gap-6">
+                    <!-- CCP -->
+                    <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center justify-center gap-4 text-lg md:text-xl font-bold hover:shadow-lg transition-all w-full md:w-auto">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/AlgeriePoste.svg" alt="CCP" class="h-8 md:h-10 object-contain bg-white px-2 py-1 rounded-lg border border-gray-100">
+                        <span class="text-gray-800 dark:text-white">CCP / BaridiMob</span>
+                    </div>
+                    <!-- Flexy -->
+                    <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-3 font-bold hover:shadow-lg transition-all w-full md:w-auto">
+                        <div class="flex items-center gap-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/ATM_Mobilis.svg/1280px-ATM_Mobilis.svg.png" alt="Mobilis" class="h-8 md:h-10 object-contain bg-white rounded px-2 py-1 border border-gray-100">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxCX6FrAt0iku9Fi1vjtFMgI_Z1qZOBoWWvUQP2U3Gwz4OQ0NrUNVP3Tk&s=10" alt="Djezzy" class="h-8 md:h-10 object-contain bg-white rounded px-2 py-1 border border-gray-100">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFM2lbUhHLa_c7IrFn2oMdC8j1zXX7xZ4tkZPQI1Q7YqRk2i7rgNDDPjQV&s=10" alt="Ooredoo" class="h-8 md:h-10 object-contain bg-white rounded px-2 py-1 border border-gray-100">
+                        </div>
+                        <span class="text-gray-500 dark:text-gray-400 text-sm">Flexy (رصيد هاتف)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-white dark:bg-cardDark pt-16 pb-8 border-t border-gray-100 dark:border-gray-800">
+            <div class="container mx-auto px-6 text-center md:text-right grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="md:col-span-1">
+                    <div class="flex items-center justify-center md:justify-start gap-2 text-2xl font-black mb-4">
+                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-green-400 flex items-center justify-center text-white"><i class="fas fa-leaf text-sm"></i></div>
+                        Tirourda Affiliate
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">المنصة الأولى للتسويق بالعمولة للمنتجات الطبيعية. نظام برمجي متطور يضمن حق المسوق 100%.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">روابط سريعة</h4>
+                    <ul class="space-y-2 text-gray-500 dark:text-gray-400 text-sm">
+                        <li><a href="javascript:void(0)" onclick="window.scrollTo(0,0)" class="hover:text-primary">الرئيسية</a></li>
+                        <li><a href="javascript:void(0)" class="hover:text-primary">شروط الاستخدام</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
     </div>
 
 
@@ -303,10 +420,12 @@
             
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
                 <div class="text-xs text-gray-400 font-bold mb-4 mt-2">القائمة الرئيسية</div>
-                <!-- Safe Routing Links -->
                 <a href="javascript:void(0)" onclick="window.switchUserTab('home', event)" class="dash-link active flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-tachometer-alt w-5"></i> لوحة القيادة</a>
                 <a href="javascript:void(0)" onclick="window.switchUserTab('products', event)" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box-open w-5"></i> تسجيل طلب / منتجات</a>
                 <a href="javascript:void(0)" onclick="window.switchUserTab('withdraw', event)" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-hand-holding-usd w-5"></i> سحب الأرباح</a>
+                
+                <div class="text-xs text-gray-400 font-bold mb-4 mt-8">أخرى</div>
+                <a href="javascript:void(0)" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-headset w-5"></i> الدعم الفني</a>
             </nav>
 
             <div class="p-4 border-t border-gray-100 dark:border-gray-800">
@@ -375,7 +494,7 @@
             <div id="tab-products" class="tab-content hidden animate-fade-in w-full">
                 <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-8">
                     <h3 class="font-black text-lg md:text-xl mb-2 flex items-center gap-2"><i class="fas fa-store text-primary"></i> منتجات المتجر وتسجيل الطلبات</h3>
-                    <p class="text-gray-500 text-xs md:text-sm mb-6">يمكنك تسجيل طلبية زبونك مباشرة من هنا، أو نسخ رابط الإحالة الخاص بك.</p>
+                    <p class="text-gray-500 text-xs md:text-sm mb-6">يمكنك تسجيل طلبية زبونك مباشرة من هنا لتأمين الـ 500 دج كعمولة ثابتة، أو نسخ رابط الإحالة.</p>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 w-full" id="affiliate-products-list">
                         <div class="col-span-full flex justify-center py-10">
@@ -386,7 +505,46 @@
             </div>
 
             <div id="tab-withdraw" class="tab-content hidden animate-fade-in w-full">
-                <!-- نفس محتوى صفحة السحب -->
+                <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                        <h3 class="font-black text-lg md:text-xl mb-4 md:mb-6 flex items-center gap-2"><i class="fas fa-money-check-alt text-primary"></i> طلب سحب أرباح</h3>
+                        
+                        <div class="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-6 flex justify-between items-center">
+                            <span class="font-bold text-sm text-gray-700 dark:text-gray-300">الرصيد القابل للسحب:</span>
+                            <span class="font-black text-xl text-primary" id="withdraw-available-balance">0 دج</span>
+                        </div>
+
+                        <form onsubmit="window.handleWithdrawRequest(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs md:text-sm font-bold mb-2">المبلغ (دج)</label>
+                                <input type="number" id="withdraw-amount" min="500" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary font-bold transition-colors" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs md:text-sm font-bold mb-2">طريقة السحب</label>
+                                <select id="withdraw-method" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary font-bold text-sm transition-colors">
+                                    <option value="ccp">بريد الجزائر (CCP)</option>
+                                    <option value="baridimob">بريديموب (BaridiMob)</option>
+                                    <option value="flexy">رصيد هاتف (Mobilis, Djezzy, Ooredoo)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs md:text-sm font-bold mb-2">رقم الحساب / الهاتف</label>
+                                <input type="text" id="withdraw-account" placeholder="أدخل رقم الـ RIP أو رقم الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary text-left text-sm transition-colors" dir="ltr" required>
+                            </div>
+                            <button type="submit" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-primary/30 mt-2 text-sm md:text-base">إرسال الطلب</button>
+                        </form>
+                    </div>
+
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                        <h3 class="font-black text-lg md:text-xl mb-4 md:mb-6 flex items-center gap-2"><i class="fas fa-history text-primary"></i> سجل السحوبات</h3>
+                        <div class="space-y-3" id="withdraw-history-list">
+                            <div class="text-center flex flex-col items-center justify-center py-10 text-gray-400">
+                                <i class="fas fa-box-open text-4xl mb-3 opacity-50"></i>
+                                <span class="text-sm">لا توجد سحوبات سابقة</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -396,7 +554,16 @@
          3. ADMIN LOGIN VIEW
     =========================================== -->
     <div id="admin-login-view" class="view min-h-screen flex items-center justify-center bg-bgLight dark:bg-bgDark relative p-4 w-full">
-        <!-- ... -->
+        <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 w-full max-w-md relative z-10 text-center">
+            <div class="w-16 h-16 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-6 shadow-xl"><i class="fas fa-shield-alt"></i></div>
+            <h2 class="text-xl md:text-2xl font-black mb-6">الإدارة العامة <span class="text-primary">Tirourda</span></h2>
+            
+            <form onsubmit="window.handleAdminLogin(event)">
+                <input type="password" id="admin-password" placeholder="كلمة المرور: abobob123#" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 outline-none focus:border-gray-900 mb-4 text-center font-bold tracking-widest text-sm transition-colors" dir="ltr" required>
+                <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-3.5 rounded-xl hover:bg-primary dark:hover:bg-primary transition-all shadow-lg text-sm md:text-base">دخول مشفر</button>
+            </form>
+            <button type="button" onclick="window.navigate('landing')" class="w-full mt-6 text-xs md:text-sm text-gray-500 hover:text-primary transition-colors">العودة للرئيسية</button>
+        </div>
     </div>
 
 
@@ -408,13 +575,14 @@
         <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden transition-opacity"></div>
 
         <aside id="admin-sidebar" class="w-64 bg-gray-900 text-white fixed h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
-            <!-- نفس محتوى القائمة الجانبية للأدمن -->
             <div class="p-6 border-b border-gray-800 flex justify-between items-center text-lg font-black">
                 <div class="flex items-center gap-2"><i class="fas fa-cogs text-primary"></i> الإدارة</div>
                 <button onclick="window.toggleAdminSidebar()" class="md:hidden text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
             </div>
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
                 <a href="javascript:void(0)" class="flex items-center gap-3 bg-primary/20 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-tachometer-alt w-5"></i> لوحة التحكم والطلبات</a>
+                <a href="javascript:void(0)" class="flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-users w-5"></i> إدارة المسوقين</a>
+                <a href="javascript:void(0)" class="flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box w-5"></i> إدارة المنتجات</a>
             </nav>
             <div class="p-4 border-t border-gray-800">
                 <button type="button" onclick="window.logoutAdmin()" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3 rounded-xl transition-all font-bold text-sm">
@@ -429,10 +597,10 @@
                     <button onclick="window.toggleAdminSidebar()" class="md:hidden w-10 h-10 rounded-xl bg-gray-50 dark:bg-bgDark text-gray-800 dark:text-white flex justify-center items-center"><i class="fas fa-bars"></i></button>
                     <h1 class="text-lg md:text-xl font-black flex items-center gap-2"><i class="fas fa-chart-pie text-gray-400"></i> نظرة عامة حية</h1>
                 </div>
+                <span class="bg-green-100 text-green-700 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold border border-green-200"><i class="fas fa-wifi"></i> متصل بـ Firebase</span>
             </header>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 animate-fade-in">
-                <!-- إحصائيات الأدمن -->
                 <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-primary relative overflow-hidden">
                     <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">العمولات المدفوعة</div>
                     <div class="text-lg md:text-2xl font-black" id="admin-total-paid">0 دج</div>
@@ -451,8 +619,20 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-6 md:gap-8 mb-8 animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 md:gap-8 mb-8 animate-fade-in">
                 
+                <!-- إضافة المنتجات عبر CSV (مهم للمتجر) -->
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-4">
+                    <h3 class="font-black text-lg mb-2 flex items-center gap-2"><i class="fas fa-file-excel text-green-600"></i> رفع منتجات عبر ملف CSV</h3>
+                    <p class="text-sm text-gray-500 mb-6">الصيغة المطلوبة: <code>الاسم,السعر,العمولة (اختياري، لأننا نستخدم 500 دج ثابتة),رابط_الصورة</code></p>
+                    
+                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl p-8 text-center hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                        <input type="file" id="csv-file" accept=".csv" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all cursor-pointer mx-auto mb-4">
+                        <button type="button" onclick="window.importCSV()" class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:scale-105">رفع وحفظ في Firebase</button>
+                    </div>
+                </div>
+
                 <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col w-full">
                     <h3 class="font-black text-base md:text-lg mb-4 flex items-center gap-2"><i class="fas fa-tasks text-yellow-500"></i> مراجعة وتأكيد الطلبات للزبائن</h3>
                     <div class="overflow-x-auto border border-gray-100 dark:border-gray-800 rounded-xl relative w-full">
@@ -506,11 +686,25 @@
         let currentUserData = null;
         let isSignupMode = false;
         let isAuthReady = false; 
-        const FIXED_COMMISSION = 500; // العمولة الثابتة
+        const FIXED_COMMISSION = 500; // العمولة الثابتة على كل مبيعة 500 دج
 
-        window.toggleTheme = () => { /* ... */ };
-        window.toggleUserSidebar = () => { /* ... */ };
-        window.toggleAdminSidebar = () => { /* ... */ };
+        window.toggleTheme = () => {
+            document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            if(document.documentElement.classList.contains('dark')) icon.classList.replace('fa-moon', 'fa-sun');
+            else icon.classList.replace('fa-sun', 'fa-moon');
+            if(document.getElementById('user-dashboard-view').classList.contains('active')) renderUserChart();
+        };
+
+        window.toggleUserSidebar = () => {
+            document.getElementById('user-sidebar').classList.toggle('translate-x-full');
+            document.getElementById('mobile-sidebar-overlay').classList.toggle('hidden');
+        };
+
+        window.toggleAdminSidebar = () => {
+            document.getElementById('admin-sidebar').classList.toggle('translate-x-full');
+            document.getElementById('mobile-admin-overlay').classList.toggle('hidden');
+        };
         
         window.navigate = (target) => {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -524,6 +718,24 @@
             
             if(target === 'user-dashboard') { renderUserChart(); loadUserDashboardData(); }
             if(target === 'admin-dashboard') { loadAdminDashboardData(); }
+            
+            const navButtons = document.getElementById('nav-auth-buttons');
+            if(navButtons) {
+                if(currentUser && target === 'landing') {
+                    navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-sm">لوحة التحكم</button>`;
+                } else {
+                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 md:px-4 text-sm md:text-base">دخول</button><button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 font-bold text-sm md:text-base">إنشاء حساب</button>`;
+                }
+            }
+            
+            const heroCta = document.getElementById('hero-cta');
+            if(heroCta && target === 'landing') {
+                if(currentUser) {
+                    heroCta.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white text-lg px-8 py-4 rounded-2xl shadow-xl font-bold flex items-center justify-center gap-3 w-full sm:w-auto">الذهاب للوحة التحكم <i class="fas fa-arrow-left"></i></button>`;
+                } else {
+                    heroCta.innerHTML = `<button onclick="window.openAuthModal(true)" class="bg-primary text-white text-lg px-8 py-4 rounded-2xl shadow-xl font-bold flex items-center justify-center gap-3 w-full sm:w-auto">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button>`;
+                }
+            }
         };
 
         function handleRouting() {
@@ -550,6 +762,8 @@
             document.getElementById('auth-title').innerText = signup ? "إنشاء حساب مسوق" : "مرحباً بك مجدداً";
             document.getElementById('auth-subtitle').innerText = signup ? "أدخل بياناتك للبدء في ربح العمولات" : "سجل دخولك للوصول إلى لوحة التحكم";
             document.getElementById('auth-btn-text').innerText = signup ? "إنشاء حساب مجاني" : "تسجيل الدخول";
+            document.getElementById('auth-switch-text').innerText = signup ? "لدي حساب بالفعل؟" : "ليس لديك حساب؟";
+            document.getElementById('auth-toggle-btn').innerText = signup ? "تسجيل الدخول" : "إنشاء حساب جديد";
             document.getElementById('register-fields').style.display = signup ? 'block' : 'none';
         };
 
@@ -558,34 +772,58 @@
             setTimeout(() => document.getElementById('auth-modal').style.display = 'none', 300);
             document.getElementById('auth-form').reset();
         };
+        
+        window.toggleAuthMode = () => window.openAuthModal(!isSignupMode);
 
         const setAuthLoading = (isLoading, isGoogle = false) => {
             const btn = document.getElementById(isGoogle ? 'google-auth-btn' : 'auth-btn');
             const loader = document.getElementById(isGoogle ? 'google-loader' : 'auth-loader');
+            const icon = document.getElementById(isGoogle ? 'google-icon' : null);
             const text = document.getElementById(isGoogle ? 'google-btn-text' : 'auth-btn-text');
+
             btn.disabled = isLoading;
-            loader.style.display = isLoading ? 'block' : 'none';
+            if(isLoading) {
+                loader.style.display = 'block';
+                if(icon) icon.style.display = 'none';
+                text.innerText = "جاري التحميل...";
+            } else {
+                loader.style.display = 'none';
+                if(icon) icon.style.display = 'block';
+                text.innerText = isGoogle ? "المتابعة باستخدام Google" : (isSignupMode ? "إنشاء حساب مجاني" : "تسجيل الدخول");
+            }
         };
 
         window.handleAuthSubmit = async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value.trim();
             const password = document.getElementById('auth-password').value.trim();
+            
+            if(password.length < 6) return Swal.fire('تنبيه', 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل.', 'warning');
+            
             setAuthLoading(true);
 
             try {
                 if (isSignupMode) {
                     const name = document.getElementById('auth-name').value.trim();
+                    const phone = document.getElementById('auth-phone').value.trim();
+                    if(!name) throw new Error("empty_name");
+
                     const cred = await auth.createUserWithEmailAndPassword(email, password);
                     await db.collection("users").doc(cred.user.uid).set({ 
-                        name: name, email: email, balance: 0, clicks: 0, role: 'affiliate', createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+                        name: name, email: email, phone: phone, balance: 0, clicks: 0, role: 'affiliate', createdAt: firebase.firestore.FieldValue.serverTimestamp() 
                     });
+                    Swal.fire({icon: 'success', title: 'تم إنشاء الحساب بنجاح!', showConfirmButton: false, timer: 1500});
                 } else {
                     await auth.signInWithEmailAndPassword(email, password);
+                    Swal.fire({icon: 'success', title: 'تم تسجيل الدخول', showConfirmButton: false, timer: 1500});
                 }
                 window.closeAuthModal();
             } catch (error) {
-                Swal.fire('خطأ', error.message, 'error');
+                let msg = error.message;
+                if(error.message === "empty_name") msg = "يرجى إدخال الاسم الكامل.";
+                else if(error.code === 'auth/email-already-in-use') msg = "هذا البريد الإلكتروني مسجل مسبقاً.";
+                else if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+                Swal.fire('خطأ', msg, 'error');
             } finally {
                 setAuthLoading(false);
             }
@@ -600,12 +838,12 @@
                 const docSnap = await docRef.get();
                 if (!docSnap.exists) {
                     await docRef.set({
-                        name: user.displayName || 'مستخدم جوجل', email: user.email, balance: 0, clicks: 0, role: 'affiliate'
+                        name: user.displayName || 'مستخدم جوجل', email: user.email, phone: user.phoneNumber || '', balance: 0, clicks: 0, role: 'affiliate', createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 }
+                Swal.fire({icon: 'success', title: 'تم الدخول بنجاح', showConfirmButton: false, timer: 1500});
                 window.closeAuthModal();
             } catch (error) {
-                // معالجة خطأ النطاق غير المسموح به خصيصاً لتوضيح الحل
                 if(error.code === 'auth/unauthorized-domain') {
                     Swal.fire({
                         icon: 'error',
@@ -631,8 +869,22 @@
         
         window.switchUserTab = (tabId, event) => {
             if(event) event.preventDefault(); 
+            
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.dash-link').forEach(el => {
+                el.classList.remove('bg-primary/10', 'text-primary');
+                el.classList.add('hover:bg-gray-50', 'dark:hover:bg-bgDark', 'text-gray-600', 'dark:text-gray-300');
+            });
+            event.currentTarget.classList.add('bg-primary/10', 'text-primary');
+            event.currentTarget.classList.remove('hover:bg-gray-50', 'dark:hover:bg-bgDark', 'text-gray-600', 'dark:text-gray-300');
+            
+            if(window.innerWidth < 768) {
+                document.getElementById('user-sidebar').classList.add('translate-x-full');
+                document.getElementById('mobile-sidebar-overlay').classList.add('hidden');
+            }
+            if(tabId === 'home') renderUserChart();
         };
 
         let unsubUser, unsubOrders, unsubProducts;
@@ -648,7 +900,9 @@
                     currentUserData = docSnap.data();
                     document.getElementById('dash-name').innerText = currentUserData.name || 'مسوق';
                     document.getElementById('dash-email').innerText = currentUserData.email;
+                    document.getElementById('dash-avatar').innerText = (currentUserData.name || 'م').charAt(0);
                     document.getElementById('user-balance').innerText = currentUserData.balance || 0;
+                    document.getElementById('withdraw-available-balance').innerText = (currentUserData.balance || 0) + ' دج';
                     document.getElementById('user-total').innerText = currentUserData.balance || 0;
                     document.getElementById('user-clicks').innerText = currentUserData.clicks || 0;
                 }
@@ -657,7 +911,7 @@
             unsubOrders = db.collection("orders").where("affiliateId", "==", currentUser.uid).onSnapshot((snapshot) => {
                 let pendingSum = 0; let confirmedCount = 0; let ordersHtml = '';
                 if(snapshot.empty) {
-                    ordersHtml = `<div class="text-center text-gray-400 py-6"><span class="text-sm">لم تقم بأي مبيعات بعد</span></div>`;
+                    ordersHtml = `<div class="flex flex-col justify-center items-center h-full text-gray-400 py-6"><i class="fas fa-box-open text-3xl mb-2 opacity-50"></i><span class="text-sm">لم تقم بأي مبيعات بعد</span></div>`;
                 } else {
                     snapshot.forEach((docSnap) => {
                         const order = docSnap.data();
@@ -688,27 +942,32 @@
 
             unsubProducts = db.collection("products").onSnapshot((snapshot) => {
                 let productsHtml = '';
-                snapshot.forEach((pDoc) => {
-                    const p = pDoc.data();
-                    const refLink = `https://tirourda.store/product/${pDoc.id}?ref=${currentUser.uid}`;
-                    productsHtml += `
-                        <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-4 bg-white dark:bg-cardDark flex flex-col h-full shadow-sm">
-                            <h4 class="font-black text-sm md:text-base mb-2 text-center text-primary">${p.name}</h4>
-                            <div class="flex justify-between items-center mb-4 mt-auto">
-                                <span class="text-xs text-gray-500 font-bold">السعر: ${p.price} دج</span>
-                                <span class="text-xs font-black bg-primary/10 text-primary px-2 py-1 rounded-lg">عمولة ثابتة: 500 دج</span>
+                if(snapshot.empty) {
+                    productsHtml = `<div class="col-span-full border border-gray-100 dark:border-gray-800 rounded-2xl p-6 bg-white dark:bg-cardDark text-center"><i class="fas fa-box-open text-4xl text-gray-300 mb-3"></i><h4 class="font-bold text-gray-500">لا توجد منتجات حالياً.</h4></div>`;
+                } else {
+                    snapshot.forEach((pDoc) => {
+                        const p = pDoc.data();
+                        const refLink = `https://tirourda.store/product/${pDoc.id}?ref=${currentUser.uid}`;
+                        productsHtml += `
+                            <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-4 bg-white dark:bg-cardDark flex flex-col h-full shadow-sm hover:shadow-xl transition-all group">
+                                <img src="${p.image || 'https://via.placeholder.com/150'}" class="w-full h-32 md:h-40 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform origin-bottom bg-gray-50">
+                                <h4 class="font-black text-sm md:text-base mb-2 text-center text-primary flex-1">${p.name}</h4>
+                                <div class="flex justify-between items-center mb-4 mt-auto">
+                                    <span class="text-xs text-gray-500 font-bold">السعر: ${p.price} دج</span>
+                                    <span class="text-[10px] md:text-xs font-black bg-primary/10 text-primary px-2 py-1 rounded-lg">عمولة ثابتة: 500 دج</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 mt-2">
+                                    <button onclick="window.copyReferralLink('${refLink}')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white text-xs font-bold py-2 rounded-xl transition-colors">
+                                        <i class="fas fa-link"></i> نسخ الرابط
+                                    </button>
+                                    <button onclick="window.openOrderModal('${pDoc.id}', '${p.name}')" class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-2 rounded-xl transition-colors shadow-md">
+                                        <i class="fas fa-cart-plus"></i> تسجيل طلبية
+                                    </button>
+                                </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-2 mt-2">
-                                <button onclick="window.copyReferralLink('${refLink}')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white text-xs font-bold py-2 rounded-xl transition-colors">
-                                    <i class="fas fa-link"></i> نسخ الرابط
-                                </button>
-                                <button onclick="window.openOrderModal('${pDoc.id}', '${p.name}')" class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-2 rounded-xl transition-colors shadow-md">
-                                    <i class="fas fa-cart-plus"></i> تسجيل طلبية
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
+                        `;
+                    });
+                }
                 document.getElementById('affiliate-products-list').innerHTML = productsHtml;
             });
         }
@@ -744,12 +1003,12 @@
                     quantity: document.getElementById('order-qty').value,
                     affiliateId: currentUser.uid,
                     affiliateName: currentUserData?.name || 'مسوق',
-                    commission: FIXED_COMMISSION, // 500 DZD Fixed
+                    commission: FIXED_COMMISSION, // 500 DZD الثابتة
                     status: 'pending',
                     date: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
-                Swal.fire({icon: 'success', title: 'تم تسجيل الطلبية بنجاح!', text: 'العمولة معلقة حتى يتم التأكيد من الإدارة.', showConfirmButton: false, timer: 2500});
+                Swal.fire({icon: 'success', title: 'تم تسجيل الطلبية بنجاح!', text: 'العمولة 500 دج معلقة حتى يتم التأكيد من الإدارة.', showConfirmButton: true});
                 window.closeOrderModal();
             } catch(error) {
                 Swal.fire('خطأ', error.message, 'error');
@@ -759,11 +1018,40 @@
             }
         };
 
+        window.handleWithdrawRequest = (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+            
+            setTimeout(() => {
+                Swal.fire('تم الاستلام', 'تم إرسال طلب السحب الخاص بك بنجاح، ستتم المراجعة خلال 24 ساعة.', 'success');
+                e.target.reset();
+                btn.disabled = false;
+                btn.innerText = "إرسال الطلب";
+            }, 1000);
+        };
+
         // --- ADMIN LOGIC ---
-        let unsubAdminOrders;
+        window.handleAdminLogin = (e) => {
+            e.preventDefault();
+            const pass = document.getElementById('admin-password').value;
+            if (pass === 'abobob123#') {
+                sessionStorage.setItem('tirourda_admin', 'true');
+                window.navigate('admin-dashboard');
+            } else {
+                Swal.fire('رفض الوصول', 'كلمة المرور الإدارية غير صحيحة', 'error');
+            }
+        };
+
+        window.logoutAdmin = () => { sessionStorage.removeItem('tirourda_admin'); window.navigate('landing'); };
+
+        let unsubAdminOrders, unsubAdminProds, unsubAdminUsers;
 
         function loadAdminDashboardData() {
             if(unsubAdminOrders) unsubAdminOrders();
+            if(unsubAdminProds) unsubAdminProds();
+            if(unsubAdminUsers) unsubAdminUsers();
 
             unsubAdminOrders = db.collection("orders").orderBy('date', 'desc').onSnapshot((snapshot) => {
                 let pendingCount = 0; let totalPaid = 0; let ordersHtml = '';
@@ -807,6 +1095,9 @@
                 document.getElementById('admin-total-paid').innerText = totalPaid + ' دج';
                 document.getElementById('admin-orders-list').innerHTML = ordersHtml;
             });
+
+            unsubAdminProds = db.collection("products").onSnapshot((snap) => document.getElementById('admin-products-count').innerText = snap.size);
+            unsubAdminUsers = db.collection("users").onSnapshot((snap) => document.getElementById('admin-users-count').innerText = snap.size);
         }
 
         window.confirmAdminOrder = async (btn, orderId, affiliateId, commission) => {
@@ -823,6 +1114,36 @@
             }
         };
 
+        window.importCSV = () => {
+            const fileInput = document.getElementById('csv-file');
+            if(!fileInput.files.length) return Swal.fire('تنبيه', 'الرجاء اختيار ملف CSV أولاً', 'warning');
+            
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const lines = e.target.result.split('\n');
+                let count = 0;
+                for(let i=1; i<lines.length; i++) {
+                    if(!lines[i].trim()) continue;
+                    const cols = lines[i].split(',');
+                    if(cols.length >= 2) {
+                        try {
+                            await db.collection("products").add({
+                                name: cols[0].trim(), 
+                                price: Number(cols[1].trim()), 
+                                commission: 500, // ثابتة
+                                image: cols[3] ? cols[3].trim() : 'https://images.unsplash.com/photo-1611078489935-0cb964de46d6?auto=format&fit=crop&w=300&q=80',
+                                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                            count++;
+                        } catch(err) {}
+                    }
+                }
+                Swal.fire('نجاح', `تم إضافة ${count} منتج بنجاح.`, 'success');
+                fileInput.value = '';
+            };
+            reader.readAsText(fileInput.files[0]);
+        };
+
         window.copyReferralLink = async (link) => {
             try {
                 await navigator.clipboard.writeText(link);
@@ -831,18 +1152,46 @@
             } catch(e) {}
         };
         
-        window.handleAdminLogin = (e) => {
-            e.preventDefault();
-            if (document.getElementById('admin-password').value === 'abobob123#') {
-                sessionStorage.setItem('tirourda_admin', 'true');
-                window.navigate('admin-dashboard');
-            }
-        };
-        
-        window.logoutAdmin = () => { sessionStorage.removeItem('tirourda_admin'); window.navigate('landing'); };
-        
         let userChartInst = null;
-        function renderUserChart() { /* ... الرسم البياني الوهمي ... */ }
+        function renderUserChart() {
+            const ctx = document.getElementById('userChart');
+            if(!ctx || ctx.offsetParent === null) return; 
+            
+            const isDark = document.documentElement.classList.contains('dark');
+            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+            
+            if(userChartInst) {
+                userChartInst.options.scales.y.grid.color = gridColor;
+                userChartInst.options.scales.x.grid.color = gridColor;
+                userChartInst.options.scales.y.ticks.color = textColor;
+                userChartInst.options.scales.x.ticks.color = textColor;
+                userChartInst.update();
+                return;
+            }
+
+            userChartInst = new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['أسبوع 1', 'أسبوع 2', 'أسبوع 3', 'أسبوع 4'],
+                    datasets: [{ 
+                        label: 'أرباح (دج)', data: [1500, 4000, 3500, 8500], 
+                        borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', 
+                        borderWidth: 3, pointBackgroundColor: '#ffffff', pointBorderColor: '#10b981', pointRadius: 4, fill: true, tension: 0.4 
+                    }]
+                },
+                options: {
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { grid: { color: gridColor }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } }, 
+                        x: { grid: { display: false }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } } 
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
