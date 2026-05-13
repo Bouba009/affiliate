@@ -40,7 +40,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <!-- تم إضافة مكتبة Firebase Storage لرفع صور المنتجات -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
     <style>
@@ -57,11 +56,9 @@
         .view.active { display: block; opacity: 1; }
         .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to left, #10b981, #34d399); }
         
-        /* Spinner Loader */
         .loader { border: 4px solid rgba(16, 185, 129, 0.2); border-left-color: #10b981; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Hero Background Animations */
         @keyframes floatUpNum {
             0% { transform: translateY(0px); opacity: 0; }
             20% { opacity: 0.4; }
@@ -78,16 +75,12 @@
 </head>
 <body class="bg-bgLight dark:bg-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-300 relative w-full h-full">
 
-    <!-- Global Theme Toggle -->
     <button onclick="window.toggleTheme()" class="fixed bottom-6 right-6 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all text-xl border border-gray-100 dark:border-gray-800">
         <i id="theme-icon" class="fas fa-moon text-gray-800 dark:text-yellow-400"></i>
     </button>
 
-    <!-- ==========================================
-         AUTH MODAL
-    =========================================== -->
+    <!-- AUTH MODAL -->
     <div id="auth-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4 w-full h-full">
-        <!-- Content remains the same -->
         <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="auth-modal-content">
             <button onclick="window.closeAuthModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-xl"></i></button>
             <div class="text-center mb-6">
@@ -138,11 +131,8 @@
         </div>
     </div>
 
-    <!-- ==========================================
-         NEW ORDER MODAL (For Affiliates)
-    =========================================== -->
+    <!-- NEW ORDER MODAL -->
     <div id="order-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4 w-full h-full">
-        <!-- Content remains the same -->
         <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="order-modal-content">
             <button onclick="window.closeOrderModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-xl"></i></button>
             <div class="text-center mb-6">
@@ -180,11 +170,8 @@
         </div>
     </div>
 
-    <!-- ==========================================
-         1. LANDING PAGE VIEW
-    =========================================== -->
+    <!-- 1. LANDING PAGE -->
     <div id="landing-view" class="view active relative w-full h-full">
-        <!-- Landing Page HTML remains exactly the same as requested -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10 w-full h-full">
             <svg class="absolute top-[5vh] md:top-[10vh] left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
                 <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
@@ -301,7 +288,7 @@
             </div>
         </section>
 
-        <!-- HOW IT WORKS & PAYOUT -->
+        <!-- HOW IT WORKS -->
         <section id="how-it-works" class="py-16 md:py-24">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12"><h2 class="text-3xl md:text-4xl font-black mb-4">كيف تبدأ <span class="text-primary">الربح</span>؟</h2></div>
@@ -315,6 +302,7 @@
             </div>
         </section>
 
+        <!-- PAYOUT -->
         <section class="py-16 md:py-20 bg-gray-50 dark:bg-bgDark border-y border-gray-100 dark:border-gray-800">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-3xl md:text-4xl font-black mb-10">طرق سحب <span class="text-primary">متعددة ومحلية</span></h2>
@@ -357,9 +345,7 @@
     </div>
 
 
-    <!-- ==========================================
-         2. USER DASHBOARD VIEW
-    =========================================== -->
+    <!-- 2. USER DASHBOARD VIEW -->
     <div id="user-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden w-full h-full">
         <div id="mobile-sidebar-overlay" onclick="window.toggleUserSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
         <aside id="user-sidebar" class="w-64 bg-white dark:bg-cardDark border-l border-gray-100 dark:border-gray-800 fixed h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
@@ -402,7 +388,6 @@
             </header>
 
             <div id="tab-home" class="tab-content block animate-fade-in w-full">
-                <!-- User Home Dashboard Stats -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6">
                     <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
                         <div class="text-gray-500 text-xs md:text-sm font-bold mb-2">أرباح قيد الانتظار</div>
@@ -441,7 +426,6 @@
                 <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-8">
                     <h3 class="font-black text-lg md:text-xl mb-2 flex items-center gap-2"><i class="fas fa-store text-primary"></i> منتجات المتجر وتسجيل الطلبات</h3>
                     <p class="text-gray-500 text-xs md:text-sm mb-6">يمكنك تسجيل طلبية زبونك مباشرة من هنا لتأمين الـ 500 دج كعمولة ثابتة، أو نسخ رابط الإحالة.</p>
-                    
                     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 w-full" id="affiliate-products-list">
                         <div class="col-span-full flex justify-center py-10">
                             <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -508,16 +492,13 @@
     </div>
 
 
-    <!-- ==========================================
-         3. ADMIN LOGIN VIEW
-    =========================================== -->
+    <!-- 3. ADMIN LOGIN VIEW -->
     <div id="admin-login-view" class="view min-h-screen flex items-center justify-center bg-bgLight dark:bg-bgDark relative p-4 w-full h-full">
         <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 w-full max-w-md relative z-10 text-center">
             <div class="w-16 h-16 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-6 shadow-xl"><i class="fas fa-shield-alt"></i></div>
             <h2 class="text-xl md:text-2xl font-black mb-6">الإدارة العامة <span class="text-primary">Tirourda</span></h2>
             
             <form onsubmit="window.handleAdminLogin(event)">
-                <!-- تم إخفاء الباسوورد في Placeholder وتغيير النوع إلى password لحمايته -->
                 <input type="password" id="admin-password" placeholder="كلمة المرور الإدارية" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 outline-none focus:border-gray-900 mb-4 text-center font-bold tracking-widest text-sm transition-colors" dir="ltr" required>
                 <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-3.5 rounded-xl hover:bg-primary dark:hover:bg-primary transition-all shadow-lg text-sm md:text-base">دخول مشفر</button>
             </form>
@@ -526,9 +507,7 @@
     </div>
 
 
-    <!-- ==========================================
-         4. ADMIN DASHBOARD VIEW
-    =========================================== -->
+    <!-- 4. ADMIN DASHBOARD VIEW -->
     <div id="admin-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden w-full h-full">
         <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden transition-opacity"></div>
         <aside id="admin-sidebar" class="w-64 bg-gray-900 text-white fixed h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
@@ -563,15 +542,15 @@
                     <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">العمولات المدفوعة</div>
                     <div class="text-lg md:text-2xl font-black" id="admin-total-paid">0 دج</div>
                 </div>
-                <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-yellow-500 relative overflow-hidden">
+                <div onclick="window.switchAdminTab('home')" class="cursor-pointer bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-yellow-500 relative overflow-hidden hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
                     <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">طلبات معلقة</div>
                     <div class="text-lg md:text-2xl font-black" id="admin-pending-count">0</div>
                 </div>
-                <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-blue-500 relative overflow-hidden">
+                <div onclick="window.switchAdminTab('products')" class="cursor-pointer bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-blue-500 relative overflow-hidden hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
                     <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">المنتجات</div>
                     <div class="text-lg md:text-2xl font-black" id="admin-products-count">0</div>
                 </div>
-                <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-purple-500 relative overflow-hidden">
+                <div onclick="window.switchAdminTab('users')" class="cursor-pointer bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-purple-500 relative overflow-hidden hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
                     <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">المسوقين</div>
                     <div class="text-lg md:text-2xl font-black" id="admin-users-count">0</div>
                 </div>
@@ -607,18 +586,12 @@
                         <form onsubmit="window.submitProduct(event)" id="admin-product-form" class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 space-y-4 mb-4">
                             <h3 class="font-black text-lg mb-4 flex items-center gap-2"><i class="fas fa-plus text-primary"></i> إضافة/تعديل منتج</h3>
                             <input type="hidden" id="prod-id">
-                            <div><label class="block text-xs font-bold mb-1">اسم المنتج</label><input type="text" id="prod-name" class="w-full bg-gray-50 dark:bg-bgDark border rounded-xl px-4 py-2" required></div>
-                            <div><label class="block text-xs font-bold mb-1">السعر (دج)</label><input type="number" id="prod-price" class="w-full bg-gray-50 dark:bg-bgDark border rounded-xl px-4 py-2" required></div>
-                            <div><label class="block text-xs font-bold mb-1">الوصف</label><textarea id="prod-desc" rows="3" class="w-full bg-gray-50 dark:bg-bgDark border rounded-xl px-4 py-2"></textarea></div>
+                            <div><label class="block text-xs font-bold mb-1">اسم المنتج</label><input type="text" id="prod-name" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2" required></div>
+                            <div><label class="block text-xs font-bold mb-1">السعر (دج)</label><input type="number" id="prod-price" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2" required></div>
+                            <div><label class="block text-xs font-bold mb-1">الوصف</label><textarea id="prod-desc" rows="3" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2"></textarea></div>
                             <div><label class="block text-xs font-bold mb-1">صورة المنتج</label><input type="file" id="prod-image" accept="image/*" class="w-full text-xs"></div>
                             <button type="submit" id="prod-submit-btn" class="bg-primary hover:bg-primaryDark text-white w-full py-2.5 rounded-xl font-bold transition-all shadow-md mt-2">حفظ المنتج</button>
                         </form>
-                        
-                        <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                            <h3 class="font-black text-sm mb-2"><i class="fas fa-file-csv"></i> رفع سريع بملف CSV</h3>
-                            <input type="file" id="csv-file" accept=".csv" class="block w-full text-xs mb-2">
-                            <button type="button" onclick="window.importCSV()" class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 w-full py-2 rounded-xl font-bold text-xs">رفع وحفظ</button>
-                        </div>
                     </div>
                     <div class="lg:col-span-2 bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 w-full overflow-x-auto">
                         <h3 class="font-black text-lg mb-4 flex items-center gap-2"><i class="fas fa-box text-primary"></i> قائمة المنتجات الحالية</h3>
@@ -650,7 +623,7 @@
                 <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
                     <h3 class="font-black text-lg mb-4 flex items-center gap-2"><i class="fas fa-flag text-red-500"></i> بلاغات الدعم الفني</h3>
                     <div id="admin-support-list" class="space-y-4 grid md:grid-cols-2 gap-4">
-                        <div class="text-center text-gray-500 col-span-full">جاري التحميل...</div>
+                        <div class="text-center text-gray-500 col-span-full py-10"><div class="inline-block w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div></div>
                     </div>
                 </div>
             </div>
@@ -658,9 +631,7 @@
         </main>
     </div>
 
-    <!-- ==========================================
-         JAVASCRIPT LOGIC
-    =========================================== -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCkkVzBU-PTSNHFMQXQ6mUQ3EkYQd6kCkQ",
@@ -672,9 +643,7 @@
             appId: "1:759034640014:web:2d7d6b212eacca8d3d7bdf"
         };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         
         const auth = firebase.auth();
         const db = firebase.firestore();
@@ -687,6 +656,7 @@
         let isAuthReady = false; 
         const FIXED_COMMISSION = 500; 
 
+        // Theme Toggle
         window.toggleTheme = () => {
             document.documentElement.classList.toggle('dark');
             const icon = document.getElementById('theme-icon');
@@ -695,6 +665,7 @@
             if(document.getElementById('user-dashboard-view').classList.contains('active')) renderUserChart();
         };
 
+        // Sidebar Toggles
         window.toggleUserSidebar = () => {
             document.getElementById('user-sidebar').classList.toggle('translate-x-full');
             document.getElementById('mobile-sidebar-overlay').classList.toggle('hidden');
@@ -705,14 +676,15 @@
             document.getElementById('mobile-admin-overlay').classList.toggle('hidden');
         };
         
+        // Navigation & Routing (Fixed Redirect Logic)
         window.navigate = (target) => {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(target + '-view').classList.add('active');
             
-            if(window.location.hash !== '#' + target && target !== 'landing') {
-                history.pushState(null, null, '#' + target);
-            } else if (target === 'landing') {
+            if (target === 'landing') {
                 history.pushState(null, null, ' '); 
+            } else {
+                history.pushState(null, null, '#' + target);
             }
             
             if(target === 'user-dashboard') { renderUserChart(); loadUserDashboardData(); }
@@ -723,7 +695,7 @@
                 if(currentUser && target === 'landing') {
                     navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-sm">لوحة التحكم</button>`;
                 } else {
-                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 md:px-4 text-sm md:text-base">دخول</button><button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 font-bold text-sm md:text-base">إنشاء حساب</button>`;
+                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 md:px-4 text-sm md:text-base">دخول</button><button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg shadow-primary/30 transition-all transform hover:-translate-y-1 font-bold text-sm md:text-base">إنشاء حساب</button>`;
                 }
             }
             
@@ -742,17 +714,28 @@
             const hash = window.location.hash;
             const isAdminAuth = sessionStorage.getItem('tirourda_admin') === 'true';
 
+            // Admin Routes
             if (hash === '#admin09' || hash === '#admin-dashboard' || hash === '#admin-login') {
                 return isAdminAuth ? window.navigate('admin-dashboard') : window.navigate('admin-login');
             }
-            if (hash === '#user-dashboard') return currentUser ? window.navigate('user-dashboard') : window.navigate('landing');
 
+            // Affiliate Dashboard Route
+            if (hash === '#user-dashboard') {
+                return currentUser ? window.navigate('user-dashboard') : window.navigate('landing');
+            }
+
+            // If hash is empty/landing, auto-redirect to dashboard IF user is logged in
+            if (currentUser) {
+                return window.navigate('user-dashboard');
+            }
+
+            // Fallback
             window.navigate('landing'); 
         }
 
         window.addEventListener('hashchange', handleRouting);
 
-        // -- AUTH LOGIC --
+        // --- AUTHENTICATION LOGIC ---
         window.openAuthModal = (signup) => {
             isSignupMode = signup;
             document.getElementById('auth-modal').style.display = 'flex';
@@ -795,7 +778,7 @@
         window.handleAuthSubmit = async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value.trim();
-            const password = document.getElementById('auth-password').value.trim();
+            const password = document.getElementById('auth-password').value;
             
             if(password.length < 6) return Swal.fire('تنبيه', 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل.', 'warning');
             setAuthLoading(true);
@@ -816,6 +799,8 @@
                     Swal.fire({icon: 'success', title: 'تم تسجيل الدخول', showConfirmButton: false, timer: 1500});
                 }
                 window.closeAuthModal();
+                // Fix for the screen not updating properly
+                window.navigate('user-dashboard'); 
             } catch (error) {
                 let msg = error.message;
                 if(error.message === "empty_name") msg = "يرجى إدخال الاسم الكامل.";
@@ -841,6 +826,7 @@
                 }
                 Swal.fire({icon: 'success', title: 'تم الدخول بنجاح', showConfirmButton: false, timer: 1500});
                 window.closeAuthModal();
+                window.navigate('user-dashboard'); 
             } catch (error) {
                 if(error.code !== 'auth/popup-closed-by-user') Swal.fire('خطأ', error.message, 'error');
             } finally {
@@ -848,17 +834,20 @@
             }
         };
 
+        // Firebase Auth State Listener
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                const docSnap = await db.collection("users").doc(user.uid).get();
-                if(docSnap.exists && docSnap.data().isBanned) {
-                    await auth.signOut();
-                    Swal.fire('حساب محظور', 'عذراً، لقد تم حظر حسابك من قبل الإدارة.', 'error');
-                    currentUser = null;
-                    isAuthReady = true;
-                    handleRouting();
-                    return;
-                }
+                try {
+                    const docSnap = await db.collection("users").doc(user.uid).get();
+                    if(docSnap.exists && docSnap.data().isBanned) {
+                        await auth.signOut();
+                        Swal.fire('حساب محظور', 'عذراً، لقد تم حظر حسابك من قبل الإدارة.', 'error');
+                        currentUser = null;
+                        isAuthReady = true;
+                        handleRouting();
+                        return;
+                    }
+                } catch(e) {}
             }
             currentUser = user;
             isAuthReady = true;
@@ -867,25 +856,32 @@
 
         window.logoutUser = async () => { await auth.signOut(); window.navigate('landing'); };
         
+        // --- USER TABS LOGIC ---
         window.switchUserTab = (tabId, event) => {
             if(event) event.preventDefault(); 
             
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('tab-' + tabId).classList.remove('hidden');
-            
-            document.querySelectorAll('.dash-link').forEach(el => {
-                el.classList.remove('bg-primary/10', 'text-primary');
-                el.classList.add('hover:bg-gray-50', 'dark:hover:bg-bgDark', 'text-gray-600', 'dark:text-gray-300');
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
             });
-            event.currentTarget.classList.add('bg-primary/10', 'text-primary');
-            event.currentTarget.classList.remove('hover:bg-gray-50', 'dark:hover:bg-bgDark', 'text-gray-600', 'dark:text-gray-300');
+            const targetTab = document.getElementById('tab-' + tabId);
+            targetTab.classList.remove('hidden');
+            targetTab.classList.add('block');
+            
+            if(event) {
+                document.querySelectorAll('.dash-link').forEach(el => {
+                    el.classList.remove('bg-primary/10', 'text-primary');
+                    el.classList.add('hover:bg-gray-50', 'dark:hover:bg-bgDark', 'text-gray-600', 'dark:text-gray-300');
+                });
+                event.currentTarget.classList.add('bg-primary/10', 'text-primary');
+                event.currentTarget.classList.remove('hover:bg-gray-50', 'dark:hover:bg-bgDark', 'text-gray-600', 'dark:text-gray-300');
+            }
             
             if(window.innerWidth < 768) {
                 document.getElementById('user-sidebar').classList.add('translate-x-full');
                 document.getElementById('mobile-sidebar-overlay').classList.add('hidden');
             }
 
-            // ملء بيانات الدعم الفني إن توفرت
             if(tabId === 'support' && currentUserData) {
                 document.getElementById('support-name').value = currentUserData.name || '';
                 document.getElementById('support-phone').value = currentUserData.phone || '';
@@ -964,7 +960,7 @@
                                 ${p.description ? `<p class="text-[10px] md:text-xs text-gray-500 text-center mb-3 line-clamp-2">${p.description}</p>` : ''}
                                 <div class="flex justify-between items-center mb-4 mt-auto">
                                     <span class="text-xs text-gray-500 font-bold">السعر: ${p.price} دج</span>
-                                    <span class="text-[10px] md:text-xs font-black bg-primary/10 text-primary px-2 py-1 rounded-lg">عمولة ثابتة: 500 دج</span>
+                                    <span class="text-[10px] md:text-xs font-black bg-primary/10 text-primary px-2 py-1 rounded-lg">عمولة: 500 دج</span>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2 mt-2">
                                     <button onclick="window.copyReferralLink('${refLink}')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white text-xs font-bold py-2 rounded-xl transition-colors">
@@ -1011,7 +1007,6 @@
         window.openOrderModal = (productId, productName) => {
             document.getElementById('order-modal').style.display = 'flex';
             setTimeout(() => document.getElementById('order-modal-content').classList.replace('scale-95','scale-100'), 10);
-            
             document.getElementById('order-product-id').value = productId;
             document.getElementById('order-product-name').innerText = productName;
         };
@@ -1042,7 +1037,6 @@
                     status: 'pending',
                     date: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                
                 Swal.fire({icon: 'success', title: 'تم تسجيل الطلبية بنجاح!', text: 'العمولة 500 دج معلقة حتى يتم التأكيد من الإدارة.', showConfirmButton: true});
                 window.closeOrderModal();
             } catch(error) {
@@ -1058,7 +1052,6 @@
             const btn = e.target.querySelector('button[type="submit"]');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-            
             setTimeout(() => {
                 Swal.fire('تم الاستلام', 'تم إرسال طلب السحب الخاص بك بنجاح، ستتم المراجعة خلال 24 ساعة.', 'success');
                 e.target.reset();
@@ -1067,18 +1060,26 @@
             }, 1000);
         };
 
+
         // --- ADMIN LOGIC ---
         window.switchAdminTab = (tabId, event) => {
             if(event) event.preventDefault();
-            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('admin-tab-' + tabId).classList.remove('hidden');
-            
-            document.querySelectorAll('.admin-dash-link').forEach(el => {
-                el.classList.remove('bg-primary/20', 'text-primary');
-                el.classList.add('hover:bg-gray-800', 'text-gray-300');
+            document.querySelectorAll('.admin-tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
             });
-            event.currentTarget.classList.add('bg-primary/20', 'text-primary');
-            event.currentTarget.classList.remove('hover:bg-gray-800', 'text-gray-300');
+            const targetTab = document.getElementById('admin-tab-' + tabId);
+            targetTab.classList.remove('hidden');
+            targetTab.classList.add('block');
+            
+            if(event) {
+                document.querySelectorAll('.admin-dash-link').forEach(el => {
+                    el.classList.remove('bg-primary/20', 'text-primary');
+                    el.classList.add('hover:bg-gray-800', 'text-gray-300');
+                });
+                event.currentTarget.classList.add('bg-primary/20', 'text-primary');
+                event.currentTarget.classList.remove('hover:bg-gray-800', 'text-gray-300');
+            }
             
             if(window.innerWidth < 768) {
                 document.getElementById('admin-sidebar').classList.add('translate-x-full');
@@ -1101,6 +1102,7 @@
         window.logoutAdmin = () => { sessionStorage.removeItem('tirourda_admin'); window.navigate('landing'); };
 
         let unsubAdminOrders, unsubAdminProds, unsubAdminUsers, unsubAdminSupport;
+        let adminProductsCache = {}; // لتخزين المنتجات بأمان لتجنب أخطاء النصوص (Quotes)
 
         function loadAdminDashboardData() {
             if(unsubAdminOrders) unsubAdminOrders();
@@ -1155,18 +1157,18 @@
             unsubAdminProds = db.collection("products").onSnapshot((snap) => {
                 document.getElementById('admin-products-count').innerText = snap.size;
                 let html = '';
+                adminProductsCache = {};
                 snap.forEach(doc => {
                     const p = doc.data();
-                    const escapedName = p.name.replace(/'/g, "\\'");
-                    const escapedDesc = p.description ? p.description.replace(/'/g, "\\'") : '';
+                    adminProductsCache[doc.id] = p; // حفظ بأمان في المتغير العام
                     html += `
                     <tr class="border-b dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
                         <td class="p-3"><img src="${p.image || 'https://via.placeholder.com/150'}" class="w-10 h-10 rounded object-cover"></td>
                         <td class="p-3 font-bold">${p.name}</td>
                         <td class="p-3 text-primary font-black">${p.price} دج</td>
                         <td class="p-3 text-center flex justify-center gap-2">
-                            <button onclick="window.editProduct('${doc.id}', '${escapedName}', ${p.price}, '${escapedDesc}')" class="text-blue-500 hover:bg-blue-100 p-2 rounded-lg transition-colors"><i class="fas fa-edit"></i></button>
-                            <button onclick="window.deleteProduct('${doc.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors"><i class="fas fa-trash"></i></button>
+                            <button onclick="window.editProduct('${doc.id}')" class="text-blue-500 hover:bg-blue-100 p-2 rounded-lg transition-colors" title="تعديل"><i class="fas fa-edit"></i></button>
+                            <button onclick="window.deleteProduct('${doc.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="حذف"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>`;
                 });
@@ -1272,11 +1274,13 @@
             }
         };
 
-        window.editProduct = (id, name, price, desc) => {
+        window.editProduct = (id) => {
+            const p = adminProductsCache[id];
+            if(!p) return;
             document.getElementById('prod-id').value = id;
-            document.getElementById('prod-name').value = name;
-            document.getElementById('prod-price').value = price;
-            document.getElementById('prod-desc').value = desc !== 'undefined' ? desc : '';
+            document.getElementById('prod-name').value = p.name;
+            document.getElementById('prod-price').value = p.price;
+            document.getElementById('prod-desc').value = p.description || '';
             document.getElementById('prod-submit-btn').innerHTML = '<i class="fas fa-save"></i> تحديث المنتج';
             document.getElementById('prod-name').focus();
         };
@@ -1315,37 +1319,6 @@
                 btn.disabled = false;
                 btn.innerHTML = 'تأكيد ودفع';
             }
-        };
-
-        window.importCSV = () => {
-            const fileInput = document.getElementById('csv-file');
-            if(!fileInput.files.length) return Swal.fire('تنبيه', 'الرجاء اختيار ملف CSV أولاً', 'warning');
-            
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const lines = e.target.result.split('\n');
-                let count = 0;
-                for(let i=1; i<lines.length; i++) {
-                    if(!lines[i].trim()) continue;
-                    const cols = lines[i].split(',');
-                    if(cols.length >= 2) {
-                        try {
-                            await db.collection("products").add({
-                                name: cols[0].trim(), 
-                                price: Number(cols[1].trim()), 
-                                description: cols[2] ? cols[2].trim() : '',
-                                commission: 500,
-                                image: cols[3] ? cols[3].trim() : 'https://via.placeholder.com/150',
-                                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                            });
-                            count++;
-                        } catch(err) {}
-                    }
-                }
-                Swal.fire('نجاح', `تم إضافة ${count} منتج بنجاح.`, 'success');
-                fileInput.value = '';
-            };
-            reader.readAsText(fileInput.files[0]);
         };
 
         window.copyReferralLink = async (link) => {
