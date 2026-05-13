@@ -26,12 +26,7 @@
                     animation: {
                         'float': 'float 4s ease-in-out infinite',
                         'float-delayed': 'float 4s ease-in-out 2s infinite',
-                        'glow': 'glow 2s ease-in-out infinite alternate',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-15px)' } },
-                        glow: { '0%': { boxShadow: '0 0 10px #10b981' }, '100%': { boxShadow: '0 0 30px #10b981' } }
                     }
                 }
             }
@@ -41,7 +36,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- FIREBASE COMPAT (هذه النسخة تعمل محلياً بدون سيرفر وبدون مشاكل CORS) -->
+    <!-- FIREBASE COMPAT -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -60,9 +55,23 @@
         .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to left, #10b981, #34d399); }
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
         
-        /* Spinner Loader داخل الأزرار */
+        /* Spinner Loader */
         .loader { border: 4px solid rgba(16, 185, 129, 0.2); border-left-color: #10b981; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Hero Background Animations (أرقام الأرباح المتصاعدة) */
+        @keyframes floatUpNum {
+            0% { transform: translateY(20px); opacity: 0; }
+            20% { opacity: 0.4; }
+            80% { opacity: 0.4; transform: translateY(-100px); }
+            100% { transform: translateY(-130px); opacity: 0; }
+        }
+        .floating-num { position: absolute; color: #10b981; font-weight: 900; opacity: 0; z-index: -5; animation: floatUpNum 5s ease-in-out infinite; pointer-events: none;}
+        .num-1 { left: 10%; top: 60%; animation-delay: 0s; font-size: 1.5rem; }
+        .num-2 { left: 45%; top: 50%; animation-delay: 1.5s; font-size: 2.2rem; }
+        .num-3 { left: 75%; top: 70%; animation-delay: 3s; font-size: 1.2rem; }
+        .num-4 { left: 85%; top: 35%; animation-delay: 4.5s; font-size: 2.5rem; }
+        .num-5 { left: 25%; top: 30%; animation-delay: 2s; font-size: 1.8rem; }
     </style>
 </head>
 <body class="bg-bgLight dark:bg-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-300 relative">
@@ -134,9 +143,32 @@
     </div>
 
     <!-- ==========================================
-         1. LANDING PAGE VIEW (تظهر بشكل افتراضي لعدم تبييض الشاشة)
+         1. LANDING PAGE VIEW
     =========================================== -->
-    <div id="landing-view" class="view active">
+    <div id="landing-view" class="view active relative">
+        
+        <!-- Animated Background Chart & Numbers -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10 h-screen">
+            <!-- Background SVG Graph -->
+            <svg class="absolute bottom-0 left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
+                <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                <defs>
+                    <linearGradient id="gradientChart" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#10b981" stop-opacity="0.8" />
+                        <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <!-- Floating DZD Numbers -->
+            <div class="absolute w-full h-full">
+                <div class="floating-num num-1">+2,500 دج</div>
+                <div class="floating-num num-2">+12,000 دج</div>
+                <div class="floating-num num-3">+800 دج</div>
+                <div class="floating-num num-4">+4,200 دج</div>
+                <div class="floating-num num-5">+1,500 دج</div>
+            </div>
+        </div>
+
         <!-- HEADER -->
         <header class="fixed top-0 w-full glass z-40 transition-all duration-300" id="main-header">
             <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
@@ -151,7 +183,6 @@
                     <a href="javascript:void(0)" onclick="window.scrollTo(0,0)" class="hover:text-primary transition-colors">الرئيسية</a>
                     <a href="#how-it-works" class="hover:text-primary transition-colors">كيف يعمل</a>
                     <a href="#features" class="hover:text-primary transition-colors">المميزات</a>
-                    <a href="#faq" class="hover:text-primary transition-colors">الأسئلة الشائعة</a>
                 </nav>
                 
                 <div class="flex gap-2 md:gap-3" id="nav-auth-buttons">
@@ -163,9 +194,6 @@
 
         <!-- HERO SECTION -->
         <section class="pt-32 md:pt-40 pb-16 md:pb-20 overflow-hidden relative min-h-[90vh] flex items-center">
-            <div class="absolute top-1/4 right-10 text-primary opacity-20 animate-float text-6xl hidden md:block"><i class="fas fa-coins"></i></div>
-            <div class="absolute bottom-1/4 left-10 text-primary opacity-20 animate-float-delayed text-5xl hidden md:block"><i class="fas fa-wallet"></i></div>
-            <div class="absolute top-1/2 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10"></div>
             
             <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
                 <div class="text-center lg:text-right z-10">
@@ -185,6 +213,7 @@
                     </div>
                 </div>
                 
+                <!-- Hero Mockup Graph -->
                 <div class="relative z-10 mt-10 lg:mt-0 perspective-1000 hidden md:block">
                     <div class="bg-white dark:bg-cardDark rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-3 transform rotate-y-[-10deg] rotate-x-[5deg] hover:rotate-0 transition-transform duration-700">
                         <div class="bg-gray-50 dark:bg-bgDark rounded-2xl p-6 h-80 relative overflow-hidden flex flex-col justify-between border border-gray-100 dark:border-gray-800">
@@ -285,20 +314,22 @@
             </div>
         </section>
 
-        <!-- PAYOUT METHODS -->
+        <!-- PAYOUT METHODS (LOGOS UPDATED) -->
         <section class="py-16 md:py-20 bg-gray-50 dark:bg-bgDark border-y border-gray-100 dark:border-gray-800">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-3xl md:text-4xl font-black mb-10">طرق سحب <span class="text-primary">متعددة ومحلية</span></h2>
                 <div class="flex flex-wrap justify-center gap-4 md:gap-6">
-                    <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center justify-center gap-3 text-lg md:text-xl font-bold hover:shadow-lg transition-all w-full md:w-auto">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Alg%C3%A9rie_Poste_logo.svg/1200px-Alg%C3%A9rie_Poste_logo.svg.png" alt="CCP" class="h-6 md:h-8 object-contain mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:p-1 dark:rounded">
-                        CCP / BaridiMob
+                    <!-- CCP -->
+                    <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center justify-center gap-4 text-lg md:text-xl font-bold hover:shadow-lg transition-all w-full md:w-auto">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/AlgeriePoste.svg" alt="CCP" class="h-8 md:h-10 object-contain bg-white px-2 py-1 rounded-lg border border-gray-100">
+                        <span class="text-gray-800 dark:text-white">CCP / BaridiMob</span>
                     </div>
-                    <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-2 font-bold hover:shadow-lg transition-all w-full md:w-auto">
+                    <!-- Flexy -->
+                    <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-3 font-bold hover:shadow-lg transition-all w-full md:w-auto">
                         <div class="flex items-center gap-4">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Mobilis_logo.svg/512px-Mobilis_logo.svg.png" alt="Mobilis" class="h-6 object-contain">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Djezzy_logo.svg/512px-Djezzy_logo.svg.png" alt="Djezzy" class="h-6 object-contain">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Ooredoo_logo.svg/512px-Ooredoo_logo.svg.png" alt="Ooredoo" class="h-6 object-contain">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/ATM_Mobilis.svg/1280px-ATM_Mobilis.svg.png" alt="Mobilis" class="h-8 md:h-10 object-contain bg-white rounded px-2 py-1 border border-gray-100">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxCX6FrAt0iku9Fi1vjtFMgI_Z1qZOBoWWvUQP2U3Gwz4OQ0NrUNVP3Tk&s=10" alt="Djezzy" class="h-8 md:h-10 object-contain bg-white rounded px-2 py-1 border border-gray-100">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFM2lbUhHLa_c7IrFn2oMdC8j1zXX7xZ4tkZPQI1Q7YqRk2i7rgNDDPjQV&s=10" alt="Ooredoo" class="h-8 md:h-10 object-contain bg-white rounded px-2 py-1 border border-gray-100">
                         </div>
                         <span class="text-gray-500 dark:text-gray-400 text-sm">Flexy (رصيد هاتف)</span>
                     </div>
@@ -307,7 +338,7 @@
         </section>
 
         <!-- FOOTER -->
-        <footer class="bg-gray-50 dark:bg-bgDark pt-16 pb-8 border-t border-gray-100 dark:border-gray-800">
+        <footer class="bg-white dark:bg-cardDark pt-16 pb-8 border-t border-gray-100 dark:border-gray-800">
             <div class="container mx-auto px-6 text-center md:text-right grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div class="md:col-span-1">
                     <div class="flex items-center justify-center md:justify-start gap-2 text-2xl font-black mb-4">
@@ -321,7 +352,7 @@
                     <ul class="space-y-2 text-gray-500 dark:text-gray-400 text-sm">
                         <li><a href="javascript:void(0)" onclick="window.scrollTo(0,0)" class="hover:text-primary">الرئيسية</a></li>
                         <li><a href="javascript:void(0)" class="hover:text-primary">شروط الاستخدام</a></li>
-                        <li><a href="javascript:void(0)" onclick="window.navigate('admin-login')" class="hover:text-primary border-b border-dashed">دخول الإدارة</a></li>
+                        <!-- تم حذف رابط الإدارة من هنا كما طلبت -->
                     </ul>
                 </div>
             </div>
@@ -424,7 +455,6 @@
                     <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col h-80 lg:h-auto">
                         <h3 class="font-black text-base md:text-lg mb-4 flex items-center gap-2"><i class="fas fa-list-alt text-primary"></i> الطلبات الأخيرة</h3>
                         <div class="space-y-2 overflow-y-auto pr-1" id="user-orders-list">
-                            <!-- Injected by JS -->
                             <div class="flex justify-center items-center h-full text-gray-400">
                                 <div class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                             </div>
@@ -439,7 +469,6 @@
                     <p class="text-gray-500 text-xs md:text-sm mb-6">انسخ روابط هذه المنتجات وانشرها لتبدأ في جني العمولات.</p>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" id="affiliate-products-list">
-                        <!-- Injected by JS -->
                         <div class="col-span-full flex justify-center py-10">
                             <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                         </div>
@@ -481,7 +510,6 @@
                     <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
                         <h3 class="font-black text-lg md:text-xl mb-4 md:mb-6 flex items-center gap-2"><i class="fas fa-history text-primary"></i> سجل السحوبات</h3>
                         <div class="space-y-3" id="withdraw-history-list">
-                            <!-- Simulated empty state -->
                             <div class="text-center flex flex-col items-center justify-center py-10 text-gray-400">
                                 <i class="fas fa-box-open text-4xl mb-3 opacity-50"></i>
                                 <span class="text-sm">لا توجد سحوبات سابقة</span>
@@ -506,7 +534,7 @@
                 <input type="password" id="admin-password" placeholder="كلمة المرور: abobob123#" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 outline-none focus:border-gray-900 mb-4 text-center font-bold tracking-widest text-sm transition-colors" dir="ltr" required>
                 <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-3.5 rounded-xl hover:bg-primary dark:hover:bg-primary transition-all shadow-lg text-sm md:text-base">دخول مشفر</button>
             </form>
-            <button type="button" onclick="window.navigate('landing')" class="w-full mt-6 text-xs md:text-sm text-gray-500 hover:text-primary transition-colors">العودة كزائر</button>
+            <button type="button" onclick="window.navigate('landing')" class="w-full mt-6 text-xs md:text-sm text-gray-500 hover:text-primary transition-colors">العودة للرئيسية</button>
         </div>
     </div>
 
@@ -564,7 +592,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8 animate-fade-in">
-                <!-- CSV UPLOAD -->
                 <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
                     <h3 class="font-black text-lg mb-2 flex items-center gap-2"><i class="fas fa-file-excel text-green-600"></i> رفع منتجات عبر ملف CSV</h3>
                     <p class="text-sm text-gray-500 mb-6">الصيغة المطلوبة: <code>الاسم,السعر,العمولة,رابط_الصورة</code></p>
@@ -576,7 +603,6 @@
                     </div>
                 </div>
 
-                <!-- ORDERS MANAGEMENT -->
                 <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col h-96">
                     <h3 class="font-black text-base md:text-lg mb-4 flex items-center gap-2"><i class="fas fa-tasks text-yellow-500"></i> تأكيد الطلبات</h3>
                     <div class="overflow-x-auto overflow-y-auto flex-1 border border-gray-100 dark:border-gray-800 rounded-xl relative">
@@ -590,7 +616,6 @@
                                 </tr>
                             </thead>
                             <tbody id="admin-orders-list">
-                                <!-- Loaded from Firebase -->
                                 <tr>
                                     <td colspan="4" class="text-center py-10">
                                         <div class="flex justify-center"><div class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div></div>
@@ -605,22 +630,12 @@
     </div>
 
     <!-- ==========================================
-         JAVASCRIPT LOGIC (Firebase Compat)
+         JAVASCRIPT LOGIC
     =========================================== -->
     <script>
-        // ==========================================
-        // 1. GLOBAL ERROR HANDLING & OFFLINE
-        // ==========================================
-        window.addEventListener('offline', () => {
-            Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'انقطع الاتصال بالإنترنت!', showConfirmButton: false, timer: 4000 });
-        });
-        window.addEventListener('online', () => {
-            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'عادت شبكة الإنترنت.', showConfirmButton: false, timer: 3000 });
-        });
+        window.addEventListener('offline', () => { Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'انقطع الاتصال بالإنترنت!', showConfirmButton: false, timer: 4000 }); });
+        window.addEventListener('online', () => { Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'عادت شبكة الإنترنت.', showConfirmButton: false, timer: 3000 }); });
 
-        // ==========================================
-        // 2. FIREBASE CONFIG & INIT
-        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyCkkVzBU-PTSNHFMQXQ6mUQ3EkYQd6kCkQ",
             authDomain: "affiliate-6e759.firebaseapp.com",
@@ -643,9 +658,6 @@
         let isSignupMode = false;
         let isAuthReady = false; 
 
-        // ==========================================
-        // 3. UI HELPERS
-        // ==========================================
         window.toggleTheme = () => {
             document.documentElement.classList.toggle('dark');
             const icon = document.getElementById('theme-icon');
@@ -664,44 +676,30 @@
             document.getElementById('mobile-admin-overlay').classList.toggle('hidden');
         };
 
-        // ==========================================
-        // 4. SECURE ROUTING SYSTEM
-        // ==========================================
         const views = ['landing-view', 'user-dashboard-view', 'admin-login-view', 'admin-dashboard-view'];
         
         window.navigate = (target) => {
             views.forEach(v => document.getElementById(v).classList.remove('active'));
             document.getElementById(target + '-view').classList.add('active');
             
-            // Manage history without triggering hashchange loop
             if(window.location.hash !== '#' + target && target !== 'landing') {
                 history.pushState(null, null, '#' + target);
             } else if (target === 'landing') {
-                history.pushState(null, null, ' '); // Clean URL
+                history.pushState(null, null, ' '); 
             }
             
-            if(target === 'user-dashboard') { 
-                renderUserChart(); 
-                loadUserDashboardData(); 
-            }
-            if(target === 'admin-dashboard') { 
-                loadAdminDashboardData(); 
-            }
+            if(target === 'user-dashboard') { renderUserChart(); loadUserDashboardData(); }
+            if(target === 'admin-dashboard') { loadAdminDashboardData(); }
             
-            // Manage top nav buttons dynamically
             const navButtons = document.getElementById('nav-auth-buttons');
             if(navButtons) {
                 if(currentUser && target === 'landing') {
                     navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-sm">لوحة التحكم</button>`;
                 } else {
-                    navButtons.innerHTML = `
-                        <button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 md:px-4 text-sm md:text-base">دخول</button>
-                        <button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 font-bold text-sm md:text-base">إنشاء حساب</button>
-                    `;
+                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 md:px-4 text-sm md:text-base">دخول</button><button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 font-bold text-sm md:text-base">إنشاء حساب</button>`;
                 }
             }
             
-            // Manage hero CTA dynamically
             const heroCta = document.getElementById('hero-cta');
             if(heroCta && target === 'landing') {
                 if(currentUser) {
@@ -718,22 +716,19 @@
             const hash = window.location.hash;
             const isAdminAuth = sessionStorage.getItem('tirourda_admin') === 'true';
 
-            // Admin Guards
+            // حماية الإدارة
+            if (hash === '#admin09') return isAdminAuth ? window.navigate('admin-dashboard') : window.navigate('admin-login');
             if (hash === '#admin-dashboard') return isAdminAuth ? window.navigate('admin-dashboard') : window.navigate('admin-login');
             if (hash === '#admin-login') return isAdminAuth ? window.navigate('admin-dashboard') : window.navigate('admin-login');
 
-            // User Guards
+            // حماية المستخدم
             if (hash === '#user-dashboard') return currentUser ? window.navigate('user-dashboard') : window.navigate('landing');
 
-            // Landing Default
             window.navigate('landing'); 
         }
 
         window.addEventListener('hashchange', handleRouting);
 
-        // ==========================================
-        // 5. AUTHENTICATION (Login / Register / Google)
-        // ==========================================
         window.openAuthModal = (signup) => {
             isSignupMode = signup;
             document.getElementById('auth-modal').style.display = 'flex';
@@ -800,7 +795,6 @@
                     Swal.fire({icon: 'success', title: 'تم تسجيل الدخول', showConfirmButton: false, timer: 1500});
                 }
                 window.closeAuthModal();
-                // Routing will handle redirect automatically via onAuthStateChanged
             } catch (error) {
                 let msg = error.message;
                 if(error.message === "empty_name") msg = "يرجى إدخال الاسم الكامل.";
@@ -839,7 +833,6 @@
             }
         };
 
-        // Firebase Auth State Observer
         auth.onAuthStateChanged((user) => {
             currentUser = user;
             isAuthReady = true;
@@ -851,9 +844,6 @@
             window.navigate('landing'); 
         };
 
-        // ==========================================
-        // 6. USER DASHBOARD DATA & LOGIC
-        // ==========================================
         window.switchUserTab = (tabId, event) => {
             if(event) event.preventDefault(); 
             
@@ -881,7 +871,6 @@
         function loadUserDashboardData() {
             if(!currentUser) return;
             
-            // Clean up old listeners to prevent memory leaks
             if(unsubUser) unsubUser();
             if(unsubOrders) unsubOrders();
             if(unsubProducts) unsubProducts();
@@ -898,7 +887,7 @@
                         document.getElementById('user-total').innerText = data.balance || 0;
                         document.getElementById('user-clicks').innerText = data.clicks || 0;
                     }
-                }, (error) => { console.error("Error fetching user data", error); });
+                });
 
                 unsubOrders = db.collection("orders").where("affiliateId", "==", currentUser.uid).onSnapshot((snapshot) => {
                     let pendingSum = 0; let confirmedCount = 0; let ordersHtml = '';
@@ -968,7 +957,7 @@
                     }
                     document.getElementById('affiliate-products-list').innerHTML = productsHtml;
                 });
-            } catch (err) { console.error("Data Fetch Error: ", err); }
+            } catch (err) {}
         }
 
         window.copyReferralLink = async (link) => {
@@ -976,9 +965,7 @@
                 await navigator.clipboard.writeText(link);
                 Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم نسخ الرابط بنجاح!', showConfirmButton: false, timer: 2000 });
                 await db.collection("users").doc(currentUser.uid).update({ clicks: firebase.firestore.FieldValue.increment(1) });
-            } catch(e) {
-                Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'فشل النسخ.', showConfirmButton: false, timer: 2000 });
-            }
+            } catch(e) {}
         };
 
         window.testSimulateOrder = async (productId, productName, commission) => {
@@ -987,7 +974,7 @@
                     productId, productName, affiliateId: currentUser.uid, commission: Number(commission), status: 'pending', date: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'تم تسجيل طلبية! اذهب للوحة القيادة لترى الرصيد.', showConfirmButton: false, timer: 3000 });
-            } catch(e) { Swal.fire('خطأ', 'تعذر تسجيل الطلب.', 'error'); }
+            } catch(e) {}
         };
 
         window.handleWithdrawRequest = (e) => {
@@ -1004,9 +991,6 @@
             }, 1000);
         };
 
-        // ==========================================
-        // 7. ADMIN DASHBOARD LOGIC
-        // ==========================================
         window.handleAdminLogin = (e) => {
             e.preventDefault();
             const pass = document.getElementById('admin-password').value;
@@ -1020,7 +1004,7 @@
 
         window.logoutAdmin = () => {
             sessionStorage.removeItem('tirourda_admin');
-            window.navigate('admin-login');
+            window.navigate('landing');
         };
 
         let unsubAdminOrders, unsubAdminProds, unsubAdminUsers;
@@ -1069,7 +1053,7 @@
 
                 unsubAdminProds = db.collection("products").onSnapshot((snap) => document.getElementById('admin-products-count').innerText = snap.size);
                 unsubAdminUsers = db.collection("users").onSnapshot((snap) => document.getElementById('admin-users-count').innerText = snap.size);
-            } catch (err) { console.error(err); }
+            } catch (err) {}
         }
 
         window.confirmAdminOrder = async (btn, orderId, affiliateId, commission) => {
@@ -1105,7 +1089,7 @@
                                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
                             });
                             count++;
-                        } catch(err) { console.error("Error adding product", err); }
+                        } catch(err) {}
                     }
                 }
                 Swal.fire('نجاح', `تم إضافة ${count} منتج بنجاح.`, 'success');
@@ -1114,9 +1098,6 @@
             reader.readAsText(fileInput.files[0]);
         };
 
-        // ==========================================
-        // 8. CHART.JS VISUALS (Fixed Static Animation)
-        // ==========================================
         let userChartInst = null;
         function renderUserChart() {
             const ctx = document.getElementById('userChart');
@@ -1148,7 +1129,7 @@
                 options: {
                     responsive: true, 
                     maintainAspectRatio: false,
-                    animation: false, // Prevents continuous re-animation on resize/tab switch
+                    animation: false,
                     plugins: { legend: { display: false } },
                     scales: { 
                         y: { grid: { color: gridColor }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } }, 
