@@ -434,13 +434,15 @@
             
             const navButtons = document.getElementById('nav-auth-buttons');
             const heroCta = document.getElementById('hero-cta');
+            
+            // تم إصلاح هذا الجزء لإرجاع الكلاسات الأصلية لتصميمك (حتى لا يختفي لون وشكل الزر)
             if(navButtons && heroCta && target === 'landing') {
                 if(currentUser) {
-                    navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-sm">لوحة التحكم</button>`;
-                    heroCta.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white px-8 py-4 rounded-2xl font-bold">لوحتك <i class="fas fa-arrow-left"></i></button>`;
+                    navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-xl shadow-lg font-bold text-sm md:text-base">لوحة التحكم</button>`;
+                    heroCta.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary hover:bg-primaryDark text-white text-lg px-8 py-4 rounded-2xl shadow-xl font-bold flex items-center justify-center gap-3 w-full sm:w-auto mx-auto lg:mx-0">الذهاب للوحة التحكم <i class="fas fa-arrow-left"></i></button>`;
                 } else {
-                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 font-bold px-3 text-sm">دخول</button><button onclick="window.openAuthModal(true)" class="bg-primary text-white px-4 py-2 rounded-xl font-bold text-sm">إنشاء حساب</button>`;
-                    heroCta.innerHTML = `<button onclick="window.openAuthModal(true)" class="bg-primary text-white px-8 py-4 rounded-2xl font-bold">ابدأ الآن <i class="fas fa-arrow-left"></i></button>`;
+                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 text-sm md:text-base">دخول</button><button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-xl shadow-lg font-bold text-sm md:text-base">إنشاء حساب</button>`;
+                    heroCta.innerHTML = `<button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white text-lg px-8 py-4 rounded-2xl shadow-xl font-bold flex items-center justify-center gap-3 w-full sm:w-auto mx-auto lg:mx-0">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button>`;
                 }
             }
         };
@@ -526,14 +528,13 @@
             finally { setAuthLoading(false, true); }
         };
 
-        // التعديل الرئيسي هنا لمنع الطرد المفاجئ وإصلاح الحسابات الناقصة
+        // تم إصلاح هذا الجزء: سيقوم باكتشاف ملفك المفقود وإنشائه حتى لا يطردك للرئيسية
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
                     const docRef = db.collection("users").doc(user.uid);
                     const docSnap = await docRef.get();
                     
-                    // إذا كان الحساب موجوداً في الـ Auth لكن لم يُسجل له ملف بسبب حظر الصلاحيات سابقاً سنقوم بإنشاءه الآن
                     if (!docSnap.exists) {
                         await docRef.set({ 
                             name: user.displayName || 'مسوق', 
@@ -550,7 +551,7 @@
                         user = null;
                     }
                 } catch(e) {
-                    console.error("Error with auth sync:", e);
+                    console.error("Error syncing user:", e);
                 }
             }
             
@@ -582,14 +583,19 @@
         function loadUserDashboardData() {
             if(!currentUser) return;
             
-            // تم إزالة الطرد التلقائي وإصلاح خطأ الكود الصامت (dash-avatar null error)
             db.collection("users").doc(currentUser.uid).onSnapshot(doc => {
-                if(!doc.exists) return; // ننتظر حتى يتم إنشاءه تلقائياً
+                // تم إزالة شرط "الطرد عند عدم وجود الملف" لكي ننتظر حتى يتم إنشاء الملف
+                if(!doc.exists) return; 
                 if(doc.data().isBanned) { auth.signOut(); return; }
                 
                 currentUserData = doc.data();
                 document.getElementById('dash-name').innerText = currentUserData.name || 'مسوق';
                 document.getElementById('dash-email').innerText = currentUserData.email;
+                
+                // الحماية من توقف الكود إذا كان زر الأفاتار غير موجود بالتصميم
+                const avatarEl = document.getElementById('dash-avatar');
+                if (avatarEl) avatarEl.innerText = (currentUserData.name || 'م').charAt(0);
+                
                 document.getElementById('user-balance').innerText = currentUserData.balance || 0;
                 document.getElementById('user-total').innerText = currentUserData.balance || 0;
                 document.getElementById('withdraw-available-balance').innerText = (currentUserData.balance || 0) + ' دج';
@@ -809,13 +815,7 @@
                 document.getElementById('admin-product-form').reset();
                 document.getElementById('prod-id').value = '';
                 Swal.fire('نجاح', 'تم الحفظ', 'success');
-            } catch(err) { 
-                if (err.message.includes('Missing or insufficient permissions')) {
-                    Swal.fire('تم الرفض من الخادم', 'صلاحيات الفايربيس منتهية. يرجى الذهاب لحساب Firebase الخاص بك وتحديث قواعد Firestore Rules كما هو مشروح.', 'error');
-                } else {
-                    Swal.fire('خطأ', err.message, 'error'); 
-                }
-            } 
+            } catch(err) { Swal.fire('خطأ', err.message, 'error'); } 
             finally { btn.innerHTML = 'حفظ'; btn.disabled = false; }
         };
 
