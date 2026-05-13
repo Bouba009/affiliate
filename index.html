@@ -789,7 +789,14 @@
                 document.getElementById('admin-product-form').reset();
                 document.getElementById('prod-id').value = '';
                 Swal.fire('نجاح', 'تم الحفظ', 'success');
-            } catch(err) { Swal.fire('خطأ', err.message, 'error'); } 
+            } catch(err) { 
+                // التعديل الوحيد المضاف: توضيح أن الخطأ من إعدادات سيرفر فايربيس وليس من الكود
+                if (err.message.includes('Missing or insufficient permissions')) {
+                    Swal.fire('تم الرفض من الخادم', 'صلاحيات الفايربيس منتهية. يرجى الذهاب لحساب Firebase الخاص بك وتحديث قواعد Firestore Rules كما هو مشروح.', 'error');
+                } else {
+                    Swal.fire('خطأ', err.message, 'error'); 
+                }
+            } 
             finally { btn.innerHTML = 'حفظ'; btn.disabled = false; }
         };
 
