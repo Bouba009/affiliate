@@ -127,35 +127,66 @@
         </div>
     </div>
 
-    <!-- NEW ORDER MODAL -->
-    <div id="order-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4 w-full h-full">
-        <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="order-modal-content">
-            <button onclick="window.closeOrderModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-xl"></i></button>
-            <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-blue-100 text-blue-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4"><i class="fas fa-shopping-cart"></i></div>
-                <h2 class="text-xl font-black">تسجيل طلبية للزبون</h2>
-                <p class="text-gray-500 text-xs mt-1" id="order-product-name">اسم المنتج</p>
-                <div class="mt-2 inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold">العمولة: 500 دج</div>
+    <!-- NEW: PRODUCT LANDING PAGE VIEW (للزبائن عند الضغط على رابط المسوق) -->
+    <div id="product-landing-view" class="view min-h-screen bg-bgLight dark:bg-bgDark w-full relative">
+        <header class="bg-white dark:bg-cardDark shadow-sm py-4 border-b border-gray-100 dark:border-gray-800">
+            <div class="container mx-auto px-4 flex items-center justify-center gap-3 text-2xl font-black">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-green-400 flex items-center justify-center text-white shadow-lg"><i class="fas fa-leaf"></i></div>
+                Tirourda <span class="text-primary font-light">Store</span>
             </div>
-            <form id="order-form" onsubmit="window.submitCustomerOrder(event)">
-                <input type="hidden" id="order-product-id">
-                <div class="space-y-4 mb-6">
-                    <div><input type="text" id="order-customer-name" placeholder="اسم الزبون الكامل" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required></div>
-                    <div><input type="tel" id="order-customer-phone" placeholder="رقم الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 text-right" dir="ltr" required></div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><input type="text" id="order-customer-state" placeholder="الولاية" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required></div>
-                        <div><input type="number" id="order-qty" value="1" min="1" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 text-center" required></div>
+        </header>
+
+        <div class="container mx-auto px-4 py-8 lg:py-16">
+            <div class="bg-white dark:bg-cardDark rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col lg:flex-row max-w-6xl mx-auto">
+                <!-- Product Image & Details -->
+                <div class="lg:w-1/2 relative bg-gray-50 dark:bg-bgDark border-b lg:border-b-0 lg:border-l border-gray-100 dark:border-gray-800">
+                    <img id="lp-image" src="" alt="Product" class="w-full h-80 lg:h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-primary text-white font-black px-4 py-2 rounded-xl shadow-lg animate-pulse-slow">
+                        توصيل سريع
                     </div>
                 </div>
-                <button type="submit" id="order-submit-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
-                    <span id="order-btn-text">تأكيد وتسجيل الطلب</span>
-                </button>
-            </form>
+
+                <!-- Order Form & Info -->
+                <div class="lg:w-1/2 p-6 lg:p-12 flex flex-col justify-center">
+                    <h1 id="lp-name" class="text-3xl lg:text-4xl font-black mb-4 text-gray-900 dark:text-white">جاري التحميل...</h1>
+                    <div class="text-3xl font-black text-primary mb-6" id="lp-price">0 دج</div>
+                    <p id="lp-desc" class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed whitespace-pre-line text-sm lg:text-base"></p>
+                    
+                    <div class="bg-gray-50 dark:bg-bgDark p-6 rounded-2xl border border-gray-100 dark:border-gray-800 relative">
+                        <h3 class="text-xl font-black mb-6 flex items-center gap-2"><i class="fas fa-shopping-bag text-primary"></i> قدم طلبك الآن</h3>
+                        
+                        <form id="lp-order-form" onsubmit="window.submitLandingOrder(event)" class="space-y-4">
+                            <input type="hidden" id="lp-prod-id">
+                            <input type="hidden" id="lp-ref-id">
+                            <input type="hidden" id="lp-prod-name">
+                            
+                            <div class="relative">
+                                <i class="fas fa-user absolute right-4 top-3.5 text-gray-400"></i>
+                                <input type="text" id="lp-customer-name" placeholder="الاسم الكامل" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary font-bold shadow-sm" required>
+                            </div>
+                            <div class="relative">
+                                <i class="fas fa-phone absolute right-4 top-3.5 text-gray-400"></i>
+                                <input type="tel" id="lp-customer-phone" placeholder="رقم الهاتف" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary text-right font-bold shadow-sm" dir="ltr" required>
+                            </div>
+                            <div class="relative">
+                                <i class="fas fa-map-marker-alt absolute right-4 top-3.5 text-gray-400"></i>
+                                <input type="text" id="lp-customer-state" placeholder="الولاية" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary font-bold shadow-sm" required>
+                            </div>
+                            
+                            <button type="submit" id="lp-submit-btn" class="w-full bg-primary hover:bg-primaryDark text-white font-black text-lg py-4 rounded-xl transition-all shadow-xl hover:shadow-primary/50 mt-4 flex items-center justify-center gap-3">
+                                تأكيد الطلب <i class="fas fa-check-circle"></i>
+                            </button>
+                            <p class="text-center text-xs text-gray-400 mt-3"><i class="fas fa-shield-alt"></i> الدفع عند الاستلام - معلوماتك محمية</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- 1. LANDING PAGE VIEW -->
     <div id="landing-view" class="view active relative w-full h-full">
+        <!-- الخفيات والتأثيرات -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10 w-full h-full">
             <svg class="absolute top-[5vh] left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
                 <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320Z"></path>
@@ -200,7 +231,6 @@
             </div>
         </section>
 
-        <!-- NEW: الإحصائيات والأرقام -->
         <section class="py-12 border-y border-gray-100 dark:border-gray-800 bg-white dark:bg-cardDark">
             <div class="container mx-auto px-6">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -224,7 +254,6 @@
             </div>
         </section>
 
-        <!-- NEW: كيف تبدأ الربح؟ -->
         <section class="py-16 bg-gray-50 dark:bg-bgDark relative overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
@@ -248,7 +277,7 @@
                     <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative z-10 hover:-translate-y-2 transition-transform">
                         <div class="w-16 h-16 mx-auto bg-primary/10 text-primary flex items-center justify-center rounded-full text-2xl font-black mb-6"><i class="fas fa-chart-line"></i></div>
                         <h3 class="font-black text-lg mb-3">3. تتبع الإحصائيات</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">ستظهر لك في الإحصائيات عدد النقرات الدقيقة على روابطك، وإذا تمت تسجيل طلبية. كما يمكنك تسجيل طلبات زبائنك بنفسك مباشرة.</p>
+                        <p class="text-gray-500 text-sm leading-relaxed">ستظهر لك في الإحصائيات عدد النقرات الدقيقة على روابطك، وإذا تمت تسجيل طلبية.</p>
                     </div>
                     
                     <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative z-10 hover:-translate-y-2 transition-transform">
@@ -260,12 +289,11 @@
             </div>
         </section>
 
-        <!-- NEW: لماذا تختار Tirourda -->
         <section class="py-16 bg-white dark:bg-cardDark">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-3xl font-black mb-4">لماذا تختار <span class="text-primary">Tirourda</span>؟</h2>
                 <p class="text-gray-500 mb-12 max-w-2xl mx-auto">بيئة عمل احترافية تضمن نجاحك وتحقيق أعلى الأرباح بشفافية تامة.</p>
-                <div class="grid md:grid-cols-3 gap-8 text-right">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-right max-w-5xl mx-auto">
                     <div class="bg-gray-50 dark:bg-bgDark p-8 rounded-3xl border border-gray-100 dark:border-gray-800">
                         <div class="w-14 h-14 bg-primary/10 text-primary flex items-center justify-center rounded-2xl text-2xl mb-6"><i class="fas fa-percent"></i></div>
                         <h3 class="text-xl font-black mb-3">عمولة ثابتة ومجزية</h3>
@@ -276,25 +304,22 @@
                         <h3 class="text-xl font-black mb-3">سحب سريع ومضمون</h3>
                         <p class="text-gray-500 text-sm leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي CCP أو كرصيد هاتف (Flexy) بكل سهولة.</p>
                     </div>
-                    <div class="bg-gray-50 dark:bg-bgDark p-8 rounded-3xl border border-gray-100 dark:border-gray-800">
-                        <div class="w-14 h-14 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-500 flex items-center justify-center rounded-2xl text-2xl mb-6"><i class="fas fa-shopping-cart"></i></div>
-                        <h3 class="text-xl font-black mb-3">تسجيل الطلبات بنفسك</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">يمكنك أخذ تفاصيل الزبون وتسجيل الطلبية له مباشرة من لوحة التحكم لتأمين عمولتك.</p>
+                    <div class="bg-gray-50 dark:bg-bgDark p-8 rounded-3xl border border-gray-100 dark:border-gray-800 md:col-span-2 lg:col-span-1">
+                        <div class="w-14 h-14 bg-purple-50 dark:bg-purple-900/20 text-purple-500 flex items-center justify-center rounded-2xl text-2xl mb-6"><i class="fas fa-link"></i></div>
+                        <h3 class="text-xl font-black mb-3">رابط خاص لكل منتج</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">تحصل على رابط فريد يوجه زبائنك لصفحة شراء محترفة تزيد من نسبة مبيعاتك.</p>
                     </div>
                 </div>
             </div>
         </section>
         
-        <!-- MODIFIED: طرق السحب لتطابق الصورة -->
         <section class="py-16 bg-gray-50 dark:bg-bgDark text-center">
             <h2 class="text-3xl font-black mb-10">طرق سحب <span class="text-primary">متعددة ومحلية</span></h2>
             <div class="flex flex-col sm:flex-row justify-center gap-6 max-w-3xl mx-auto px-6">
-                <!-- CCP -->
                 <div class="flex-1 bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center justify-center gap-4">
                     <span class="font-black text-xl">CCP / BaridiMob</span>
                     <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-800"><i class="fas fa-money-check-alt"></i></div>
                 </div>
-                <!-- Flexy -->
                 <div class="flex-1 bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-4">
                     <div class="flex gap-4 items-center justify-center text-lg">
                         <span class="text-red-500 font-black px-2 border dark:border-gray-700 rounded-lg">ooredoo</span>
@@ -317,7 +342,7 @@
             </div>
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
                 <a href="#" onclick="window.switchUserTab('home', event)" data-tab="home" class="dash-link flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-tachometer-alt w-5"></i> الرئيسية</a>
-                <a href="#" onclick="window.switchUserTab('products', event)" data-tab="products" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-box-open w-5"></i> المنتجات والطلبات</a>
+                <a href="#" onclick="window.switchUserTab('products', event)" data-tab="products" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-box-open w-5"></i> المنتجات وروابط الترويج</a>
                 <a href="#" onclick="window.switchUserTab('withdraw', event)" data-tab="withdraw" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-hand-holding-usd w-5"></i> سحب الأرباح</a>
                 <a href="#" onclick="window.switchUserTab('support', event)" data-tab="support" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold mt-8 border-t dark:border-gray-700 pt-6"><i class="fas fa-headset w-5"></i> الدعم الفني</a>
             </nav>
@@ -336,20 +361,21 @@
             <div id="tab-home" class="tab-content block animate-fade-in w-full">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">معلق</div><div class="text-xl font-black text-yellow-500" id="user-pending">0</div></div>
-                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">إجمالي</div><div class="text-xl font-black text-primary" id="user-total">0</div></div>
-                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">مبيعات</div><div class="text-xl font-black" id="user-orders-count">0</div></div>
-                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">نقرات</div><div class="text-xl font-black text-blue-500" id="user-clicks">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">إجمالي الأرباح</div><div class="text-xl font-black text-primary" id="user-total">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">مبيعات ناجحة</div><div class="text-xl font-black" id="user-orders-count">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">نقرات الروابط</div><div class="text-xl font-black text-blue-500" id="user-clicks">0</div></div>
                 </div>
                 <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 h-80 overflow-y-auto">
-                    <h3 class="font-black text-base mb-4"><i class="fas fa-list text-primary"></i> الطلبات الأخيرة</h3>
+                    <h3 class="font-black text-base mb-4"><i class="fas fa-list text-primary"></i> الطلبات الأخيرة من روابطك</h3>
                     <div class="space-y-2" id="user-orders-list">جاري التحميل...</div>
                 </div>
             </div>
 
             <div id="tab-products" class="tab-content hidden animate-fade-in w-full">
                 <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-8">
-                    <h3 class="font-black text-lg mb-4"><i class="fas fa-store text-primary"></i> المنتجات</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="affiliate-products-list">جاري التحميل...</div>
+                    <h3 class="font-black text-lg mb-4"><i class="fas fa-link text-primary"></i> روابط الترويج (Landing Pages)</h3>
+                    <p class="text-gray-500 text-sm mb-6">انسخ الرابط الخاص بكل منتج وشاركه. الرابط يوجه الزبون لصفحة هبوط احترافية تتضمن استمارة الشراء، وسيتم احتساب العمولة تلقائياً في حسابك.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="affiliate-products-list">جاري التحميل...</div>
                 </div>
             </div>
 
@@ -446,7 +472,7 @@
                             <input type="hidden" id="prod-id">
                             <input type="text" id="prod-name" placeholder="اسم المنتج" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2 text-sm" required>
                             <input type="number" id="prod-price" placeholder="السعر (دج)" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2 text-sm" required>
-                            <textarea id="prod-desc" placeholder="الوصف" rows="3" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2 text-sm"></textarea>
+                            <textarea id="prod-desc" placeholder="الوصف" rows="5" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2 text-sm"></textarea>
                             <div><label class="block text-xs font-bold mb-1">صورة (سيتم ضغطها تلقائياً)</label><input type="file" id="prod-image" accept="image/*" class="w-full text-xs"></div>
                             <button type="submit" id="prod-submit-btn" class="bg-primary text-white w-full py-2.5 rounded-xl font-bold">حفظ</button>
                         </form>
@@ -525,7 +551,7 @@
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(target + '-view').classList.add('active');
             
-            history.pushState(null, null, target === 'landing' ? ' ' : '#' + target);
+            history.pushState(null, null, target === 'landing' ? window.location.pathname : '#' + target);
             
             if(target === 'user-dashboard') loadUserDashboardData();
             if(target === 'admin-dashboard') loadAdminDashboardData();
@@ -544,7 +570,50 @@
             }
         };
 
+        // NEW: Load the product landing page dynamically
+        async function loadProductLandingPage(prodId, refId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('product-landing-view').classList.add('active');
+
+            try {
+                const doc = await db.collection('products').doc(prodId).get();
+                if (!doc.exists) {
+                    Swal.fire('عذراً', 'المنتج غير متوفر حالياً', 'error').then(() => window.location.href = window.location.pathname);
+                    return;
+                }
+                
+                const p = doc.data();
+                document.getElementById('lp-image').src = p.image;
+                document.getElementById('lp-name').innerText = p.name;
+                document.getElementById('lp-price').innerText = p.price + ' دج';
+                document.getElementById('lp-desc').innerText = p.description || 'لا يوجد وصف للمنتج.';
+                
+                document.getElementById('lp-prod-id').value = prodId;
+                document.getElementById('lp-ref-id').value = refId;
+                document.getElementById('lp-prod-name').value = p.name;
+
+                // تسجيل النقرة للمسوق بصمت
+                if(refId) {
+                    db.collection('users').doc(refId).update({ clicks: firebase.firestore.FieldValue.increment(1) }).catch(e => console.log("Click tracking error", e));
+                }
+            } catch (e) {
+                console.error(e);
+                Swal.fire('خطأ', 'حدث خطأ أثناء تحميل المنتج', 'error');
+            }
+        }
+
+        // MODIFIED: Handle routing including the new Landing Page Params
         function handleRouting() {
+            // Check for Product Affiliate Link
+            const urlParams = new URLSearchParams(window.location.search);
+            const prodId = urlParams.get('prod');
+            const refId = urlParams.get('ref');
+
+            if (prodId && refId) {
+                loadProductLandingPage(prodId, refId);
+                return; // Stop normal routing, we stay in product landing page
+            }
+
             if(!isAuthReady) return; 
             const hash = window.location.hash;
             const isAdminAuth = sessionStorage.getItem('tirourda_admin') === 'true';
@@ -646,9 +715,7 @@
                         Swal.fire('حساب محظور', 'لقد تم حظر حسابك.', 'error');
                         user = null;
                     }
-                } catch(e) {
-                    console.error("Error syncing user:", e);
-                }
+                } catch(e) { console.error("Error syncing user:", e); }
             }
             
             currentUser = user; 
@@ -687,9 +754,6 @@
                 document.getElementById('dash-name').innerText = currentUserData.name || 'مسوق';
                 document.getElementById('dash-email').innerText = currentUserData.email;
                 
-                const avatarEl = document.getElementById('dash-avatar');
-                if (avatarEl) avatarEl.innerText = (currentUserData.name || 'م').charAt(0);
-                
                 document.getElementById('user-balance').innerText = currentUserData.balance || 0;
                 document.getElementById('user-total').innerText = currentUserData.balance || 0;
                 document.getElementById('withdraw-available-balance').innerText = (currentUserData.balance || 0) + ' دج';
@@ -698,32 +762,42 @@
 
             db.collection("orders").where("affiliateId", "==", currentUser.uid).onSnapshot(snap => {
                 let pend = 0, conf = 0, html = '';
-                if(snap.empty) html = `<div class="text-center py-6 text-gray-400">لا توجد طلبات</div>`;
+                if(snap.empty) html = `<div class="text-center py-6 text-gray-400">لا توجد طلبات بعد</div>`;
                 snap.forEach(doc => {
                     const o = doc.data();
                     if(o.status === 'pending') pend += Number(o.commission);
                     if(o.status === 'confirmed') conf++;
                     const st = o.status === 'pending' ? `<span class="bg-yellow-100 text-yellow-700 px-2 rounded text-xs">معلق</span>` : `<span class="bg-green-100 text-green-700 px-2 rounded text-xs">مؤكد</span>`;
-                    html += `<div class="p-3 border rounded-xl flex justify-between"><div><div class="font-bold text-sm text-blue-600">${o.customerName}</div><div class="text-xs text-gray-500">${o.productName}</div></div><div class="text-left font-black text-sm">${o.commission} دج<br>${st}</div></div>`;
+                    html += `<div class="p-4 border dark:border-gray-800 rounded-2xl flex justify-between items-center bg-gray-50 dark:bg-bgDark"><div><div class="font-black text-sm mb-1">${o.customerName}</div><div class="text-xs text-gray-500"><i class="fas fa-box text-primary"></i> ${o.productName}</div></div><div class="text-left font-black text-sm">${o.commission} دج<br><div class="mt-1">${st}</div></div></div>`;
                 });
                 document.getElementById('user-orders-list').innerHTML = html;
                 document.getElementById('user-pending').innerText = pend;
                 document.getElementById('user-orders-count').innerText = conf;
             });
 
+            // MODIFIED: Affiliate Products UI (Removed Order Button, Added nice Copy UI)
             db.collection("products").onSnapshot(snap => {
                 let html = '';
                 if(snap.empty) html = `<div class="text-center col-span-full py-6 text-gray-400">لا منتجات حاليا</div>`;
                 snap.forEach(doc => {
                     const p = doc.data();
+                    // Generate Unique Link for this affiliate
+                    const productLink = `${window.location.origin}${window.location.pathname}?prod=${doc.id}&ref=${currentUser.uid}`;
+                    
                     html += `
-                        <div class="border rounded-2xl p-4 flex flex-col group bg-white dark:bg-cardDark">
-                            <img src="${p.image}" class="w-full h-32 object-cover rounded-xl mb-3">
-                            <h4 class="font-black text-sm text-center text-primary">${p.name}</h4>
-                            <div class="flex justify-between items-center my-3"><span class="text-xs font-bold">${p.price} دج</span><span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded">500 دج عمولة</span></div>
-                            <div class="grid grid-cols-2 gap-2 mt-auto">
-                                <button onclick="window.copyLink('${doc.id}')" class="bg-gray-100 text-xs font-bold py-2 rounded-xl"><i class="fas fa-link"></i> نسخ</button>
-                                <button onclick="window.openOrderModal('${doc.id}', '${p.name}')" class="bg-blue-500 text-white text-xs font-bold py-2 rounded-xl">طلب</button>
+                        <div class="border dark:border-gray-800 rounded-3xl p-5 flex flex-col group bg-white dark:bg-cardDark shadow-sm hover:shadow-lg transition-shadow">
+                            <img src="${p.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                            <h4 class="font-black text-lg text-center mb-2">${p.name}</h4>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-sm font-black text-gray-800 dark:text-gray-200">${p.price} دج</span>
+                                <span class="text-xs bg-primary/10 text-primary font-bold px-3 py-1.5 rounded-xl">عمولة: 500 دج</span>
+                            </div>
+                            
+                            <div class="mt-auto bg-gray-50 dark:bg-bgDark p-2 rounded-xl border dark:border-gray-700 flex items-center gap-2">
+                                <input type="text" readonly value="${productLink}" class="w-full bg-transparent text-xs outline-none text-gray-500 dir-ltr text-left px-2" onclick="this.select()">
+                                <button onclick="window.copyGeneratedLink('${productLink}')" class="bg-primary hover:bg-primaryDark text-white w-10 h-10 rounded-lg transition-colors flex items-center justify-center shrink-0">
+                                    <i class="fas fa-copy"></i>
+                                </button>
                             </div>
                         </div>`;
                 });
@@ -731,39 +805,63 @@
             });
         }
 
-        window.copyLink = async (id) => {
-            await navigator.clipboard.writeText(`https://tirourda.store/product/${id}?ref=${currentUser.uid}`);
-            Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'تم النسخ!', showConfirmButton: false, timer: 1500 });
-            db.collection("users").doc(currentUser.uid).update({ clicks: firebase.firestore.FieldValue.increment(1) });
-        };
-
-        window.openOrderModal = (id, name) => {
-            document.getElementById('order-modal').style.display = 'flex';
-            setTimeout(() => document.getElementById('order-modal-content').classList.replace('scale-95','scale-100'), 10);
-            document.getElementById('order-product-id').value = id;
-            document.getElementById('order-product-name').innerText = name;
-        };
-
-        window.closeOrderModal = () => {
-            document.getElementById('order-modal-content').classList.replace('scale-100','scale-95');
-            setTimeout(() => document.getElementById('order-modal').style.display = 'none', 300);
-            document.getElementById('order-form').reset();
-        };
-
-        window.submitCustomerOrder = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('order-submit-btn');
-            btn.disabled = true;
+        // NEW: Copy Generated Link
+        window.copyGeneratedLink = async (link) => {
             try {
+                await navigator.clipboard.writeText(link);
+                Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'تم نسخ رابطك الخاص بنجاح!', showConfirmButton: false, timer: 2000 });
+            } catch (err) {
+                Swal.fire('خطأ', 'لم نتمكن من نسخ الرابط تلقائياً، يرجى نسخه يدوياً', 'error');
+            }
+        };
+
+        // NEW: Submit Landing Page Order
+        window.submitLandingOrder = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('lp-submit-btn');
+            btn.disabled = true; 
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'جاري تسجيل الطلب... <div class="loader inline-block align-middle ml-2" style="display:inline-block; border-color: white; border-left-color: transparent; width:16px; height:16px;"></div>';
+            
+            try {
+                const refId = document.getElementById('lp-ref-id').value;
+                
+                // Get Affiliate Name for Admin DB
+                let affiliateName = 'مسوق';
+                if(refId) {
+                    const userDoc = await db.collection('users').doc(refId).get();
+                    if(userDoc.exists) affiliateName = userDoc.data().name || 'مسوق';
+                }
+
                 await db.collection("orders").add({
-                    productId: document.getElementById('order-product-id').value, productName: document.getElementById('order-product-name').innerText,
-                    customerName: document.getElementById('order-customer-name').value, customerPhone: document.getElementById('order-customer-phone').value,
-                    customerState: document.getElementById('order-customer-state').value, quantity: document.getElementById('order-qty').value,
-                    affiliateId: currentUser.uid, affiliateName: currentUserData.name || 'مسوق', commission: FIXED_COMMISSION, status: 'pending', date: firebase.firestore.FieldValue.serverTimestamp()
+                    productId: document.getElementById('lp-prod-id').value, 
+                    productName: document.getElementById('lp-prod-name').value,
+                    customerName: document.getElementById('lp-customer-name').value, 
+                    customerPhone: document.getElementById('lp-customer-phone').value,
+                    customerState: document.getElementById('lp-customer-state').value, 
+                    quantity: 1, // Fixed to 1 for simplicity based on prompt
+                    affiliateId: refId || 'direct', 
+                    affiliateName: affiliateName, 
+                    commission: FIXED_COMMISSION, 
+                    status: 'pending', 
+                    date: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                Swal.fire({icon: 'success', title: 'نجاح!', text: 'تم تسجيل الطلبية', showConfirmButton: false, timer: 1500});
-                window.closeOrderModal();
-            } catch(e) { Swal.fire('خطأ', e.message, 'error'); } finally { btn.disabled = false; }
+                
+                Swal.fire({
+                    icon: 'success', 
+                    title: 'شكراً لثقتك بنا!', 
+                    text: 'تم تسجيل طلبك بنجاح. سيتصل بك فريقنا قريباً لتأكيد التوصيل.', 
+                    confirmButtonText: 'حسناً',
+                    confirmButtonColor: '#10b981'
+                }).then(() => {
+                    window.location.href = window.location.pathname; // Redirect to main page
+                });
+                
+            } catch(e) { 
+                Swal.fire('خطأ', e.message, 'error'); 
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            } 
         };
 
         window.submitSupportTicket = async (e) => {
@@ -821,10 +919,10 @@
                         html += `
                         <tr class="border-b dark:border-gray-800 text-xs">
                             <td class="p-3 text-blue-600 font-bold">${o.affiliateName}</td>
-                            <td class="p-3">${o.customerName}<br><span class="text-gray-400" dir="ltr">${o.customerPhone}</span></td>
-                            <td class="p-3">${o.productName} (${o.quantity})</td>
+                            <td class="p-3">${o.customerName}<br><span class="text-gray-400" dir="ltr">${o.customerPhone}</span><br><span class="text-gray-400">${o.customerState}</span></td>
+                            <td class="p-3">${o.productName}</td>
                             <td class="p-3 text-primary font-black">${o.commission} دج</td>
-                            <td class="p-3 text-center"><button onclick="window.confirmAdminOrder(this, '${doc.id}', '${o.affiliateId}')" class="bg-primary text-white px-3 py-1 rounded">تأكيد</button></td>
+                            <td class="p-3 text-center"><button onclick="window.confirmAdminOrder(this, '${doc.id}', '${o.affiliateId}')" class="bg-primary text-white px-3 py-1 rounded shadow-md">تأكيد التوصيل</button></td>
                         </tr>`;
                     }
                 });
@@ -838,7 +936,7 @@
                 let html = ''; adminProdsCache = {};
                 snap.forEach(doc => {
                     const p = doc.data(); adminProdsCache[doc.id] = p;
-                    html += `<tr class="border-b dark:border-gray-800"><td class="p-3"><img src="${p.image}" class="w-8 h-8 rounded"></td><td class="p-3">${p.name}</td><td class="p-3 font-black">${p.price} دج</td><td class="p-3"><button onclick="window.editProduct('${doc.id}')" class="text-blue-500 mx-2"><i class="fas fa-edit"></i></button><button onclick="window.deleteProduct('${doc.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`;
+                    html += `<tr class="border-b dark:border-gray-800"><td class="p-3"><img src="${p.image}" class="w-10 h-10 rounded object-cover"></td><td class="p-3 font-bold">${p.name}</td><td class="p-3 font-black text-primary">${p.price} دج</td><td class="p-3"><button onclick="window.editProduct('${doc.id}')" class="text-blue-500 mx-2"><i class="fas fa-edit"></i></button><button onclick="window.deleteProduct('${doc.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`;
                 });
                 document.getElementById('admin-products-table-body').innerHTML = html;
             });
@@ -848,7 +946,7 @@
                 let html = '';
                 snap.forEach(doc => {
                     const u = doc.data();
-                    html += `<tr class="border-b dark:border-gray-800"><td class="p-3 font-bold">${u.name}</td><td class="p-3">${u.email}</td><td class="p-3 font-black text-primary">${u.balance} دج</td><td class="p-3 text-${u.isBanned?'red':'green'}-500">${u.isBanned?'محظور':'نشط'}</td><td class="p-3"><button onclick="window.toggleBanUser('${doc.id}', ${!!u.isBanned})" class="bg-${u.isBanned?'green':'red'}-500 text-white px-2 py-1 rounded text-xs">${u.isBanned?'فك حظر':'حظر'}</button></td></tr>`;
+                    html += `<tr class="border-b dark:border-gray-800"><td class="p-3 font-bold">${u.name}</td><td class="p-3">${u.email}</td><td class="p-3 font-black text-primary">${u.balance} دج</td><td class="p-3 text-${u.isBanned?'red':'green'}-500 font-bold">${u.isBanned?'محظور':'نشط'}</td><td class="p-3"><button onclick="window.toggleBanUser('${doc.id}', ${!!u.isBanned})" class="bg-${u.isBanned?'green':'red'}-500 text-white px-3 py-1 rounded text-xs shadow-md">${u.isBanned?'فك حظر':'حظر'}</button></td></tr>`;
                 });
                 document.getElementById('admin-users-table-body').innerHTML = html;
             });
@@ -857,16 +955,16 @@
                 let html = '';
                 snap.forEach(doc => {
                     const t = doc.data();
-                    html += `<div class="bg-gray-50 dark:bg-bgDark p-4 rounded-xl border dark:border-gray-700"><b>${t.name}</b> (${t.phone})<br><p class="text-xs mt-2 p-2 bg-white dark:bg-cardDark border rounded break-words">${t.description}</p></div>`;
+                    html += `<div class="bg-gray-50 dark:bg-bgDark p-4 rounded-xl border dark:border-gray-700"><b>${t.name}</b> (${t.phone})<br><p class="text-xs mt-2 p-3 bg-white dark:bg-cardDark border dark:border-gray-600 rounded-lg break-words leading-relaxed">${t.description}</p></div>`;
                 });
-                document.getElementById('admin-support-list').innerHTML = html || '<div class="col-span-full">لا بلاغات</div>';
+                document.getElementById('admin-support-list').innerHTML = html || '<div class="col-span-full text-center text-gray-500">لا توجد بلاغات</div>';
             });
         }
 
         window.submitProduct = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('prod-submit-btn');
-            btn.disabled = true; btn.innerHTML = 'جاري...';
+            btn.disabled = true; btn.innerHTML = 'جاري الحفظ...';
             try {
                 const id = document.getElementById('prod-id').value;
                 const name = document.getElementById('prod-name').value;
@@ -882,11 +980,11 @@
                             const img = new Image();
                             img.onload = () => {
                                 const cvs = document.createElement('canvas');
-                                let w = img.width, h = img.height, max = 300;
+                                let w = img.width, h = img.height, max = 500; // Increased resolution slightly for Landing Page
                                 if(w>h && w>max){ h*=max/w; w=max; } else if(h>max){ w*=max/h; h=max; }
                                 cvs.width=w; cvs.height=h;
                                 cvs.getContext('2d').drawImage(img,0,0,w,h);
-                                resolve(cvs.toDataURL('image/jpeg',0.7));
+                                resolve(cvs.toDataURL('image/jpeg',0.75));
                             };
                             img.onerror = () => resolve('');
                             img.src = e.target.result;
@@ -895,18 +993,18 @@
                     });
                 }
                 
-                const data = { name, price: Number(price), description: desc, commission: 500 };
+                const data = { name, price: Number(price), description: desc, commission: FIXED_COMMISSION };
                 if(imgData) data.image = imgData;
                 
                 if (id) { await db.collection('products').doc(id).update(data); } 
                 else { 
-                    if(!imgData) data.image = 'https://via.placeholder.com/150';
+                    if(!imgData) data.image = 'https://via.placeholder.com/500';
                     data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                     await db.collection('products').add(data); 
                 }
                 document.getElementById('admin-product-form').reset();
                 document.getElementById('prod-id').value = '';
-                Swal.fire('نجاح', 'تم الحفظ', 'success');
+                Swal.fire('نجاح', 'تم حفظ المنتج بنجاح', 'success');
             } catch(err) { Swal.fire('خطأ', err.message, 'error'); } 
             finally { btn.innerHTML = 'حفظ'; btn.disabled = false; }
         };
@@ -921,19 +1019,30 @@
         };
 
         window.deleteProduct = async (id) => {
-            if((await Swal.fire({title:'حذف؟', icon:'warning', showCancelButton:true})).isConfirmed) db.collection('products').doc(id).delete();
+            if((await Swal.fire({title:'حذف؟', text:'هل أنت متأكد من حذف المنتج؟', icon:'warning', showCancelButton:true, confirmButtonText:'نعم، احذف', cancelButtonText:'إلغاء'})).isConfirmed) {
+                db.collection('products').doc(id).delete();
+            }
         };
 
         window.toggleBanUser = async (id, banned) => {
-            if((await Swal.fire({title:'تأكيد؟', icon:'warning', showCancelButton:true})).isConfirmed) db.collection("users").doc(id).update({ isBanned: !banned });
+            if((await Swal.fire({title:'تأكيد؟', text: banned ? 'فك حظر المسوق؟' : 'حظر المسوق؟', icon:'warning', showCancelButton:true, confirmButtonText:'تأكيد', cancelButtonText:'إلغاء'})).isConfirmed) {
+                db.collection("users").doc(id).update({ isBanned: !banned });
+            }
         };
 
         window.confirmAdminOrder = async (btn, oId, uId) => {
-            btn.disabled=true; btn.innerText='..';
-            await db.collection("orders").doc(oId).update({ status: 'confirmed' });
-            await db.collection("users").doc(uId).update({ balance: firebase.firestore.FieldValue.increment(500) });
-            Swal.fire({toast:true, position:'top', icon:'success', title:'تم!', showConfirmButton:false, timer:1500});
+            if((await Swal.fire({title:'تأكيد التوصيل؟', text:'هل استلم الزبون الطلبية؟ سيتم إضافة 500 دج للمسوق.', icon:'question', showCancelButton:true, confirmButtonText:'نعم، تم التوصيل', cancelButtonText:'إلغاء'})).isConfirmed){
+                btn.disabled=true; btn.innerText='جاري...';
+                await db.collection("orders").doc(oId).update({ status: 'confirmed' });
+                if(uId !== 'direct') {
+                    await db.collection("users").doc(uId).update({ balance: firebase.firestore.FieldValue.increment(FIXED_COMMISSION) });
+                }
+                Swal.fire({toast:true, position:'top', icon:'success', title:'تم تأكيد الطلب بنجاح!', showConfirmButton:false, timer:1500});
+            }
         };
+        
+        // Initial routing check (to catch URL params before Firebase init finishes)
+        handleRouting();
     </script>
 </body>
 </html>
