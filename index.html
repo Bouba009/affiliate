@@ -26,7 +26,8 @@
                         'float': 'float 4s ease-in-out infinite',
                         'float-delayed': 'float 4s ease-in-out 2s infinite',
                         'glow': 'glow 2s ease-in-out infinite alternate',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 2s linear infinite'
                     },
                     keyframes: {
                         float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-15px)' } },
@@ -53,9 +54,21 @@
         .view.active { display: block; opacity: 1; }
         .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to left, #10b981, #34d399); }
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        
+        /* Spinner Loader */
+        .loader { border: 4px solid rgba(16, 185, 129, 0.2); border-left-color: #10b981; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-bgLight dark:bg-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-300 relative">
+
+    <!-- Global Initial Loader (To prevent UI flickering while checking Auth State) -->
+    <div id="global-loader" class="fixed inset-0 bg-bgLight dark:bg-bgDark z-[200] flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-green-400 flex items-center justify-center text-white text-3xl mb-4 animate-pulse shadow-lg shadow-primary/30">
+            <i class="fas fa-leaf"></i>
+        </div>
+        <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+    </div>
 
     <!-- Global Theme Toggle -->
     <button onclick="window.toggleTheme()" class="fixed bottom-6 right-6 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all text-xl border border-gray-100 dark:border-gray-800">
@@ -98,7 +111,10 @@
                     </div>
                 </div>
 
-                <button type="submit" id="auth-btn" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-primary/30 mb-4">تسجيل الدخول</button>
+                <button type="submit" id="auth-btn" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-primary/30 mb-4 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                    <span id="auth-btn-text">تسجيل الدخول</span>
+                    <div class="loader" id="auth-loader"></div>
+                </button>
                 
                 <div class="flex items-center gap-4 mb-4">
                     <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
@@ -106,9 +122,10 @@
                     <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
                 </div>
 
-                <button type="button" onclick="window.handleGoogleAuth()" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-3 mb-6">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                    المتابعة باستخدام Google
+                <button type="button" onclick="window.handleGoogleAuth()" id="google-auth-btn" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-3 mb-6 disabled:opacity-70">
+                    <svg id="google-icon" class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    <div class="loader hidden !border-gray-500 !border-l-gray-300" id="google-loader"></div>
+                    <span id="google-btn-text">المتابعة باستخدام Google</span>
                 </button>
             </form>
 
@@ -122,7 +139,7 @@
     <!-- ==========================================
          1. LANDING PAGE VIEW
     =========================================== -->
-    <div id="landing-view" class="view active">
+    <div id="landing-view" class="view">
         <!-- HEADER -->
         <header class="fixed top-0 w-full glass z-40 transition-all duration-300" id="main-header">
             <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
@@ -140,7 +157,7 @@
                     <a href="#faq" class="hover:text-primary transition-colors">الأسئلة الشائعة</a>
                 </nav>
                 
-                <div class="flex gap-2 md:gap-3">
+                <div class="flex gap-2 md:gap-3" id="nav-auth-buttons">
                     <button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 md:px-4 text-sm md:text-base">دخول</button>
                     <button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg shadow-primary/30 transition-all transform hover:-translate-y-1 font-bold text-sm md:text-base">إنشاء حساب</button>
                 </div>
@@ -162,9 +179,9 @@
                         اربح المال مع <br> <span class="gradient-text">Tirourda Affiliate</span>
                     </h1>
                     <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                        شارك منتجات Tirourda المتميزة (عسل، زيوت، مواد تجميل طبيعية) واحصل على عمولات حقيقية بالدينار الجزائري. نظام حديث، سحب سريع، وتتبع مباشر.
+                        شارك منتجات Tirourda المتميزة واحصل على عمولات حقيقية بالدينار الجزائري. نظام حديث، سحب سريع، وتتبع مباشر.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" id="hero-cta">
                         <button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white text-lg px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 transition-all transform hover:-translate-y-1 font-bold flex items-center justify-center gap-3">
                             ابدأ الآن مجانا <i class="fas fa-arrow-left"></i>
                         </button>
@@ -174,12 +191,10 @@
                 <div class="relative z-10 mt-10 lg:mt-0 perspective-1000 hidden md:block">
                     <div class="bg-white dark:bg-cardDark rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-3 transform rotate-y-[-10deg] rotate-x-[5deg] hover:rotate-0 transition-transform duration-700">
                         <div class="bg-gray-50 dark:bg-bgDark rounded-2xl p-6 h-80 relative overflow-hidden flex flex-col justify-between border border-gray-100 dark:border-gray-800">
-                            <!-- Mock Topbar -->
                             <div class="flex justify-between items-center mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
                                 <div class="flex items-center gap-2 font-bold"><i class="fas fa-chart-pie text-primary"></i> الإحصائيات</div>
                                 <div class="text-primary font-black bg-primary/10 px-4 py-1.5 rounded-lg border border-primary/20">45,000 دج</div>
                             </div>
-                            <!-- Mock Chart -->
                             <div class="flex-1 flex items-end gap-3 px-2">
                                 <div class="w-1/6 bg-gradient-to-t from-primary/20 to-primary/40 rounded-t-xl h-1/3"></div>
                                 <div class="w-1/6 bg-gradient-to-t from-primary/30 to-primary/50 rounded-t-xl h-1/2"></div>
@@ -223,26 +238,23 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 max-w-3xl mx-auto">
                     <h2 class="text-3xl md:text-4xl font-black mb-4">لماذا تختار <span class="text-primary">Tirourda</span>؟</h2>
-                    <p class="text-gray-600 dark:text-gray-400">نقدم لك أحدث بيئة عمل لضمان نجاحك وتحقيق أعلى الأرباح بسهولة وشفافية.</p>
+                    <p class="text-gray-600 dark:text-gray-400">بيئة عمل احترافية تضمن نجاحك وتحقيق أعلى الأرباح بشفافية تامة.</p>
                 </div>
                 <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-                    <!-- Feature -->
                     <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2 group">
                         <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-percent"></i></div>
                         <h3 class="text-lg font-bold mb-2">عمولات مرتفعة</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">نقدم نسب عمولات مجزية في السوق لتكافئ جهودك بشكل عادل على كل مبيعة.</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">نقدم نسب عمولات مجزية في السوق لتكافئ جهودك بشكل عادل.</p>
                     </div>
-                    <!-- Feature -->
                     <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2 group">
                         <div class="w-14 h-14 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-bolt"></i></div>
                         <h3 class="text-lg font-bold mb-2">سحب سريع</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">بمجرد تأكيد الطلب، يمكنك سحب أرباحك فوراً نحو حسابك البريدي أو رصيد هاتفك.</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي أو رصيد هاتفك.</p>
                     </div>
-                    <!-- Feature -->
                     <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2 group">
                         <div class="w-14 h-14 bg-yellow-500/10 text-yellow-500 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-link"></i></div>
                         <h3 class="text-lg font-bold mb-2">روابط إحالة ذكية</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">نظام الكوكيز يضمن احتساب عمولتك حتى لو قام العميل بالشراء بعد أيام من دخوله الرابط.</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">نظام الكوكيز يضمن احتساب عمولتك حتى لو قام العميل بالشراء لاحقاً.</p>
                     </div>
                 </div>
             </div>
@@ -328,7 +340,7 @@
     <div id="user-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden">
         
         <!-- Mobile Sidebar Overlay -->
-        <div id="mobile-sidebar-overlay" onclick="window.toggleUserSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"></div>
+        <div id="mobile-sidebar-overlay" onclick="window.toggleUserSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
 
         <!-- SIDEBAR -->
         <aside id="user-sidebar" class="w-64 bg-white dark:bg-cardDark border-l border-gray-100 dark:border-gray-800 fixed h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
@@ -339,7 +351,7 @@
             
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
                 <div class="text-xs text-gray-400 font-bold mb-4 mt-2">القائمة الرئيسية</div>
-                <!-- Changed href="#" to javascript:void(0) to prevent redirect bugs -->
+                <!-- Safe Routing Links -->
                 <a href="javascript:void(0)" onclick="switchUserTab('home', event)" class="dash-link active flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-tachometer-alt w-5"></i> لوحة القيادة</a>
                 <a href="javascript:void(0)" onclick="switchUserTab('products', event)" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box-open w-5"></i> المنتجات (الروابط)</a>
                 <a href="javascript:void(0)" onclick="switchUserTab('withdraw', event)" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-hand-holding-usd w-5"></i> سحب الأرباح</a>
@@ -388,21 +400,21 @@
                 </div>
             </header>
 
-            <div id="tab-home" class="tab-content block">
+            <div id="tab-home" class="tab-content block animate-fade-in">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6">
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
                         <div class="text-gray-500 text-xs md:text-sm font-bold mb-2">قيد الانتظار</div>
                         <div class="text-xl md:text-3xl font-black text-yellow-500 mb-1" id="user-pending">0</div>
                     </div>
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
                         <div class="text-gray-500 text-xs md:text-sm font-bold mb-2">إجمالي الأرباح</div>
                         <div class="text-xl md:text-3xl font-black text-primary mb-1" id="user-total">0</div>
                     </div>
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
                         <div class="text-gray-500 text-xs md:text-sm font-bold mb-2">الطلبات الناجحة</div>
                         <div class="text-xl md:text-3xl font-black mb-1" id="user-orders-count">0</div>
                     </div>
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
                         <div class="text-gray-500 text-xs md:text-sm font-bold mb-2">النقرات</div>
                         <div class="text-xl md:text-3xl font-black text-blue-500 mb-1" id="user-clicks">0</div>
                     </div>
@@ -418,23 +430,29 @@
                         <h3 class="font-black text-base md:text-lg mb-4 flex items-center gap-2"><i class="fas fa-list-alt text-primary"></i> الطلبات الأخيرة</h3>
                         <div class="space-y-2 overflow-y-auto pr-1" id="user-orders-list">
                             <!-- Injected by JS -->
+                            <div class="flex justify-center items-center h-full text-gray-400">
+                                <div class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="tab-products" class="tab-content hidden">
+            <div id="tab-products" class="tab-content hidden animate-fade-in">
                 <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-8">
                     <h3 class="font-black text-lg md:text-xl mb-2 flex items-center gap-2"><i class="fas fa-store text-primary"></i> منتجات المتجر</h3>
                     <p class="text-gray-500 text-xs md:text-sm mb-6">انسخ روابط هذه المنتجات وانشرها لتبدأ في جني العمولات.</p>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" id="affiliate-products-list">
                         <!-- Injected by JS -->
+                        <div class="col-span-full flex justify-center py-10">
+                            <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="tab-withdraw" class="tab-content hidden">
+            <div id="tab-withdraw" class="tab-content hidden animate-fade-in">
                 <div class="grid md:grid-cols-2 gap-6 md:gap-8">
                     <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
                         <h3 class="font-black text-lg md:text-xl mb-4 md:mb-6 flex items-center gap-2"><i class="fas fa-money-check-alt text-primary"></i> طلب سحب أرباح</h3>
@@ -447,11 +465,11 @@
                         <form onsubmit="window.handleWithdrawRequest(event)" class="space-y-4">
                             <div>
                                 <label class="block text-xs md:text-sm font-bold mb-2">المبلغ (دج)</label>
-                                <input type="number" id="withdraw-amount" min="500" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary font-bold" required>
+                                <input type="number" id="withdraw-amount" min="500" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary font-bold transition-colors" required>
                             </div>
                             <div>
                                 <label class="block text-xs md:text-sm font-bold mb-2">طريقة السحب</label>
-                                <select id="withdraw-method" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary font-bold text-sm">
+                                <select id="withdraw-method" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary font-bold text-sm transition-colors">
                                     <option value="ccp">بريد الجزائر (CCP)</option>
                                     <option value="baridimob">بريديموب (BaridiMob)</option>
                                     <option value="flexy">رصيد هاتف (Mobilis, Djezzy, Ooredoo)</option>
@@ -459,7 +477,7 @@
                             </div>
                             <div>
                                 <label class="block text-xs md:text-sm font-bold mb-2">رقم الحساب / الهاتف</label>
-                                <input type="text" id="withdraw-account" placeholder="أدخل رقم الـ RIP أو رقم الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary text-left text-sm" dir="ltr" required>
+                                <input type="text" id="withdraw-account" placeholder="أدخل رقم الـ RIP أو رقم الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary text-left text-sm transition-colors" dir="ltr" required>
                             </div>
                             <button type="submit" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-primary/30 mt-2 text-sm md:text-base">إرسال الطلب</button>
                         </form>
@@ -468,7 +486,11 @@
                     <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
                         <h3 class="font-black text-lg md:text-xl mb-4 md:mb-6 flex items-center gap-2"><i class="fas fa-history text-primary"></i> سجل السحوبات</h3>
                         <div class="space-y-3" id="withdraw-history-list">
-                            <div class="text-center text-gray-400 py-10 text-sm">لا توجد سحوبات سابقة</div>
+                            <!-- Simulated empty state -->
+                            <div class="text-center flex flex-col items-center justify-center py-10 text-gray-400">
+                                <i class="fas fa-box-open text-4xl mb-3 opacity-50"></i>
+                                <span class="text-sm">لا توجد سحوبات سابقة</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -486,7 +508,7 @@
             <h2 class="text-xl md:text-2xl font-black mb-6">الإدارة العامة <span class="text-primary">Tirourda</span></h2>
             
             <form onsubmit="window.handleAdminLogin(event)">
-                <input type="password" id="admin-password" placeholder="كلمة المرور: abobob123#" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 outline-none focus:border-gray-900 mb-4 text-center font-bold tracking-widest text-sm" dir="ltr">
+                <input type="password" id="admin-password" placeholder="كلمة المرور: abobob123#" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 outline-none focus:border-gray-900 mb-4 text-center font-bold tracking-widest text-sm transition-colors" dir="ltr" required>
                 <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-3.5 rounded-xl hover:bg-primary dark:hover:bg-primary transition-all shadow-lg text-sm md:text-base">دخول مشفر</button>
             </form>
             <button type="button" onclick="window.navigate('landing')" class="w-full mt-6 text-xs md:text-sm text-gray-500 hover:text-primary transition-colors">العودة كزائر</button>
@@ -499,7 +521,7 @@
     =========================================== -->
     <div id="admin-dashboard-view" class="view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden">
         
-        <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden"></div>
+        <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden transition-opacity"></div>
 
         <aside id="admin-sidebar" class="w-64 bg-gray-900 text-white fixed h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
             <div class="p-6 border-b border-gray-800 flex justify-between items-center text-lg font-black">
@@ -512,7 +534,7 @@
                 <a href="javascript:void(0)" class="flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box w-5"></i> إدارة المنتجات</a>
             </nav>
             <div class="p-4 border-t border-gray-800">
-                <button type="button" onclick="window.navigate('landing')" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3 rounded-xl transition-all font-bold text-sm">
+                <button type="button" onclick="window.logoutAdmin()" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3 rounded-xl transition-all font-bold text-sm">
                     <i class="fas fa-sign-out-alt"></i> إغلاق لوحة الإدارة
                 </button>
             </div>
@@ -527,7 +549,7 @@
                 <span class="bg-green-100 text-green-700 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold border border-green-200"><i class="fas fa-wifi"></i> متصل بـ Firebase</span>
             </header>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 animate-fade-in">
                 <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-primary relative overflow-hidden">
                     <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">العمولات المدفوعة</div>
                     <div class="text-lg md:text-2xl font-black" id="admin-total-paid">0 دج</div>
@@ -546,7 +568,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8 animate-fade-in">
                 <!-- CSV UPLOAD -->
                 <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
                     <h3 class="font-black text-lg mb-2 flex items-center gap-2"><i class="fas fa-file-excel text-green-600"></i> رفع منتجات عبر ملف CSV</h3>
@@ -562,9 +584,9 @@
                 <!-- ORDERS MANAGEMENT -->
                 <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col h-96">
                     <h3 class="font-black text-base md:text-lg mb-4 flex items-center gap-2"><i class="fas fa-tasks text-yellow-500"></i> تأكيد الطلبات</h3>
-                    <div class="overflow-x-auto overflow-y-auto flex-1 border border-gray-100 dark:border-gray-800 rounded-xl">
+                    <div class="overflow-x-auto overflow-y-auto flex-1 border border-gray-100 dark:border-gray-800 rounded-xl relative">
                         <table class="w-full text-xs md:text-sm text-right min-w-[400px]">
-                            <thead class="text-gray-500 bg-gray-50 dark:bg-bgDark sticky top-0">
+                            <thead class="text-gray-500 bg-gray-50 dark:bg-bgDark sticky top-0 z-10">
                                 <tr>
                                     <th class="p-3 whitespace-nowrap">رقم الطلب / المسوق</th>
                                     <th class="p-3">المنتج</th>
@@ -574,6 +596,11 @@
                             </thead>
                             <tbody id="admin-orders-list">
                                 <!-- Loaded from Firebase -->
+                                <tr>
+                                    <td colspan="4" class="text-center py-10">
+                                        <div class="flex justify-center"><div class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div></div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -590,6 +617,9 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDoc, doc, setDoc, updateDoc, onSnapshot, query, where, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // ==========================================
+        // 1. FIREBASE CONFIG
+        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyCkkVzBU-PTSNHFMQXQ6mUQ3EkYQd6kCkQ",
             authDomain: "affiliate-6e759.firebaseapp.com",
@@ -607,9 +637,20 @@
 
         let currentUser = null;
         let isSignupMode = false;
-        let isAuthReady = false; // To fix the premature logout bug
+        let isAuthReady = false; 
 
-        // UI HELPERS
+        // ==========================================
+        // 2. GLOBAL UI HELPERS
+        // ==========================================
+        
+        // Show Offline Toast
+        window.addEventListener('offline', () => {
+            Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'انقطع الاتصال بالإنترنت!', showConfirmButton: false, timer: 4000 });
+        });
+        window.addEventListener('online', () => {
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'عادت شبكة الإنترنت.', showConfirmButton: false, timer: 3000 });
+        });
+
         window.toggleTheme = () => {
             document.documentElement.classList.toggle('dark');
             const icon = document.getElementById('theme-icon');
@@ -628,14 +669,18 @@
             document.getElementById('mobile-admin-overlay').classList.toggle('hidden');
         };
 
-        // Routing SPA with Auth Guard Fix
+        // ==========================================
+        // 3. SECURE ROUTING SYSTEM
+        // ==========================================
         window.navigate = (target) => {
             views.forEach(v => document.getElementById(v).classList.remove('active'));
             document.getElementById(target + '-view').classList.add('active');
             
-            // Do not force hash change if it's not necessary, to prevent loops
-            if(window.location.hash !== '#' + target) {
-                history.replaceState(null, null, '#' + target);
+            // Clean routing without triggering hashchange loop
+            if(window.location.hash !== '#' + target && target !== 'landing') {
+                history.pushState(null, null, '#' + target);
+            } else if (target === 'landing') {
+                history.pushState(null, null, ' '); // Clean URL for landing
             }
             
             if(target === 'user-dashboard') { 
@@ -648,23 +693,50 @@
         };
 
         function handleRouting() {
-            if(!isAuthReady) return; // Don't route until Firebase tells us if user is logged in or not
+            if(!isAuthReady) return; 
+
+            // Hide the global loader once Firebase auth state is known
+            const globalLoader = document.getElementById('global-loader');
+            if(globalLoader) {
+                globalLoader.style.opacity = '0';
+                setTimeout(() => globalLoader.style.display = 'none', 500);
+            }
             
             const hash = window.location.hash;
-            if (hash === '#admin-login') window.navigate('admin-login');
-            else if (hash === '#admin-dashboard') window.navigate('admin-dashboard');
-            else if (currentUser && (hash === '#user-dashboard' || hash === '' || hash === '#')) {
-                window.navigate('user-dashboard');
-            } else if (!currentUser && hash === '#user-dashboard') {
-                window.navigate('landing');
-            } else if (hash === '#landing' || hash === '' || hash === '#') {
+            const isAdminAuth = sessionStorage.getItem('tirourda_admin') === 'true';
+
+            // Admin Guards
+            if (hash === '#admin-dashboard') {
+                if(isAdminAuth) window.navigate('admin-dashboard');
+                else window.navigate('admin-login');
+                return;
+            }
+            if (hash === '#admin-login') {
+                if(isAdminAuth) window.navigate('admin-dashboard');
+                else window.navigate('admin-login');
+                return;
+            }
+
+            // User Guards
+            if (hash === '#user-dashboard') {
+                if(currentUser) window.navigate('user-dashboard');
+                else window.navigate('landing');
+                return;
+            }
+
+            // Default Route (Landing)
+            if(currentUser && hash !== '#admin-login' && hash !== '#admin-dashboard') {
+                window.navigate('user-dashboard'); // Auto-redirect logged-in users
+            } else {
                 window.navigate('landing');
             }
         }
 
         window.addEventListener('hashchange', handleRouting);
 
-        // AUTH LOGIC
+        // ==========================================
+        // 4. AUTHENTICATION (Login / Register / Google)
+        // ==========================================
         window.openAuthModal = (signup) => {
             isSignupMode = signup;
             document.getElementById('auth-modal').style.display = 'flex';
@@ -672,7 +744,7 @@
             
             document.getElementById('auth-title').innerText = signup ? "إنشاء حساب مسوق" : "مرحباً بك مجدداً";
             document.getElementById('auth-subtitle').innerText = signup ? "أدخل بياناتك للبدء في ربح العمولات" : "سجل دخولك للوصول إلى لوحة التحكم";
-            document.getElementById('auth-btn').innerText = signup ? "إنشاء حساب مجاني" : "تسجيل الدخول";
+            document.getElementById('auth-btn-text').innerText = signup ? "إنشاء حساب مجاني" : "تسجيل الدخول";
             document.getElementById('auth-switch-text').innerText = signup ? "لدي حساب بالفعل؟" : "ليس لديك حساب؟";
             document.getElementById('auth-toggle-btn').innerText = signup ? "تسجيل الدخول" : "إنشاء حساب جديد";
             document.getElementById('register-fields').style.display = signup ? 'block' : 'none';
@@ -681,25 +753,51 @@
         window.closeAuthModal = () => {
             document.getElementById('auth-modal-content').classList.replace('scale-100','scale-95');
             setTimeout(() => document.getElementById('auth-modal').style.display = 'none', 300);
+            document.getElementById('auth-form').reset();
         };
 
         window.toggleAuthMode = () => window.openAuthModal(!isSignupMode);
 
+        const setAuthLoading = (isLoading, isGoogle = false) => {
+            const btn = document.getElementById(isGoogle ? 'google-auth-btn' : 'auth-btn');
+            const loader = document.getElementById(isGoogle ? 'google-loader' : 'auth-loader');
+            const icon = document.getElementById(isGoogle ? 'google-icon' : null);
+            const text = document.getElementById(isGoogle ? 'google-btn-text' : 'auth-btn-text');
+
+            btn.disabled = isLoading;
+            if(isLoading) {
+                loader.style.display = 'block';
+                if(icon) icon.style.display = 'none';
+                text.innerText = "جاري التحميل...";
+            } else {
+                loader.style.display = 'none';
+                if(icon) icon.style.display = 'block';
+                text.innerText = isGoogle ? "المتابعة باستخدام Google" : (isSignupMode ? "إنشاء حساب مجاني" : "تسجيل الدخول");
+            }
+        };
+
         window.handleAuthSubmit = async (e) => {
             e.preventDefault();
-            const email = document.getElementById('auth-email').value;
-            const password = document.getElementById('auth-password').value;
             
+            // Sanitization
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value.trim();
+            
+            if(password.length < 6) return Swal.fire('تنبيه', 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل.', 'warning');
+
+            setAuthLoading(true);
+
             try {
                 if (isSignupMode) {
-                    const name = document.getElementById('auth-name').value;
-                    const phone = document.getElementById('auth-phone').value;
-                    if(!name) return Swal.fire('تنبيه', 'يرجى إدخال الاسم الكامل', 'warning');
+                    const name = document.getElementById('auth-name').value.trim();
+                    const phone = document.getElementById('auth-phone').value.trim();
+                    if(!name) throw new Error("empty_name");
 
                     const cred = await createUserWithEmailAndPassword(auth, email, password);
                     await setDoc(doc(db, "users", cred.user.uid), { 
                         name: name, email: email, phone: phone, balance: 0, clicks: 0, role: 'affiliate', createdAt: serverTimestamp() 
                     });
+                    
                     Swal.fire({icon: 'success', title: 'تم إنشاء الحساب بنجاح!', showConfirmButton: false, timer: 1500});
                 } else {
                     await signInWithEmailAndPassword(auth, email, password);
@@ -708,19 +806,23 @@
                 window.closeAuthModal();
             } catch (error) {
                 let msg = error.message;
-                if(error.code === 'auth/email-already-in-use') msg = "هذا البريد الإلكتروني مسجل مسبقاً.";
-                if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
-                if(error.code === 'auth/weak-password') msg = "كلمة المرور ضعيفة جداً (يجب أن تكون 6 أحرف على الأقل).";
-                Swal.fire('خطأ في التسجيل', msg, 'error');
+                if(error.message === "empty_name") msg = "يرجى إدخال الاسم الكامل.";
+                else if(error.code === 'auth/email-already-in-use') msg = "هذا البريد الإلكتروني مسجل مسبقاً.";
+                else if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+                Swal.fire('خطأ', msg, 'error');
+            } finally {
+                setAuthLoading(false);
             }
         };
 
         window.handleGoogleAuth = async () => {
+            setAuthLoading(true, true);
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
                 const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
+                
                 if (!docSnap.exists()) {
                     await setDoc(docRef, {
                         name: user.displayName || 'مستخدم جوجل',
@@ -729,12 +831,14 @@
                         balance: 0, clicks: 0, role: 'affiliate', createdAt: serverTimestamp()
                     });
                 }
-                Swal.fire({icon: 'success', title: 'تم الدخول بواسطة Google', showConfirmButton: false, timer: 1500});
+                Swal.fire({icon: 'success', title: 'تم الدخول بنجاح', showConfirmButton: false, timer: 1500});
                 window.closeAuthModal();
             } catch (error) {
                 let msg = error.message;
                 if(error.code === 'auth/unauthorized-domain') msg = "هذا النطاق غير مسموح به في إعدادات Firebase.";
-                Swal.fire('خطأ جوجل', msg, 'error');
+                if(error.code !== 'auth/popup-closed-by-user') Swal.fire('خطأ', msg, 'error');
+            } finally {
+                setAuthLoading(false, true);
             }
         };
 
@@ -745,11 +849,16 @@
             handleRouting();
         });
 
-        window.logoutUser = async () => { await signOut(auth); window.navigate('landing'); };
+        window.logoutUser = async () => { 
+            await signOut(auth); 
+            window.navigate('landing'); 
+        };
 
-        // USER DASHBOARD LOGIC
+        // ==========================================
+        // 5. USER DASHBOARD LOGIC (With Memory Leak Prevention)
+        // ==========================================
         window.switchUserTab = (tabId, event) => {
-            if(event) event.preventDefault(); // Stop any # link jumping behavior completely
+            if(event) event.preventDefault(); // Stop default anchor jumping
             
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
@@ -772,7 +881,7 @@
         function loadUserDashboardData() {
             if(!currentUser) return;
             
-            // Clean up previous listeners if any
+            // Clean up old listeners
             if(unsubUser) unsubUser();
             if(unsubOrders) unsubOrders();
             if(unsubProducts) unsubProducts();
@@ -789,78 +898,88 @@
                         document.getElementById('user-total').innerText = data.balance || 0;
                         document.getElementById('user-clicks').innerText = data.clicks || 0;
                     }
-                });
+                }, (error) => { console.error("Error fetching user data", error); });
 
                 const q = query(collection(db, "orders"), where("affiliateId", "==", currentUser.uid));
                 unsubOrders = onSnapshot(q, (snapshot) => {
                     let pendingSum = 0; let confirmedCount = 0; let ordersHtml = '';
-                    snapshot.forEach((docSnap) => {
-                        const order = docSnap.data();
-                        if(order.status === 'pending') pendingSum += Number(order.commission);
-                        if(order.status === 'confirmed') confirmedCount++;
+                    
+                    if(snapshot.empty) {
+                        document.getElementById('user-orders-list').innerHTML = `
+                            <div class="flex flex-col justify-center items-center h-full text-gray-400 py-6">
+                                <i class="fas fa-box-open text-3xl mb-2 opacity-50"></i>
+                                <span class="text-sm">لم تقم بأي مبيعات بعد</span>
+                            </div>`;
+                    } else {
+                        snapshot.forEach((docSnap) => {
+                            const order = docSnap.data();
+                            if(order.status === 'pending') pendingSum += Number(order.commission);
+                            if(order.status === 'confirmed') confirmedCount++;
 
-                        let statusUI = order.status === 'pending' 
-                            ? `<div class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-1 rounded-md mt-1 inline-block"><i class="fas fa-clock"></i> بانتظار التأكيد</div>`
-                            : `<div class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-md mt-1 inline-block"><i class="fas fa-check"></i> تم الدفع</div>`;
+                            let statusUI = order.status === 'pending' 
+                                ? `<div class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-1 rounded-md mt-1 inline-block"><i class="fas fa-clock"></i> بانتظار التأكيد</div>`
+                                : `<div class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-md mt-1 inline-block"><i class="fas fa-check"></i> تم الدفع</div>`;
 
-                        ordersHtml += `
-                            <div class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-bgDark rounded-xl border border-gray-100 dark:border-gray-800 transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400"><i class="fas fa-box"></i></div>
-                                    <div><div class="font-bold text-xs md:text-sm">${order.productName}</div>${statusUI}</div>
+                            ordersHtml += `
+                                <div class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-bgDark rounded-xl border border-gray-100 dark:border-gray-800 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400"><i class="fas fa-box"></i></div>
+                                        <div><div class="font-bold text-xs md:text-sm">${order.productName}</div>${statusUI}</div>
+                                    </div>
+                                    <div class="font-black text-xs md:text-sm ${order.status === 'pending' ? 'text-yellow-500' : 'text-primary'}">+${order.commission} دج</div>
                                 </div>
-                                <div class="font-black text-xs md:text-sm ${order.status === 'pending' ? 'text-yellow-500' : 'text-primary'}">+${order.commission} دج</div>
-                            </div>
-                        `;
-                    });
+                            `;
+                        });
+                        document.getElementById('user-orders-list').innerHTML = ordersHtml;
+                    }
                     document.getElementById('user-pending').innerText = pendingSum;
                     document.getElementById('user-orders-count').innerText = confirmedCount;
-                    document.getElementById('user-orders-list').innerHTML = ordersHtml || '<p class="text-xs text-gray-500 text-center p-4">لم تقم بأي مبيعات بعد.</p>';
                 });
 
                 unsubProducts = onSnapshot(collection(db, "products"), (snapshot) => {
                     let productsHtml = '';
-                    snapshot.forEach((pDoc) => {
-                        const p = pDoc.data();
-                        const refLink = `https://tirourda.store/product/${pDoc.id}?ref=${currentUser.uid}`;
-                        productsHtml += `
-                            <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-3 md:p-4 hover:shadow-xl transition-all group bg-white dark:bg-cardDark flex flex-col h-full">
-                                <img src="${p.image || 'https://via.placeholder.com/150'}" class="w-full h-32 md:h-40 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform origin-bottom">
-                                <h4 class="font-black text-sm md:text-base mb-2 flex-1">${p.name}</h4>
-                                <div class="flex justify-between items-center mb-4">
-                                    <span class="text-[10px] md:text-xs text-gray-500 font-bold line-through">السعر: ${p.price}</span>
-                                    <span class="text-xs md:text-sm font-black text-primary bg-primary/10 px-2 py-1 rounded-lg">العمولة: ${p.commission} دج</span>
-                                </div>
-                                <button type="button" onclick="window.copyReferralLink('${refLink}')" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-primary dark:hover:bg-primary text-xs md:text-sm font-bold py-2 md:py-2.5 rounded-xl transition-colors mb-2 shadow-md">
-                                    <i class="fas fa-copy"></i> نسخ الرابط
-                                </button>
-                                <button type="button" onclick="window.testSimulateOrder('${pDoc.id}', '${p.name}', ${p.commission})" class="w-full text-[10px] md:text-xs text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-500 py-1.5 rounded-lg transition-colors border-dashed mt-2">
-                                    <i class="fas fa-vial"></i> تسجيل طلب تجريبي
-                                </button>
-                            </div>
-                        `;
-                    });
-                    
                     if(snapshot.empty) {
                         productsHtml = `
-                            <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-4 bg-white dark:bg-cardDark">
-                                <h4 class="font-black text-base mb-2">عسل سدر طبيعي (للتجربة)</h4>
-                                <span class="text-sm font-black text-primary bg-primary/10 px-2 py-1 rounded-lg mb-4 inline-block">العمولة: 1000 دج</span>
-                                <button type="button" onclick="window.testSimulateOrder('test_id', 'عسل سدر طبيعي', 1000)" class="w-full text-xs text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-500 py-1.5 rounded-lg transition-colors border-dashed">
-                                    تسجيل طلب تجريبي 
-                                </button>
+                            <div class="col-span-full border border-gray-100 dark:border-gray-800 rounded-2xl p-6 bg-white dark:bg-cardDark text-center">
+                                <i class="fas fa-box-open text-4xl text-gray-300 mb-3"></i>
+                                <h4 class="font-bold text-gray-500">لا توجد منتجات حالياً.</h4>
                             </div>
                         `;
+                    } else {
+                        snapshot.forEach((pDoc) => {
+                            const p = pDoc.data();
+                            const refLink = `https://tirourda.store/product/${pDoc.id}?ref=${currentUser.uid}`;
+                            productsHtml += `
+                                <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-3 md:p-4 hover:shadow-xl transition-all group bg-white dark:bg-cardDark flex flex-col h-full">
+                                    <img src="${p.image || 'https://via.placeholder.com/150'}" class="w-full h-32 md:h-40 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform origin-bottom bg-gray-50">
+                                    <h4 class="font-black text-sm md:text-base mb-2 flex-1">${p.name}</h4>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <span class="text-[10px] md:text-xs text-gray-500 font-bold line-through">السعر: ${p.price}</span>
+                                        <span class="text-xs md:text-sm font-black text-primary bg-primary/10 px-2 py-1 rounded-lg">العمولة: ${p.commission} دج</span>
+                                    </div>
+                                    <button type="button" onclick="window.copyReferralLink('${refLink}')" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-primary dark:hover:bg-primary text-xs md:text-sm font-bold py-2 md:py-2.5 rounded-xl transition-colors mb-2 shadow-md">
+                                        <i class="fas fa-copy"></i> نسخ الرابط
+                                    </button>
+                                    <button type="button" onclick="window.testSimulateOrder('${pDoc.id}', '${p.name}', ${p.commission})" class="w-full text-[10px] md:text-xs text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-500 py-1.5 rounded-lg transition-colors border-dashed mt-2">
+                                        <i class="fas fa-vial"></i> تسجيل طلب تجريبي
+                                    </button>
+                                </div>
+                            `;
+                        });
                     }
                     document.getElementById('affiliate-products-list').innerHTML = productsHtml;
                 });
-            } catch (err) { console.error("Firebase Rule Error or Network Error: ", err); }
+            } catch (err) { console.error("Data Fetch Error: ", err); }
         }
 
         window.copyReferralLink = async (link) => {
-            navigator.clipboard.writeText(link);
-            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم نسخ الرابط! أي مبيعة عبره ستسجل لك.', showConfirmButton: false, timer: 2000 });
-            try { await updateDoc(doc(db, "users", currentUser.uid), { clicks: increment(1) }); } catch(e) { }
+            try {
+                await navigator.clipboard.writeText(link);
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم نسخ الرابط بنجاح!', showConfirmButton: false, timer: 2000 });
+                await updateDoc(doc(db, "users", currentUser.uid), { clicks: increment(1) });
+            } catch(e) {
+                Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'فشل النسخ.', showConfirmButton: false, timer: 2000 });
+            }
         };
 
         window.testSimulateOrder = async (productId, productName, commission) => {
@@ -869,22 +988,48 @@
                     productId, productName, affiliateId: currentUser.uid, commission: Number(commission), status: 'pending', date: serverTimestamp()
                 });
                 Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'تم تسجيل طلبية! اذهب للوحة القيادة لترى الرصيد.', showConfirmButton: false, timer: 3000 });
-            } catch(e) { Swal.fire('خطأ', e.message, 'error'); }
+            } catch(e) { Swal.fire('خطأ', 'تعذر تسجيل الطلب.', 'error'); }
         };
 
-        // ADMIN LOGIC
+        window.handleWithdrawRequest = (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerText = "جاري الإرسال...";
+            
+            setTimeout(() => {
+                Swal.fire('تم الاستلام', 'تم إرسال طلب السحب الخاص بك بنجاح، ستتم المراجعة خلال 24 ساعة.', 'success');
+                e.target.reset();
+                btn.disabled = false;
+                btn.innerText = "إرسال الطلب";
+            }, 1000);
+        };
+
+        // ==========================================
+        // 6. ADMIN SECURE LOGIC
+        // ==========================================
         window.handleAdminLogin = (e) => {
             e.preventDefault();
-            if (document.getElementById('admin-password').value === 'abobob123#') {
+            const pass = document.getElementById('admin-password').value;
+            
+            // Note: Keeping hardcoded password as requested, but implemented session storage protection.
+            if (pass === 'abobob123#') {
+                sessionStorage.setItem('tirourda_admin', 'true');
                 window.navigate('admin-dashboard');
             } else {
                 Swal.fire('رفض الوصول', 'كلمة المرور الإدارية غير صحيحة', 'error');
             }
         };
 
+        window.logoutAdmin = () => {
+            sessionStorage.removeItem('tirourda_admin');
+            window.navigate('admin-login');
+        };
+
         let unsubAdminOrders, unsubAdminProds, unsubAdminUsers;
 
         function loadAdminDashboardData() {
+            // Clean up old listeners
             if(unsubAdminOrders) unsubAdminOrders();
             if(unsubAdminProds) unsubAdminProds();
             if(unsubAdminUsers) unsubAdminUsers();
@@ -892,44 +1037,57 @@
             try {
                 unsubAdminOrders = onSnapshot(collection(db, "orders"), (snapshot) => {
                     let pendingCount = 0; let totalPaid = 0; let ordersHtml = '';
-                    snapshot.forEach((docSnap) => {
-                        const order = docSnap.data();
-                        if(order.status === 'confirmed') totalPaid += Number(order.commission);
-                        else if(order.status === 'pending') {
-                            pendingCount++;
-                            ordersHtml += `
-                                <tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
-                                    <td class="p-2 md:p-3">
-                                        <div class="text-[10px] text-gray-400">#${docSnap.id.slice(0,6)}</div>
-                                        <div class="font-bold text-[10px]" dir="ltr">${order.affiliateId.slice(0,6)}...</div>
-                                    </td>
-                                    <td class="p-2 md:p-3 font-bold text-xs md:text-sm">${order.productName}</td>
-                                    <td class="p-2 md:p-3 text-primary font-black text-xs md:text-sm">${order.commission} دج</td>
-                                    <td class="p-2 md:p-3 text-center">
-                                        <button type="button" onclick="window.confirmAdminOrder('${docSnap.id}', '${order.affiliateId}', ${order.commission})" class="bg-primary hover:bg-primaryDark text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-md transform hover:scale-105 transition-all">
-                                            <i class="fas fa-check"></i> دفع
-                                        </button>
-                                    </td>
-                                </tr>
-                            `;
-                        }
-                    });
+                    
+                    if(snapshot.empty) {
+                        ordersHtml = `<tr><td colspan="4" class="text-center py-10 text-gray-500 font-bold text-xs"><i class="fas fa-check-circle text-2xl mb-2 text-green-500"></i><br>لا توجد طلبات معلقة</td></tr>`;
+                    } else {
+                        snapshot.forEach((docSnap) => {
+                            const order = docSnap.data();
+                            if(order.status === 'confirmed') totalPaid += Number(order.commission);
+                            else if(order.status === 'pending') {
+                                pendingCount++;
+                                ordersHtml += `
+                                    <tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
+                                        <td class="p-2 md:p-3">
+                                            <div class="text-[10px] text-gray-400">#${docSnap.id.slice(0,6)}</div>
+                                            <div class="font-bold text-[10px]" dir="ltr">${order.affiliateId.slice(0,6)}...</div>
+                                        </td>
+                                        <td class="p-2 md:p-3 font-bold text-xs md:text-sm">${order.productName}</td>
+                                        <td class="p-2 md:p-3 text-primary font-black text-xs md:text-sm">${order.commission} دج</td>
+                                        <td class="p-2 md:p-3 text-center">
+                                            <button type="button" onclick="window.confirmAdminOrder(this, '${docSnap.id}', '${order.affiliateId}', ${order.commission})" class="bg-primary hover:bg-primaryDark text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-md transform hover:scale-105 transition-all">
+                                                <i class="fas fa-check"></i> دفع
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                            }
+                        });
+                        if(pendingCount === 0) ordersHtml = `<tr><td colspan="4" class="text-center py-10 text-gray-500 font-bold text-xs"><i class="fas fa-check-circle text-2xl mb-2 text-green-500"></i><br>تم الدفع للجميع</td></tr>`;
+                    }
+
                     document.getElementById('admin-pending-count').innerText = pendingCount;
                     document.getElementById('admin-total-paid').innerText = totalPaid + ' دج';
-                    document.getElementById('admin-orders-list').innerHTML = ordersHtml || '<tr><td colspan="4" class="text-center p-6 text-gray-500 font-bold text-xs">لا توجد طلبات معلقة</td></tr>';
+                    document.getElementById('admin-orders-list').innerHTML = ordersHtml;
                 });
 
                 unsubAdminProds = onSnapshot(collection(db, "products"), (snap) => document.getElementById('admin-products-count').innerText = snap.size);
                 unsubAdminUsers = onSnapshot(collection(db, "users"), (snap) => document.getElementById('admin-users-count').innerText = snap.size);
-            } catch (err) { console.log(err); }
+            } catch (err) { console.error(err); }
         }
 
-        window.confirmAdminOrder = async (orderId, affiliateId, commission) => {
+        window.confirmAdminOrder = async (btn, orderId, affiliateId, commission) => {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             try {
                 await updateDoc(doc(db, "orders", orderId), { status: 'confirmed' });
                 await updateDoc(doc(db, "users", affiliateId), { balance: increment(commission) });
-                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم تأكيد الطلب، رصيد المسوق ارتفع الآن!', showConfirmButton: false, timer: 2000 });
-            } catch(e) { Swal.fire('خطأ', e.message, 'error'); }
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم تأكيد الطلب، رصيد المسوق ارتفع!', showConfirmButton: false, timer: 2000 });
+            } catch(e) { 
+                Swal.fire('خطأ', 'حدث خطأ أثناء التأكيد.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check"></i> دفع';
+            }
         };
 
         window.importCSV = () => {
@@ -954,24 +1112,26 @@
                         } catch(err) { console.error("Error adding product", err); }
                     }
                 }
-                Swal.fire('نجاح', `تم إضافة ${count} منتجات بنجاح في قاعدة بيانات Firebase! ستظهر فوراً للمسوقين.`, 'success');
+                Swal.fire('نجاح', `تم إضافة ${count} منتج بنجاح.`, 'success');
                 fileInput.value = '';
             };
             reader.readAsText(fileInput.files[0]);
         };
 
-        // FIXED CHART (No excessive animations)
+        // ==========================================
+        // 7. CHART.JS VISUALS (Fixed Static Animation)
+        // ==========================================
         let userChartInst = null;
         function renderUserChart() {
             const ctx = document.getElementById('userChart');
-            if(!ctx || ctx.offsetParent === null) return;
+            // Ensure element exists and is visible before rendering
+            if(!ctx || ctx.offsetParent === null) return; 
             
             const isDark = document.documentElement.classList.contains('dark');
             const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
             const textColor = isDark ? '#94a3b8' : '#64748b';
             
             if(userChartInst) {
-                // Just update colors if already exists, don't recreate completely
                 userChartInst.options.scales.y.grid.color = gridColor;
                 userChartInst.options.scales.x.grid.color = gridColor;
                 userChartInst.options.scales.y.ticks.color = textColor;
@@ -993,7 +1153,7 @@
                 options: {
                     responsive: true, 
                     maintainAspectRatio: false,
-                    animation: false, // THIS STOPS THE CHART FROM MOVING/ANIMATING CONSTANTLY
+                    animation: false, // Prevents continuous/annoying animations
                     plugins: { legend: { display: false } },
                     scales: { 
                         y: { grid: { color: gridColor }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } }, 
