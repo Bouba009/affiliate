@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tirourda Affiliate | أضخم منصة تسويق في الجزائر 2026</title>
+    <title>Tirourda Affiliate | المنصة الأقوى</title>
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Tailwind CSS -->
@@ -24,8 +23,6 @@
                         cardLight: '#ffffff', cardDark: '#1e293b'
                     },
                     animation: {
-                        'float': 'float 4s ease-in-out infinite',
-                        'float-delayed': 'float 4s ease-in-out 2s infinite',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
@@ -42,23 +39,22 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
-        html, body { font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; width: 100%; height: 100%; margin: 0; padding: 0; }
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
-        .dark .glass { background: rgba(15, 23, 42, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .glass-card { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.6); }
-        .dark .glass-card { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); }
+        html, body { font-family: 'Cairo', sans-serif; overflow-x: hidden; width: 100%; min-height: 100%; margin: 0; padding: 0; }
+        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); }
+        .dark .glass { background: rgba(15, 23, 42, 0.9); }
+        .glass-card { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); }
+        .dark .glass-card { background: rgba(30, 41, 59, 0.4); }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
         
-        /* Fix Layout Visibility and Flex */
-        .view { display: none !important; opacity: 0; transition: opacity 0.4s ease; width: 100%; min-h: 100vh; }
+        /* Layout Fixes */
+        .view { display: none !important; opacity: 0; transition: opacity 0.4s ease; width: 100%; min-height: 100vh; }
         .view.active { display: block !important; opacity: 1; }
         .view.active.flex-view { display: flex !important; opacity: 1; }
         
         .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to left, #10b981, #34d399); }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        
         .loader { border: 4px solid rgba(16, 185, 129, 0.2); border-left-color: #10b981; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -72,12 +68,11 @@
         .num-1 { left: 10%; top: 40%; animation-delay: 0s; font-size: 1.5rem; }
         .num-2 { left: 45%; top: 30%; animation-delay: 1.5s; font-size: 2.2rem; }
         .num-3 { left: 75%; top: 50%; animation-delay: 3s; font-size: 1.2rem; }
-        .num-4 { left: 85%; top: 25%; animation-delay: 4.5s; font-size: 2.5rem; }
-        .num-5 { left: 25%; top: 15%; animation-delay: 2s; font-size: 1.8rem; }
     </style>
 </head>
 <body class="bg-bgLight dark:bg-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-300 relative w-full h-full">
 
+    <!-- THEME TOGGLE -->
     <button onclick="window.toggleTheme()" class="fixed bottom-6 left-6 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all text-xl border border-gray-100 dark:border-gray-800 opacity-90 hover:opacity-100">
         <i id="theme-icon" class="fas fa-moon text-gray-800 dark:text-yellow-400"></i>
     </button>
@@ -87,7 +82,7 @@
         <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="auth-modal-content">
             <button onclick="window.closeAuthModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-xl"></i></button>
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-gradient-to-tr from-primary to-green-400 text-white rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg shadow-primary/30"><i class="fas fa-leaf"></i></div>
+                <div class="w-16 h-16 bg-gradient-to-tr from-primary to-green-400 text-white rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg"><i class="fas fa-leaf"></i></div>
                 <h2 id="auth-title" class="text-2xl font-black">مرحباً بك مجدداً</h2>
                 <p id="auth-subtitle" class="text-gray-500 text-sm mt-1">سجل دخولك للوصول إلى لوحة التحكم</p>
             </div>
@@ -95,33 +90,31 @@
                 <div id="register-fields" class="hidden space-y-4 mb-4">
                     <div class="relative">
                         <i class="fas fa-user absolute right-4 top-3.5 text-gray-400"></i>
-                        <input type="text" id="auth-name" placeholder="الاسم الكامل" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary transition-colors">
+                        <input type="text" id="auth-name" placeholder="الاسم الكامل" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary">
                     </div>
                     <div class="relative">
                         <i class="fas fa-phone absolute right-4 top-3.5 text-gray-400"></i>
-                        <input type="tel" id="auth-phone" placeholder="رقم الهاتف (اختياري)" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary transition-colors" dir="ltr" style="text-align: right;">
+                        <input type="tel" id="auth-phone" placeholder="رقم الهاتف (اختياري)" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary text-right" dir="ltr">
                     </div>
                 </div>
                 <div class="space-y-4 mb-6">
                     <div class="relative">
                         <i class="fas fa-envelope absolute right-4 top-3.5 text-gray-400"></i>
-                        <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary transition-colors" required>
+                        <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary" required>
                     </div>
                     <div class="relative">
                         <i class="fas fa-lock absolute right-4 top-3.5 text-gray-400"></i>
-                        <input type="password" id="auth-password" placeholder="كلمة المرور" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary transition-colors" required>
+                        <input type="password" id="auth-password" placeholder="كلمة المرور" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl pr-12 pl-4 py-3 outline-none focus:border-primary" required>
                     </div>
                 </div>
-                <button type="submit" id="auth-btn" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-primary/30 mb-4 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                <button type="submit" id="auth-btn" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3.5 rounded-xl transition-all shadow-lg mb-4 flex items-center justify-center gap-2">
                     <span id="auth-btn-text">تسجيل الدخول</span>
                     <div class="loader" id="auth-loader"></div>
                 </button>
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-                    <span class="text-sm text-gray-400">أو</span>
-                    <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
+                    <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div><span class="text-sm text-gray-400">أو</span><div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
                 </div>
-                <button type="button" onclick="window.handleGoogleAuth()" id="google-auth-btn" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-3 mb-6 disabled:opacity-70 disabled:cursor-not-allowed">
+                <button type="button" onclick="window.handleGoogleAuth()" id="google-auth-btn" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-3 mb-6">
                     <svg id="google-icon" class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                     <div class="loader hidden !border-gray-500 !border-l-gray-300" id="google-loader"></div>
                     <span id="google-btn-text">المتابعة باستخدام Google</span>
@@ -139,505 +132,253 @@
         <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="order-modal-content">
             <button onclick="window.closeOrderModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-xl"></i></button>
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-blue-100 text-blue-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg"><i class="fas fa-shopping-cart"></i></div>
-                <h2 class="text-xl font-black">تسجيل طلبية جديدة للزبون</h2>
+                <div class="w-16 h-16 bg-blue-100 text-blue-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4"><i class="fas fa-shopping-cart"></i></div>
+                <h2 class="text-xl font-black">تسجيل طلبية للزبون</h2>
                 <p class="text-gray-500 text-xs mt-1" id="order-product-name">اسم المنتج</p>
                 <div class="mt-2 inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold">العمولة: 500 دج</div>
             </div>
             <form id="order-form" onsubmit="window.submitCustomerOrder(event)">
                 <input type="hidden" id="order-product-id">
                 <div class="space-y-4 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold mb-1">اسم الزبون الكامل</label>
-                        <input type="text" id="order-customer-name" placeholder="مثال: محمد الأمين" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1">رقم الهاتف</label>
-                        <input type="tel" id="order-customer-phone" placeholder="05xx xx xx xx" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors text-right" dir="ltr" required>
-                    </div>
+                    <div><input type="text" id="order-customer-name" placeholder="اسم الزبون الكامل" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required></div>
+                    <div><input type="tel" id="order-customer-phone" placeholder="رقم الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 text-right" dir="ltr" required></div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold mb-1">الولاية</label>
-                            <input type="text" id="order-customer-state" placeholder="الجزائر العاصمة..." class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-1">الكمية</label>
-                            <input type="number" id="order-qty" value="1" min="1" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary transition-colors text-center" required>
-                        </div>
+                        <div><input type="text" id="order-customer-state" placeholder="الولاية" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required></div>
+                        <div><input type="number" id="order-qty" value="1" min="1" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 text-center" required></div>
                     </div>
                 </div>
-                <button type="submit" id="order-submit-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg mb-2 flex items-center justify-center gap-2">
+                <button type="submit" id="order-submit-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
                     <span id="order-btn-text">تأكيد وتسجيل الطلب</span>
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- 1. LANDING PAGE -->
+    <!-- 1. LANDING PAGE VIEW -->
     <div id="landing-view" class="view active relative w-full h-full">
         <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10 w-full h-full">
-            <svg class="absolute top-[5vh] md:top-[10vh] left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
-                <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                <defs>
-                    <linearGradient id="gradientChart" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#10b981" stop-opacity="0.8" />
-                        <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
-                    </linearGradient>
-                </defs>
+            <svg class="absolute top-[5vh] left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
+                <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320Z"></path>
+                <defs><linearGradient id="gradientChart" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.8" /><stop offset="100%" stop-color="#10b981" stop-opacity="0" /></linearGradient></defs>
             </svg>
-            <div class="absolute w-full h-full">
-                <div class="floating-num num-1">+500 دج</div>
-                <div class="floating-num num-2">+1,500 دج</div>
-                <div class="floating-num num-3">+500 دج</div>
-                <div class="floating-num num-4">+4,000 دج</div>
-                <div class="floating-num num-5">+1,000 دج</div>
-            </div>
+            <div class="floating-num num-1">+500 دج</div><div class="floating-num num-2">+1,500 دج</div><div class="floating-num num-3">+500 دج</div>
         </div>
 
-        <header class="fixed top-0 w-full glass z-40 transition-all duration-300" id="main-header">
+        <header class="fixed top-0 w-full glass z-40 transition-all">
             <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center w-full">
-                <div class="flex items-center gap-3 text-xl md:text-2xl font-black cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-tr from-primary to-green-400 flex items-center justify-center text-white shadow-lg shadow-primary/30">
-                        <i class="fas fa-leaf"></i>
-                    </div>
+                <div class="flex items-center gap-3 text-xl font-black cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-green-400 flex items-center justify-center text-white"><i class="fas fa-leaf"></i></div>
                     Tirourda <span class="text-primary font-light">Affiliate</span>
                 </div>
-                <nav class="hidden lg:flex gap-8 font-semibold text-sm">
-                    <a href="javascript:void(0)" onclick="window.scrollTo(0,0)" class="hover:text-primary transition-colors">الرئيسية</a>
-                    <a href="#how-it-works" class="hover:text-primary transition-colors">كيف يعمل</a>
-                    <a href="#features" class="hover:text-primary transition-colors">المميزات</a>
-                </nav>
-                <div class="flex gap-2 md:gap-3" id="nav-auth-buttons">
-                    <button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 md:px-4 text-sm md:text-base">دخول</button>
-                    <button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg shadow-primary/30 transition-all transform hover:-translate-y-1 font-bold text-sm md:text-base">إنشاء حساب</button>
+                <div class="flex gap-2" id="nav-auth-buttons">
+                    <button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 text-sm md:text-base">دخول</button>
+                    <button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-xl shadow-lg font-bold text-sm md:text-base">إنشاء حساب</button>
                 </div>
             </div>
         </header>
 
-        <section class="pt-32 md:pt-40 pb-16 md:pb-20 overflow-hidden relative min-h-[90vh] flex items-center w-full">
-            <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center w-full">
-                <div class="text-center lg:text-right z-10 w-full">
-                    <span class="glass-card text-primary px-5 py-2 rounded-full text-xs md:text-sm font-bold mb-6 inline-flex items-center gap-2 shadow-sm">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> المنصة الأولى للمنتجات الطبيعية بالجزائر
-                    </span>
-                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6">
-                        اربح المال مع <br> <span class="gradient-text">Tirourda Affiliate</span>
-                    </h1>
-                    <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                        شارك منتجات Tirourda المتميزة واحصل على <span class="font-bold text-primary">500 دج كعمولة ثابتة</span> على كل طلبية ناجحة للزبائن.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" id="hero-cta">
-                        <button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white text-lg px-8 py-4 rounded-2xl shadow-xl shadow-primary/30 transition-all transform hover:-translate-y-1 font-bold flex items-center justify-center gap-3 w-full sm:w-auto">
-                            ابدأ الآن مجانا <i class="fas fa-arrow-left"></i>
-                        </button>
-                    </div>
+        <section class="pt-32 pb-16 relative min-h-[90vh] flex items-center">
+            <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+                <div class="text-center lg:text-right z-10">
+                    <span class="glass-card text-primary px-5 py-2 rounded-full text-xs md:text-sm font-bold mb-6 inline-flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> المنصة الأولى للمنتجات الطبيعية</span>
+                    <h1 class="text-4xl md:text-6xl font-black leading-tight mb-6">اربح المال مع <br> <span class="gradient-text">Tirourda Affiliate</span></h1>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto lg:mx-0">شارك منتجاتنا واحصل على <span class="font-bold text-primary">500 دج عمولة ثابتة</span> على كل طلبية ناجحة.</p>
+                    <div id="hero-cta"><button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white text-lg px-8 py-4 rounded-2xl shadow-xl font-bold flex items-center justify-center gap-3 w-full sm:w-auto mx-auto lg:mx-0">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button></div>
                 </div>
-                <div class="relative z-10 mt-10 lg:mt-0 perspective-1000 hidden md:block w-full">
-                    <div class="bg-white dark:bg-cardDark rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-3 transform rotate-y-[-10deg] rotate-x-[5deg] hover:rotate-0 transition-transform duration-700">
-                        <div class="bg-gray-50 dark:bg-bgDark rounded-2xl p-6 h-80 relative overflow-hidden flex flex-col justify-between border border-gray-100 dark:border-gray-800">
-                            <div class="flex justify-between items-center mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
-                                <div class="flex items-center gap-2 font-bold"><i class="fas fa-chart-pie text-primary"></i> الإحصائيات</div>
-                                <div class="text-primary font-black bg-primary/10 px-4 py-1.5 rounded-lg border border-primary/20">45,000 دج</div>
-                            </div>
+                <div class="relative z-10 hidden md:block w-full">
+                    <div class="bg-white dark:bg-cardDark rounded-3xl shadow-2xl border dark:border-gray-800 p-3 transform rotate-y-[-10deg] rotate-x-[5deg] hover:rotate-0 transition-transform duration-700">
+                        <div class="bg-gray-50 dark:bg-bgDark rounded-2xl p-6 h-80 relative flex flex-col justify-between border dark:border-gray-800">
+                            <div class="flex justify-between items-center border-b dark:border-gray-700 pb-4 mb-4"><div class="font-bold"><i class="fas fa-chart-pie text-primary"></i> الإحصائيات</div><div class="text-primary font-black bg-primary/10 px-4 py-1 rounded-lg">45,000 دج</div></div>
                             <div class="flex-1 flex items-end gap-3 px-2">
-                                <div class="w-1/6 bg-gradient-to-t from-primary/20 to-primary/40 rounded-t-xl h-1/3"></div>
-                                <div class="w-1/6 bg-gradient-to-t from-primary/30 to-primary/50 rounded-t-xl h-1/2"></div>
-                                <div class="w-1/6 bg-gradient-to-t from-primary/40 to-primary/70 rounded-t-xl h-3/4"></div>
-                                <div class="w-1/6 bg-gradient-to-t from-primary to-green-400 rounded-t-xl h-full shadow-lg shadow-primary/50 relative">
-                                    <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-2 rounded font-bold">+500</div>
-                                </div>
-                                <div class="w-1/6 bg-gradient-to-t from-primary/30 to-primary/60 rounded-t-xl h-2/3"></div>
-                                <div class="w-1/6 bg-gradient-to-t from-primary/20 to-primary/40 rounded-t-xl h-1/3"></div>
+                                <div class="w-1/6 bg-primary/30 rounded-t-xl h-1/3"></div><div class="w-1/6 bg-primary/50 rounded-t-xl h-1/2"></div><div class="w-1/6 bg-primary/70 rounded-t-xl h-3/4"></div>
+                                <div class="w-1/6 bg-gradient-to-t from-primary to-green-400 rounded-t-xl h-full relative"><div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-2 rounded">+500</div></div>
+                                <div class="w-1/6 bg-primary/60 rounded-t-xl h-2/3"></div><div class="w-1/6 bg-primary/40 rounded-t-xl h-1/3"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- STATS & FEATURES -->
-        <section class="py-10 bg-white dark:bg-cardDark border-y border-gray-100 dark:border-gray-800">
-            <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                <div><div class="text-3xl md:text-5xl font-black mb-2">+<span class="text-primary">150</span></div><div class="text-xs md:text-base text-gray-500 font-bold">مسوق نشط</div></div>
-                <div><div class="text-3xl md:text-5xl font-black mb-2">+<span class="text-primary">500K</span></div><div class="text-xs md:text-base text-gray-500 font-bold">دج مدفوعة</div></div>
-                <div><div class="text-3xl md:text-5xl font-black mb-2">+<span class="text-primary">1,200</span></div><div class="text-xs md:text-base text-gray-500 font-bold">طلب ناجح</div></div>
-                <div><div class="text-3xl md:text-5xl font-black mb-2">+<span class="text-primary">45</span></div><div class="text-xs md:text-base text-gray-500 font-bold">منتج مميز</div></div>
+        
+        <section class="py-16 bg-gray-50 dark:bg-bgDark text-center">
+            <h2 class="text-3xl font-black mb-10">طرق سحب <span class="text-primary">سريعة</span></h2>
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm font-bold">CCP / BaridiMob</div>
+                <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm font-bold">Flexy (رصيد هاتف)</div>
             </div>
         </section>
-
-        <section id="features" class="py-16 md:py-24 bg-gray-50 dark:bg-bgDark">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12 max-w-3xl mx-auto">
-                    <h2 class="text-3xl md:text-4xl font-black mb-4">لماذا تختار <span class="text-primary">Tirourda</span>؟</h2>
-                    <p class="text-gray-600 dark:text-gray-400">بيئة عمل احترافية تضمن نجاحك وتحقيق أعلى الأرباح بشفافية تامة.</p>
-                </div>
-                <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-                    <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2 group">
-                        <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-percent"></i></div>
-                        <h3 class="text-lg font-bold mb-2">عمولة ثابتة ومجزية</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">نقدم 500 دج عمولة ثابتة على كل طلبية ناجحة لتكافئ جهودك بشكل عادل.</p>
-                    </div>
-                    <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2 group">
-                        <div class="w-14 h-14 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-bolt"></i></div>
-                        <h3 class="text-lg font-bold mb-2">سحب سريع ومضمون</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي CCP أو رصيد هاتفك (Flexy).</p>
-                    </div>
-                    <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2 group">
-                        <div class="w-14 h-14 bg-yellow-500/10 text-yellow-500 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-cart-plus"></i></div>
-                        <h3 class="text-lg font-bold mb-2">تسجيل الطلبات بنفسك</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">يمكنك أخذ تفاصيل الزبون وتسجيل الطلبية له مباشرة من لوحة التحكم لتأمين عمولتك.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- HOW IT WORKS -->
-        <section id="how-it-works" class="py-16 md:py-24">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12"><h2 class="text-3xl md:text-4xl font-black mb-4">كيف تبدأ <span class="text-primary">الربح</span>؟</h2></div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 relative">
-                    <div class="hidden md:block absolute top-10 right-1/8 w-3/4 h-1 border-t-2 border-dashed border-gray-300 dark:border-gray-700 -z-10"></div>
-                    <div class="text-center group"><div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-xl md:text-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform"><i class="fas fa-user-plus"></i></div><h3 class="font-bold text-sm md:text-lg mb-1">1. إنشاء حساب</h3></div>
-                    <div class="text-center group"><div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-xl md:text-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform"><i class="fas fa-bullhorn"></i></div><h3 class="font-bold text-sm md:text-lg mb-1">2. الترويج للمنتجات</h3></div>
-                    <div class="text-center group"><div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-xl md:text-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform"><i class="fas fa-edit"></i></div><h3 class="font-bold text-sm md:text-lg mb-1">3. تسجيل طلبات الزبائن</h3></div>
-                    <div class="text-center group"><div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-white dark:bg-cardDark border-4 border-primary text-primary rounded-full flex items-center justify-center text-xl md:text-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform"><i class="fas fa-money-bill-wave"></i></div><h3 class="font-bold text-sm md:text-lg mb-1">4. استلم أرباحك</h3></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAYOUT -->
-        <section class="py-16 md:py-20 bg-gray-50 dark:bg-bgDark border-y border-gray-100 dark:border-gray-800">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-3xl md:text-4xl font-black mb-10">طرق سحب <span class="text-primary">متعددة ومحلية</span></h2>
-                <div class="flex flex-wrap justify-center gap-4 md:gap-6">
-                    <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center justify-center gap-4 text-lg md:text-xl font-bold hover:shadow-lg transition-all w-full md:w-auto">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/AlgeriePoste.svg" alt="CCP" class="h-8 md:h-10 object-contain bg-white px-2 py-1 rounded-lg border border-gray-100">
-                        <span class="text-gray-800 dark:text-white">CCP / BaridiMob</span>
-                    </div>
-                    <div class="bg-white dark:bg-cardDark px-6 py-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-3 font-bold hover:shadow-lg transition-all w-full md:w-auto">
-                        <div class="flex items-center gap-4">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/ATM_Mobilis.svg/1280px-ATM_Mobilis.svg.png" alt="Mobilis" class="h-8 md:h-10 object-contain bg-white rounded px-2 py-1 border border-gray-100">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxCX6FrAt0iku9Fi1vjtFMgI_Z1qZOBoWWvUQP2U3Gwz4OQ0NrUNVP3Tk&s=10" alt="Djezzy" class="h-8 md:h-10 object-contain bg-white rounded px-2 py-1 border border-gray-100">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFM2lbUhHLa_c7IrFn2oMdC8j1zXX7xZ4tkZPQI1Q7YqRk2i7rgNDDPjQV&s=10" alt="Ooredoo" class="h-8 md:h-10 object-contain bg-white rounded px-2 py-1 border border-gray-100">
-                        </div>
-                        <span class="text-gray-500 dark:text-gray-400 text-sm">Flexy (رصيد هاتف)</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer class="bg-white dark:bg-cardDark pt-16 pb-8 border-t border-gray-100 dark:border-gray-800">
-            <div class="container mx-auto px-6 text-center md:text-right grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <div class="md:col-span-1">
-                    <div class="flex items-center justify-center md:justify-start gap-2 text-2xl font-black mb-4">
-                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-green-400 flex items-center justify-center text-white"><i class="fas fa-leaf text-sm"></i></div>
-                        Tirourda Affiliate
-                    </div>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">المنصة الأولى للتسويق بالعمولة للمنتجات الطبيعية. نظام برمجي متطور يضمن حق المسوق 100%.</p>
-                </div>
-                <div>
-                    <h4 class="font-bold text-lg mb-4">روابط سريعة</h4>
-                    <ul class="space-y-2 text-gray-500 dark:text-gray-400 text-sm">
-                        <li><a href="javascript:void(0)" onclick="window.scrollTo(0,0)" class="hover:text-primary">الرئيسية</a></li>
-                        <li><a href="javascript:void(0)" class="hover:text-primary">شروط الاستخدام</a></li>
-                    </ul>
-                </div>
-            </div>
-        </footer>
     </div>
 
-
     <!-- 2. USER DASHBOARD VIEW -->
-    <div id="user-dashboard-view" class="view flex-view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden w-full h-full">
+    <div id="user-dashboard-view" class="view flex-view min-h-screen bg-bgLight dark:bg-bgDark relative overflow-hidden w-full h-full">
         <div id="mobile-sidebar-overlay" onclick="window.toggleUserSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
         <aside id="user-sidebar" class="w-64 bg-white dark:bg-cardDark border-l border-gray-100 dark:border-gray-800 fixed top-0 h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
             <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center text-lg font-black">
-                <div class="flex items-center gap-2"><i class="fas fa-leaf text-primary"></i> مسوق Tirourda</div>
+                <div class="flex items-center gap-2"><i class="fas fa-leaf text-primary"></i> لوحة المسوق</div>
                 <button onclick="window.toggleUserSidebar()" class="md:hidden text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
             </div>
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <div class="text-xs text-gray-400 font-bold mb-4 mt-2">القائمة الرئيسية</div>
-                <a href="javascript:void(0)" onclick="window.switchUserTab('home', event)" class="dash-link active flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-tachometer-alt w-5"></i> لوحة القيادة</a>
-                <a href="javascript:void(0)" onclick="window.switchUserTab('products', event)" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box-open w-5"></i> تسجيل طلب / منتجات</a>
-                <a href="javascript:void(0)" onclick="window.switchUserTab('withdraw', event)" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-hand-holding-usd w-5"></i> سحب الأرباح</a>
-                
-                <div class="text-xs text-gray-400 font-bold mb-4 mt-8">أخرى</div>
-                <a href="javascript:void(0)" onclick="window.switchUserTab('support', event)" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-headset w-5"></i> الدعم الفني</a>
+                <a href="#" onclick="window.switchUserTab('home', event)" data-tab="home" class="dash-link flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-tachometer-alt w-5"></i> الرئيسية</a>
+                <a href="#" onclick="window.switchUserTab('products', event)" data-tab="products" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-box-open w-5"></i> المنتجات والطلبات</a>
+                <a href="#" onclick="window.switchUserTab('withdraw', event)" data-tab="withdraw" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-hand-holding-usd w-5"></i> سحب الأرباح</a>
+                <a href="#" onclick="window.switchUserTab('support', event)" data-tab="support" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold mt-8 border-t dark:border-gray-700 pt-6"><i class="fas fa-headset w-5"></i> الدعم الفني</a>
             </nav>
-            <div class="p-4 border-t border-gray-100 dark:border-gray-800">
-                <button onclick="window.logoutUser()" class="w-full flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-500 hover:text-white py-3 rounded-xl transition-all font-bold">
-                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-                </button>
-            </div>
+            <div class="p-4 border-t dark:border-gray-800"><button onclick="window.logoutUser()" class="w-full flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-500 hover:text-white py-3 rounded-xl font-bold"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button></div>
         </aside>
 
-        <main class="flex-1 md:pr-64 p-4 md:p-8 pt-6 w-full overflow-x-hidden min-h-screen">
+        <main class="flex-1 md:pr-64 p-4 md:p-8 pt-6 w-full min-h-screen">
             <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 mb-6 flex justify-between items-center relative z-10 w-full">
                 <div class="flex items-center gap-3">
                     <button onclick="window.toggleUserSidebar()" class="md:hidden w-10 h-10 rounded-xl bg-gray-50 dark:bg-bgDark text-primary flex justify-center items-center"><i class="fas fa-bars"></i></button>
-                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/20 text-primary flex items-center justify-center font-black text-lg md:text-xl hidden sm:flex" id="dash-avatar">م</div>
-                    <div class="hidden sm:block">
-                        <h1 class="font-bold text-sm md:text-base leading-tight" id="dash-name">المسوق</h1>
-                        <p class="text-[10px] md:text-xs text-gray-500" id="dash-email">email@test.com</p>
-                    </div>
+                    <div><h1 class="font-bold text-sm md:text-base" id="dash-name">المسوق</h1><p class="text-[10px] text-gray-500" id="dash-email">email@test.com</p></div>
                 </div>
-                <div class="flex items-center gap-2 md:gap-4">
-                    <div class="bg-gray-50 dark:bg-bgDark px-3 py-2 md:px-4 md:py-2.5 rounded-xl border border-gray-100 dark:border-gray-700 font-bold flex gap-2 items-center">
-                        <i class="fas fa-wallet text-gray-400 hidden sm:inline-block"></i>
-                        <span id="user-balance" class="text-primary text-base md:text-lg">0</span> <span class="text-xs md:text-sm">دج</span>
-                    </div>
-                </div>
+                <div class="bg-gray-50 dark:bg-bgDark px-3 py-2 rounded-xl border font-bold flex gap-2 items-center"><span id="user-balance" class="text-primary text-base md:text-lg">0</span> <span class="text-xs">دج</span></div>
             </header>
 
             <div id="tab-home" class="tab-content block animate-fade-in w-full">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6">
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
-                        <div class="text-gray-500 text-xs md:text-sm font-bold mb-2">أرباح قيد الانتظار</div>
-                        <div class="text-xl md:text-3xl font-black text-yellow-500 mb-1" id="user-pending">0</div>
-                    </div>
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
-                        <div class="text-gray-500 text-xs md:text-sm font-bold mb-2">إجمالي الأرباح</div>
-                        <div class="text-xl md:text-3xl font-black text-primary mb-1" id="user-total">0</div>
-                    </div>
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
-                        <div class="text-gray-500 text-xs md:text-sm font-bold mb-2">الطلبات المؤكدة</div>
-                        <div class="text-xl md:text-3xl font-black mb-1" id="user-orders-count">0</div>
-                    </div>
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
-                        <div class="text-gray-500 text-xs md:text-sm font-bold mb-2">النقرات</div>
-                        <div class="text-xl md:text-3xl font-black text-blue-500 mb-1" id="user-clicks">0</div>
-                    </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">معلق</div><div class="text-xl font-black text-yellow-500" id="user-pending">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">إجمالي</div><div class="text-xl font-black text-primary" id="user-total">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">مبيعات</div><div class="text-xl font-black" id="user-orders-count">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="text-gray-500 text-xs font-bold mb-2">نقرات</div><div class="text-xl font-black text-blue-500" id="user-clicks">0</div></div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="lg:col-span-2 bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 w-full">
-                        <h3 class="font-black text-base md:text-lg mb-4 flex items-center gap-2"><i class="fas fa-chart-area text-primary"></i> أرباحك</h3>
-                        <canvas id="userChart" height="150"></canvas>
-                    </div>
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col h-80 lg:h-auto w-full">
-                        <h3 class="font-black text-base md:text-lg mb-4 flex items-center gap-2"><i class="fas fa-list-alt text-primary"></i> الطلبات الأخيرة</h3>
-                        <div class="space-y-2 overflow-y-auto pr-1" id="user-orders-list">
-                            <div class="flex justify-center items-center h-full text-gray-400">
-                                <div class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 h-80 overflow-y-auto">
+                    <h3 class="font-black text-base mb-4"><i class="fas fa-list text-primary"></i> الطلبات الأخيرة</h3>
+                    <div class="space-y-2" id="user-orders-list">جاري التحميل...</div>
                 </div>
             </div>
 
             <div id="tab-products" class="tab-content hidden animate-fade-in w-full">
-                <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-8">
-                    <h3 class="font-black text-lg md:text-xl mb-2 flex items-center gap-2"><i class="fas fa-store text-primary"></i> منتجات المتجر وتسجيل الطلبات</h3>
-                    <p class="text-gray-500 text-xs md:text-sm mb-6">يمكنك تسجيل طلبية زبونك مباشرة من هنا لتأمين الـ 500 دج كعمولة ثابتة، أو نسخ رابط الإحالة.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 w-full" id="affiliate-products-list">
-                        <div class="col-span-full flex justify-center py-10">
-                            <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-                        </div>
-                    </div>
+                <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-8">
+                    <h3 class="font-black text-lg mb-4"><i class="fas fa-store text-primary"></i> المنتجات</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="affiliate-products-list">جاري التحميل...</div>
                 </div>
             </div>
 
             <div id="tab-withdraw" class="tab-content hidden animate-fade-in w-full">
-                <div class="grid md:grid-cols-2 gap-6 md:gap-8">
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                        <h3 class="font-black text-lg md:text-xl mb-4 md:mb-6 flex items-center gap-2"><i class="fas fa-money-check-alt text-primary"></i> طلب سحب أرباح</h3>
-                        <div class="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-6 flex justify-between items-center">
-                            <span class="font-bold text-sm text-gray-700 dark:text-gray-300">الرصيد القابل للسحب:</span>
-                            <span class="font-black text-xl text-primary" id="withdraw-available-balance">0 دج</span>
-                        </div>
-                        <form onsubmit="window.handleWithdrawRequest(event)" class="space-y-4">
-                            <div>
-                                <label class="block text-xs md:text-sm font-bold mb-2">المبلغ (دج)</label>
-                                <input type="number" id="withdraw-amount" min="500" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary font-bold transition-colors" required>
-                            </div>
-                            <div>
-                                <label class="block text-xs md:text-sm font-bold mb-2">طريقة السحب</label>
-                                <select id="withdraw-method" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary font-bold text-sm transition-colors">
-                                    <option value="ccp">بريد الجزائر (CCP)</option>
-                                    <option value="baridimob">بريديموب (BaridiMob)</option>
-                                    <option value="flexy">رصيد هاتف (Mobilis, Djezzy, Ooredoo)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs md:text-sm font-bold mb-2">رقم الحساب / الهاتف</label>
-                                <input type="text" id="withdraw-account" placeholder="أدخل رقم الـ RIP أو رقم الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary text-left text-sm transition-colors" dir="ltr" required>
-                            </div>
-                            <button type="submit" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-primary/30 mt-2 text-sm md:text-base">إرسال الطلب</button>
-                        </form>
-                    </div>
-                    <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                        <h3 class="font-black text-lg md:text-xl mb-4 md:mb-6 flex items-center gap-2"><i class="fas fa-history text-primary"></i> سجل السحوبات</h3>
-                        <div class="space-y-3" id="withdraw-history-list">
-                            <div class="text-center flex flex-col items-center justify-center py-10 text-gray-400">
-                                <i class="fas fa-box-open text-4xl mb-3 opacity-50"></i>
-                                <span class="text-sm">لا توجد سحوبات سابقة</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-support" class="tab-content hidden animate-fade-in w-full">
-                <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 max-w-2xl">
-                    <h3 class="font-black text-lg md:text-xl mb-4 flex items-center gap-2"><i class="fas fa-headset text-primary"></i> الدعم الفني والإبلاغات</h3>
-                    <p class="text-sm text-gray-500 mb-6">واجهت مشكلة؟ أرسل لنا رسالة وسنقوم بالرد عليك في أقرب وقت لحل المشكلة.</p>
-                    <form onsubmit="window.submitSupportTicket(event)" class="space-y-4">
-                        <input type="text" id="support-name" placeholder="الاسم الكامل" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary" required>
-                        <input type="tel" id="support-phone" placeholder="رقم الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary text-right" dir="ltr" required>
-                        <input type="email" id="support-email" placeholder="البريد الإلكتروني" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary" required>
-                        <textarea id="support-desc" placeholder="قم بوصف المشكل هنا..." rows="5" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-primary" required></textarea>
-                        <button type="submit" class="bg-primary text-white font-bold py-3 px-6 rounded-xl w-full shadow-lg hover:bg-primaryDark transition-all">إرسال البلاغ</button>
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border dark:border-gray-800 max-w-lg mx-auto">
+                    <h3 class="font-black text-lg mb-4"><i class="fas fa-money-check text-primary"></i> طلب سحب</h3>
+                    <div class="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-4 flex justify-between font-bold text-primary"><span>متاح للسحب:</span> <span id="withdraw-available-balance">0 دج</span></div>
+                    <form onsubmit="window.handleWithdrawRequest(event)" class="space-y-4">
+                        <input type="number" id="withdraw-amount" min="500" placeholder="المبلغ (الأدنى 500)" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 font-bold" required>
+                        <select id="withdraw-method" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 font-bold"><option value="ccp">CCP / BaridiMob</option><option value="flexy">Flexy</option></select>
+                        <input type="text" id="withdraw-account" placeholder="رقم الحساب / الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" dir="ltr" required>
+                        <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl">تأكيد السحب</button>
                     </form>
                 </div>
             </div>
 
+            <div id="tab-support" class="tab-content hidden animate-fade-in w-full">
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border dark:border-gray-800 max-w-lg mx-auto">
+                    <h3 class="font-black text-lg mb-4"><i class="fas fa-headset text-primary"></i> اتصل بالدعم</h3>
+                    <form onsubmit="window.submitSupportTicket(event)" class="space-y-4">
+                        <input type="text" id="support-name" placeholder="الاسم الكامل" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required>
+                        <input type="tel" id="support-phone" placeholder="الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required>
+                        <input type="email" id="support-email" placeholder="الإيميل" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required>
+                        <textarea id="support-desc" placeholder="وصف المشكلة..." rows="4" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required></textarea>
+                        <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl">إرسال</button>
+                    </form>
+                </div>
+            </div>
         </main>
     </div>
 
-
     <!-- 3. ADMIN LOGIN VIEW -->
-    <div id="admin-login-view" class="view flex-view min-h-screen flex items-center justify-center bg-bgLight dark:bg-bgDark relative p-4 w-full h-full">
-        <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 w-full max-w-md relative z-10 text-center">
+    <div id="admin-login-view" class="view flex-view items-center justify-center min-h-screen bg-bgLight dark:bg-bgDark relative p-4">
+        <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-2xl border dark:border-gray-800 w-full max-w-sm text-center">
             <div class="w-16 h-16 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-6 shadow-xl"><i class="fas fa-shield-alt"></i></div>
-            <h2 class="text-xl md:text-2xl font-black mb-6">الإدارة العامة <span class="text-primary">Tirourda</span></h2>
-            
+            <h2 class="text-2xl font-black mb-6">الإدارة</h2>
             <form onsubmit="window.handleAdminLogin(event)">
-                <input type="password" id="admin-password" placeholder="كلمة المرور الإدارية" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 outline-none focus:border-gray-900 mb-4 text-center font-bold tracking-widest text-sm transition-colors" dir="ltr" required>
-                <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-3.5 rounded-xl hover:bg-primary dark:hover:bg-primary transition-all shadow-lg text-sm md:text-base">دخول مشفر</button>
+                <input type="password" id="admin-password" placeholder="كلمة المرور" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-4 text-center font-bold tracking-widest mb-4" dir="ltr" required>
+                <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-3.5 rounded-xl">دخول</button>
             </form>
-            <button type="button" onclick="window.navigate('landing')" class="w-full mt-6 text-xs md:text-sm text-gray-500 hover:text-primary transition-colors">العودة للرئيسية</button>
+            <button type="button" onclick="window.navigate('landing')" class="mt-6 text-sm text-gray-500 hover:text-primary">العودة للرئيسية</button>
         </div>
     </div>
 
-
     <!-- 4. ADMIN DASHBOARD VIEW -->
-    <div id="admin-dashboard-view" class="view flex-view min-h-screen bg-bgLight dark:bg-bgDark flex relative overflow-hidden w-full h-full">
-        <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 top-0 bg-black/60 z-40 hidden md:hidden transition-opacity"></div>
+    <div id="admin-dashboard-view" class="view flex-view min-h-screen bg-bgLight dark:bg-bgDark relative overflow-hidden w-full h-full">
+        <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden transition-opacity"></div>
         <aside id="admin-sidebar" class="w-64 bg-gray-900 text-white fixed top-0 h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
             <div class="p-6 border-b border-gray-800 flex justify-between items-center text-lg font-black">
-                <div class="flex items-center gap-2"><i class="fas fa-cogs text-primary"></i> الإدارة</div>
-                <button onclick="window.toggleAdminSidebar()" class="md:hidden text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
+                <div><i class="fas fa-cogs text-primary"></i> الإدارة</div><button onclick="window.toggleAdminSidebar()" class="md:hidden text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
             </div>
-            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <a href="javascript:void(0)" onclick="window.switchAdminTab('home', event)" class="admin-dash-link flex items-center gap-3 bg-primary/20 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-tachometer-alt w-5"></i> لوحة التحكم والطلبات</a>
-                <a href="javascript:void(0)" onclick="window.switchAdminTab('products', event)" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box w-5"></i> إدارة المنتجات</a>
-                <a href="javascript:void(0)" onclick="window.switchAdminTab('users', event)" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-users w-5"></i> إدارة المسوقين</a>
-                <a href="javascript:void(0)" onclick="window.switchAdminTab('support', event)" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-flag w-5"></i> بلاغات المسوقين</a>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" onclick="window.switchAdminTab('home', event)" data-tab="home" class="admin-dash-link flex items-center gap-3 bg-primary/20 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-tasks w-5"></i> الطلبات</a>
+                <a href="#" onclick="window.switchAdminTab('products', event)" data-tab="products" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-box w-5"></i> المنتجات</a>
+                <a href="#" onclick="window.switchAdminTab('users', event)" data-tab="users" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-users w-5"></i> المسوقين</a>
+                <a href="#" onclick="window.switchAdminTab('support', event)" data-tab="support" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-flag w-5"></i> الإبلاغات</a>
             </nav>
-            <div class="p-4 border-t border-gray-800">
-                <button type="button" onclick="window.logoutAdmin()" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3 rounded-xl transition-all font-bold text-sm">
-                    <i class="fas fa-sign-out-alt"></i> إغلاق لوحة الإدارة
-                </button>
-            </div>
+            <div class="p-4 border-t border-gray-800"><button onclick="window.logoutAdmin()" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3 rounded-xl font-bold"><i class="fas fa-sign-out-alt"></i> إغلاق</button></div>
         </aside>
 
-        <main class="flex-1 md:pr-64 p-4 md:p-8 pt-6 w-full overflow-x-hidden min-h-screen">
-            <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 mb-6 flex justify-between items-center relative z-10">
-                <div class="flex items-center gap-3">
-                    <button onclick="window.toggleAdminSidebar()" class="md:hidden w-10 h-10 rounded-xl bg-gray-50 dark:bg-bgDark text-gray-800 dark:text-white flex justify-center items-center"><i class="fas fa-bars"></i></button>
-                    <h1 class="text-lg md:text-xl font-black flex items-center gap-2"><i class="fas fa-chart-pie text-gray-400"></i> نظرة عامة حية</h1>
-                </div>
-                <span class="bg-green-100 text-green-700 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold border border-green-200"><i class="fas fa-wifi"></i> متصل بـ Firebase</span>
+        <main class="flex-1 md:pr-64 p-4 md:p-8 pt-6 w-full min-h-screen">
+            <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 mb-6 flex justify-between items-center">
+                <div class="flex items-center gap-3"><button onclick="window.toggleAdminSidebar()" class="md:hidden w-10 h-10 rounded-xl bg-gray-50 dark:bg-bgDark"><i class="fas fa-bars"></i></button><h1 class="text-lg font-black text-primary">لوحة الإدارة</h1></div>
             </header>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6 animate-fade-in">
-                <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-primary relative overflow-hidden">
-                    <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">العمولات المدفوعة</div>
-                    <div class="text-lg md:text-2xl font-black" id="admin-total-paid">0 دج</div>
-                </div>
-                <div onclick="window.switchAdminTab('home')" class="cursor-pointer bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-yellow-500 relative overflow-hidden hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
-                    <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">طلبات معلقة</div>
-                    <div class="text-lg md:text-2xl font-black" id="admin-pending-count">0</div>
-                </div>
-                <div onclick="window.switchAdminTab('products')" class="cursor-pointer bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-blue-500 relative overflow-hidden hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
-                    <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">المنتجات</div>
-                    <div class="text-lg md:text-2xl font-black" id="admin-products-count">0</div>
-                </div>
-                <div onclick="window.switchAdminTab('users')" class="cursor-pointer bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 border-b-4 border-b-purple-500 relative overflow-hidden hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
-                    <div class="text-gray-500 text-[10px] md:text-sm font-bold mb-1">المسوقين</div>
-                    <div class="text-lg md:text-2xl font-black" id="admin-users-count">0</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border dark:border-gray-800 border-b-4 border-b-primary"><div class="text-[10px] md:text-sm font-bold text-gray-500 mb-1">العمولات المدفوعة</div><div class="text-lg font-black" id="admin-total-paid">0 دج</div></div>
+                <div onclick="window.switchAdminTab('home')" class="cursor-pointer bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border dark:border-gray-800 border-b-4 border-b-yellow-500 hover:bg-gray-50 dark:hover:bg-bgDark"><div class="text-[10px] md:text-sm font-bold text-gray-500 mb-1">طلبات معلقة</div><div class="text-lg font-black" id="admin-pending-count">0</div></div>
+                <div onclick="window.switchAdminTab('products')" class="cursor-pointer bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border dark:border-gray-800 border-b-4 border-b-blue-500 hover:bg-gray-50 dark:hover:bg-bgDark"><div class="text-[10px] md:text-sm font-bold text-gray-500 mb-1">المنتجات</div><div class="text-lg font-black" id="admin-products-count">0</div></div>
+                <div onclick="window.switchAdminTab('users')" class="cursor-pointer bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border dark:border-gray-800 border-b-4 border-b-purple-500 hover:bg-gray-50 dark:hover:bg-bgDark"><div class="text-[10px] md:text-sm font-bold text-gray-500 mb-1">المسوقين</div><div class="text-lg font-black" id="admin-users-count">0</div></div>
+            </div>
+
+            <div class="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+                <button onclick="window.switchAdminTab('products')" class="whitespace-nowrap bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold"><i class="fas fa-plus"></i> إضافة منتج</button>
+                <button onclick="window.switchAdminTab('users')" class="whitespace-nowrap bg-purple-500 text-white px-4 py-2 rounded-xl text-xs font-bold"><i class="fas fa-users"></i> إدارة المسوقين</button>
+                <button onclick="window.switchAdminTab('support')" class="whitespace-nowrap bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold"><i class="fas fa-flag"></i> الإبلاغات</button>
+            </div>
+
+            <div id="admin-tab-home" class="admin-tab-content block w-full">
+                <div class="bg-white dark:bg-cardDark p-4 rounded-2xl shadow-sm border dark:border-gray-800 overflow-x-auto w-full">
+                    <h3 class="font-black mb-4"><i class="fas fa-tasks text-yellow-500"></i> مراجعة الطلبات</h3>
+                    <table class="w-full text-xs md:text-sm text-right min-w-[700px]">
+                        <thead class="bg-gray-50 dark:bg-bgDark text-gray-500"><tr><th class="p-3">المسوق</th><th class="p-3">الزبون</th><th class="p-3">المنتج</th><th class="p-3">العمولة</th><th class="p-3 text-center">إجراء</th></tr></thead>
+                        <tbody id="admin-orders-list"><tr><td colspan="5" class="text-center py-4">جاري التحميل...</td></tr></tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- أزرار وصول سريع للأقسام -->
-            <div class="flex gap-2 md:gap-4 mb-6 overflow-x-auto pb-2 scrollbar-hide w-full">
-                <button onclick="window.switchAdminTab('products')" class="whitespace-nowrap bg-blue-500 hover:bg-blue-600 text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-md flex items-center gap-2 transition-transform transform hover:scale-105"><i class="fas fa-plus"></i> إضافة/تعديل منتج</button>
-                <button onclick="window.switchAdminTab('users')" class="whitespace-nowrap bg-purple-500 hover:bg-purple-600 text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-md flex items-center gap-2 transition-transform transform hover:scale-105"><i class="fas fa-users"></i> حظر المسوقين</button>
-                <button onclick="window.switchAdminTab('support')" class="whitespace-nowrap bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-md flex items-center gap-2 transition-transform transform hover:scale-105"><i class="fas fa-flag"></i> الإبلاغات والدعم</button>
-            </div>
-
-            <!-- ADMIN TAB: HOME (Orders) -->
-            <div id="admin-tab-home" class="admin-tab-content block animate-fade-in w-full">
-                <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col w-full">
-                    <h3 class="font-black text-base md:text-lg mb-4 flex items-center gap-2"><i class="fas fa-tasks text-yellow-500"></i> مراجعة وتأكيد الطلبات للزبائن</h3>
-                    <div class="overflow-x-auto border border-gray-100 dark:border-gray-800 rounded-xl relative w-full">
-                        <table class="w-full text-xs md:text-sm text-right min-w-[700px]">
-                            <thead class="text-gray-500 bg-gray-50 dark:bg-bgDark sticky top-0 z-10 border-b border-gray-200 dark:border-gray-700">
-                                <tr>
-                                    <th class="p-3">رقم الطلب / المسوق</th>
-                                    <th class="p-3">بيانات الزبون</th>
-                                    <th class="p-3">المنتج / الكمية</th>
-                                    <th class="p-3">عمولة المسوق</th>
-                                    <th class="p-3 text-center">إجراء</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-orders-list">
-                                <tr><td colspan="5" class="text-center py-10"><div class="flex justify-center"><div class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div></div></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ADMIN TAB: PRODUCTS -->
-            <div id="admin-tab-products" class="admin-tab-content hidden animate-fade-in w-full">
+            <div id="admin-tab-products" class="admin-tab-content hidden w-full">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-1">
-                        <form onsubmit="window.submitProduct(event)" id="admin-product-form" class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 space-y-4 mb-4">
-                            <h3 class="font-black text-lg mb-4 flex items-center gap-2"><i class="fas fa-plus text-primary"></i> إضافة/تعديل منتج</h3>
+                        <form onsubmit="window.submitProduct(event)" id="admin-product-form" class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border dark:border-gray-800 space-y-4">
+                            <h3 class="font-black text-lg"><i class="fas fa-plus text-primary"></i> منتج جديد</h3>
                             <input type="hidden" id="prod-id">
-                            <div><label class="block text-xs font-bold mb-1">اسم المنتج</label><input type="text" id="prod-name" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2" required></div>
-                            <div><label class="block text-xs font-bold mb-1">السعر (دج)</label><input type="number" id="prod-price" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2" required></div>
-                            <div><label class="block text-xs font-bold mb-1">الوصف</label><textarea id="prod-desc" rows="3" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2"></textarea></div>
-                            <div><label class="block text-xs font-bold mb-1">صورة المنتج</label><input type="file" id="prod-image" accept="image/*" class="w-full text-xs"></div>
-                            <button type="submit" id="prod-submit-btn" class="bg-primary hover:bg-primaryDark text-white w-full py-2.5 rounded-xl font-bold transition-all shadow-md mt-2">حفظ المنتج</button>
+                            <input type="text" id="prod-name" placeholder="اسم المنتج" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2 text-sm" required>
+                            <input type="number" id="prod-price" placeholder="السعر (دج)" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2 text-sm" required>
+                            <textarea id="prod-desc" placeholder="الوصف" rows="3" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-2 text-sm"></textarea>
+                            <div><label class="block text-xs font-bold mb-1">صورة (سيتم ضغطها تلقائياً)</label><input type="file" id="prod-image" accept="image/*" class="w-full text-xs"></div>
+                            <button type="submit" id="prod-submit-btn" class="bg-primary text-white w-full py-2.5 rounded-xl font-bold">حفظ</button>
                         </form>
                     </div>
-                    <div class="lg:col-span-2 bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 w-full overflow-x-auto">
-                        <h3 class="font-black text-lg mb-4 flex items-center gap-2"><i class="fas fa-box text-primary"></i> قائمة المنتجات الحالية</h3>
-                        <table class="w-full text-xs md:text-sm text-right min-w-[500px]">
-                            <thead class="text-gray-500 bg-gray-50 dark:bg-bgDark border-b dark:border-gray-700">
-                                <tr><th class="p-3">الصورة</th><th class="p-3">الاسم</th><th class="p-3">السعر</th><th class="p-3 text-center">الإجراء</th></tr>
-                            </thead>
+                    <div class="lg:col-span-2 bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border dark:border-gray-800 overflow-x-auto w-full">
+                        <h3 class="font-black text-lg mb-4">المنتجات</h3>
+                        <table class="w-full text-xs text-right min-w-[500px]">
+                            <thead class="bg-gray-50 dark:bg-bgDark text-gray-500"><tr><th class="p-3">صورة</th><th class="p-3">اسم</th><th class="p-3">سعر</th><th class="p-3 text-center">إجراء</th></tr></thead>
                             <tbody id="admin-products-table-body"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- ADMIN TAB: USERS -->
-            <div id="admin-tab-users" class="admin-tab-content hidden animate-fade-in w-full">
-                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 w-full overflow-x-auto">
-                    <h3 class="font-black text-lg mb-4 flex items-center gap-2"><i class="fas fa-users text-primary"></i> إدارة وحظر المسوقين</h3>
+            <div id="admin-tab-users" class="admin-tab-content hidden w-full">
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border dark:border-gray-800 overflow-x-auto w-full">
+                    <h3 class="font-black text-lg mb-4"><i class="fas fa-users text-primary"></i> إدارة المسوقين</h3>
                     <table class="w-full text-xs md:text-sm text-right min-w-[700px]">
-                        <thead class="text-gray-500 bg-gray-50 dark:bg-bgDark border-b dark:border-gray-700">
-                            <tr><th class="p-3">المسوق</th><th class="p-3">البريد الإلكتروني</th><th class="p-3">الهاتف</th><th class="p-3">الرصيد</th><th class="p-3">الحالة</th><th class="p-3 text-center">حظر/فك حظر</th></tr>
-                        </thead>
+                        <thead class="bg-gray-50 dark:bg-bgDark text-gray-500"><tr><th class="p-3">المسوق</th><th class="p-3">الإيميل</th><th class="p-3">الرصيد</th><th class="p-3">الحالة</th><th class="p-3 text-center">إجراء</th></tr></thead>
                         <tbody id="admin-users-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- ADMIN TAB: SUPPORT TICKETS -->
-            <div id="admin-tab-support" class="admin-tab-content hidden animate-fade-in w-full">
-                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                    <h3 class="font-black text-lg mb-4 flex items-center gap-2"><i class="fas fa-flag text-red-500"></i> بلاغات الدعم الفني</h3>
-                    <div id="admin-support-list" class="space-y-4 grid md:grid-cols-2 gap-4">
-                        <div class="text-center text-gray-500 col-span-full py-10"><div class="inline-block w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div></div>
-                    </div>
+            <div id="admin-tab-support" class="admin-tab-content hidden w-full">
+                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border dark:border-gray-800">
+                    <h3 class="font-black text-lg mb-4"><i class="fas fa-flag text-red-500"></i> الإبلاغات</h3>
+                    <div id="admin-support-list" class="space-y-4 grid md:grid-cols-2 gap-4">جاري التحميل...</div>
                 </div>
             </div>
-
         </main>
     </div>
 
@@ -648,7 +389,6 @@
             authDomain: "affiliate-6e759.firebaseapp.com",
             databaseURL: "https://affiliate-6e759-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "affiliate-6e759",
-            storageBucket: "affiliate-6e759.firebasestorage.app",
             messagingSenderId: "759034640014",
             appId: "1:759034640014:web:2d7d6b212eacca8d3d7bdf"
         };
@@ -657,7 +397,6 @@
         
         const auth = firebase.auth();
         const db = firebase.firestore();
-        const storage = firebase.storage();
         const googleProvider = new firebase.auth.GoogleAuthProvider();
 
         let currentUser = null;
@@ -666,16 +405,13 @@
         let isAuthReady = false; 
         const FIXED_COMMISSION = 500; 
 
-        // Theme Toggle
         window.toggleTheme = () => {
             document.documentElement.classList.toggle('dark');
             const icon = document.getElementById('theme-icon');
             if(document.documentElement.classList.contains('dark')) icon.classList.replace('fa-moon', 'fa-sun');
             else icon.classList.replace('fa-sun', 'fa-moon');
-            if(document.getElementById('user-dashboard-view').classList.contains('active')) renderUserChart();
         };
 
-        // Sidebar Toggles
         window.toggleUserSidebar = () => {
             document.getElementById('user-sidebar').classList.toggle('translate-x-full');
             document.getElementById('mobile-sidebar-overlay').classList.toggle('hidden');
@@ -685,38 +421,26 @@
             document.getElementById('admin-sidebar').classList.toggle('translate-x-full');
             document.getElementById('mobile-admin-overlay').classList.toggle('hidden');
         };
-        
-        // Navigation & Routing
+
         window.navigate = (target) => {
             window.scrollTo({ top: 0, behavior: 'instant' });
-            
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(target + '-view').classList.add('active');
             
-            if (target === 'landing') {
-                history.pushState(null, null, ' '); 
-            } else {
-                history.pushState(null, null, '#' + target);
-            }
+            history.pushState(null, null, target === 'landing' ? ' ' : '#' + target);
             
-            if(target === 'user-dashboard') { renderUserChart(); loadUserDashboardData(); }
-            if(target === 'admin-dashboard') { loadAdminDashboardData(); }
+            if(target === 'user-dashboard') loadUserDashboardData();
+            if(target === 'admin-dashboard') loadAdminDashboardData();
             
             const navButtons = document.getElementById('nav-auth-buttons');
-            if(navButtons) {
-                if(currentUser && target === 'landing') {
-                    navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-sm">لوحة التحكم</button>`;
-                } else {
-                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primary font-bold px-3 md:px-4 text-sm md:text-base">دخول</button><button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl shadow-lg shadow-primary/30 transition-all transform hover:-translate-y-1 font-bold text-sm md:text-base">إنشاء حساب</button>`;
-                }
-            }
-            
             const heroCta = document.getElementById('hero-cta');
-            if(heroCta && target === 'landing') {
+            if(navButtons && heroCta && target === 'landing') {
                 if(currentUser) {
-                    heroCta.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white text-lg px-8 py-4 rounded-2xl shadow-xl font-bold flex items-center justify-center gap-3 w-full sm:w-auto">الذهاب للوحة التحكم <i class="fas fa-arrow-left"></i></button>`;
+                    navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-sm">لوحة التحكم</button>`;
+                    heroCta.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary text-white px-8 py-4 rounded-2xl font-bold">لوحتك <i class="fas fa-arrow-left"></i></button>`;
                 } else {
-                    heroCta.innerHTML = `<button onclick="window.openAuthModal(true)" class="bg-primary text-white text-lg px-8 py-4 rounded-2xl shadow-xl font-bold flex items-center justify-center gap-3 w-full sm:w-auto">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button>`;
+                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 font-bold px-3 text-sm">دخول</button><button onclick="window.openAuthModal(true)" class="bg-primary text-white px-4 py-2 rounded-xl font-bold text-sm">إنشاء حساب</button>`;
+                    heroCta.innerHTML = `<button onclick="window.openAuthModal(true)" class="bg-primary text-white px-8 py-4 rounded-2xl font-bold">ابدأ الآن <i class="fas fa-arrow-left"></i></button>`;
                 }
             }
         };
@@ -729,31 +453,22 @@
             if (hash === '#admin09' || hash === '#admin-dashboard' || hash === '#admin-login') {
                 return isAdminAuth ? window.navigate('admin-dashboard') : window.navigate('admin-login');
             }
-
-            if (hash === '#user-dashboard') {
+            if (hash === '#user-dashboard' || currentUser) {
                 return currentUser ? window.navigate('user-dashboard') : window.navigate('landing');
             }
-
-            if (currentUser) {
-                return window.navigate('user-dashboard');
-            }
-
             window.navigate('landing'); 
         }
 
         window.addEventListener('hashchange', handleRouting);
 
-        // --- AUTHENTICATION LOGIC ---
         window.openAuthModal = (signup) => {
             isSignupMode = signup;
             document.getElementById('auth-modal').style.display = 'flex';
             setTimeout(() => document.getElementById('auth-modal-content').classList.replace('scale-95','scale-100'), 10);
-            
-            document.getElementById('auth-title').innerText = signup ? "إنشاء حساب مسوق" : "مرحباً بك مجدداً";
-            document.getElementById('auth-subtitle').innerText = signup ? "أدخل بياناتك للبدء في ربح العمولات" : "سجل دخولك للوصول إلى لوحة التحكم";
-            document.getElementById('auth-btn-text').innerText = signup ? "إنشاء حساب مجاني" : "تسجيل الدخول";
+            document.getElementById('auth-title').innerText = signup ? "إنشاء حساب مسوق" : "تسجيل الدخول";
+            document.getElementById('auth-btn-text').innerText = signup ? "إنشاء حساب مجاني" : "دخول";
             document.getElementById('auth-switch-text').innerText = signup ? "لدي حساب بالفعل؟" : "ليس لديك حساب؟";
-            document.getElementById('auth-toggle-btn').innerText = signup ? "تسجيل الدخول" : "إنشاء حساب جديد";
+            document.getElementById('auth-toggle-btn').innerText = signup ? "دخول" : "إنشاء حساب";
             document.getElementById('register-fields').style.display = signup ? 'block' : 'none';
         };
 
@@ -762,81 +477,53 @@
             setTimeout(() => document.getElementById('auth-modal').style.display = 'none', 300);
             document.getElementById('auth-form').reset();
         };
-        
+
         window.toggleAuthMode = () => window.openAuthModal(!isSignupMode);
 
         const setAuthLoading = (isLoading, isGoogle = false) => {
             const btn = document.getElementById(isGoogle ? 'google-auth-btn' : 'auth-btn');
             const loader = document.getElementById(isGoogle ? 'google-loader' : 'auth-loader');
-            const icon = document.getElementById(isGoogle ? 'google-icon' : null);
             const text = document.getElementById(isGoogle ? 'google-btn-text' : 'auth-btn-text');
-
             btn.disabled = isLoading;
-            if(isLoading) {
-                loader.style.display = 'block';
-                if(icon) icon.style.display = 'none';
-                text.innerText = "جاري التحميل...";
-            } else {
-                loader.style.display = 'none';
-                if(icon) icon.style.display = 'block';
-                text.innerText = isGoogle ? "المتابعة باستخدام Google" : (isSignupMode ? "إنشاء حساب مجاني" : "تسجيل الدخول");
-            }
+            loader.style.display = isLoading ? 'block' : 'none';
+            text.innerText = isLoading ? "جاري..." : (isGoogle ? "المتابعة بـ Google" : (isSignupMode ? "إنشاء" : "دخول"));
         };
 
         window.handleAuthSubmit = async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value.trim();
             const password = document.getElementById('auth-password').value;
-            
-            if(password.length < 6) return Swal.fire('تنبيه', 'كلمة المرور يجب أن تتكون من 6 أحرف على الأقل.', 'warning');
+            if(password.length < 6) return Swal.fire('تنبيه', 'الرقم السري قصير', 'warning');
             setAuthLoading(true);
-
             try {
                 if (isSignupMode) {
                     const name = document.getElementById('auth-name').value.trim();
-                    const phone = document.getElementById('auth-phone').value.trim();
                     if(!name) throw new Error("empty_name");
-
                     const cred = await auth.createUserWithEmailAndPassword(email, password);
                     await db.collection("users").doc(cred.user.uid).set({ 
-                        name: name, email: email, phone: phone, balance: 0, clicks: 0, role: 'affiliate', isBanned: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+                        name, email, phone: document.getElementById('auth-phone').value, balance: 0, clicks: 0, isBanned: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() 
                     });
-                    Swal.fire({icon: 'success', title: 'تم إنشاء الحساب بنجاح!', showConfirmButton: false, timer: 1500});
                 } else {
                     await auth.signInWithEmailAndPassword(email, password);
-                    Swal.fire({icon: 'success', title: 'تم تسجيل الدخول', showConfirmButton: false, timer: 1500});
                 }
                 window.closeAuthModal();
             } catch (error) {
-                let msg = error.message;
-                if(error.message === "empty_name") msg = "يرجى إدخال الاسم الكامل.";
-                else if(error.code === 'auth/email-already-in-use') msg = "هذا البريد الإلكتروني مسجل مسبقاً.";
-                else if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
-                Swal.fire('خطأ', msg, 'error');
-            } finally {
-                setAuthLoading(false);
-            }
+                Swal.fire('خطأ', error.message === "empty_name" ? "أدخل الاسم" : "بيانات غير صحيحة", 'error');
+            } finally { setAuthLoading(false); }
         };
 
         window.handleGoogleAuth = async () => {
             setAuthLoading(true, true);
             try {
                 const result = await auth.signInWithPopup(googleProvider);
-                const user = result.user;
-                const docRef = db.collection("users").doc(user.uid);
+                const docRef = db.collection("users").doc(result.user.uid);
                 const docSnap = await docRef.get();
                 if (!docSnap.exists) {
-                    await docRef.set({
-                        name: user.displayName || 'مستخدم جوجل', email: user.email, phone: user.phoneNumber || '', balance: 0, clicks: 0, role: 'affiliate', isBanned: false, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+                    await docRef.set({ name: result.user.displayName, email: result.user.email, phone: '', balance: 0, clicks: 0, isBanned: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                 }
-                Swal.fire({icon: 'success', title: 'تم الدخول بنجاح', showConfirmButton: false, timer: 1500});
                 window.closeAuthModal();
-            } catch (error) {
-                if(error.code !== 'auth/popup-closed-by-user') Swal.fire('خطأ', error.message, 'error');
-            } finally {
-                setAuthLoading(false, true);
-            }
+            } catch (error) { if(error.code !== 'auth/popup-closed-by-user') Swal.fire('خطأ', error.message, 'error'); } 
+            finally { setAuthLoading(false, true); }
         };
 
         auth.onAuthStateChanged(async (user) => {
@@ -846,11 +533,8 @@
                     const docSnap = await db.collection("users").doc(user.uid).get();
                     if(docSnap.exists && docSnap.data().isBanned) {
                         await auth.signOut();
-                        Swal.fire('حساب محظور', 'عذراً، لقد تم حظر حسابك من قبل الإدارة.', 'error');
+                        Swal.fire('حساب محظور', 'لقد تم حظر حسابك.', 'error');
                         currentUser = null;
-                        isAuthReady = true;
-                        handleRouting();
-                        return;
                     }
                 } catch(e) {}
             }
@@ -859,161 +543,85 @@
         });
 
         window.logoutUser = async () => { await auth.signOut(); window.navigate('landing'); };
-        
-        // --- USER TABS LOGIC ---
+
         window.switchUserTab = (tabId, event) => {
             if(event) event.preventDefault(); 
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
             
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('block');
+            document.querySelectorAll('.dash-link').forEach(el => {
+                el.classList.remove('bg-primary/10', 'text-primary');
+                el.classList.add('text-gray-600');
+                if(el.getAttribute('data-tab') === tabId) el.classList.add('bg-primary/10', 'text-primary');
             });
-            const targetTab = document.getElementById('tab-' + tabId);
-            targetTab.classList.remove('hidden');
-            targetTab.classList.add('block');
-            
-            if(event) {
-                document.querySelectorAll('.dash-link').forEach(el => {
-                    el.classList.remove('bg-primary/10', 'text-primary');
-                    el.classList.add('hover:bg-gray-50', 'dark:hover:bg-bgDark', 'text-gray-600', 'dark:text-gray-300');
-                });
-                event.currentTarget.classList.add('bg-primary/10', 'text-primary');
-                event.currentTarget.classList.remove('hover:bg-gray-50', 'dark:hover:bg-bgDark', 'text-gray-600', 'dark:text-gray-300');
-            }
             
             if(window.innerWidth < 768) {
                 document.getElementById('user-sidebar').classList.add('translate-x-full');
                 document.getElementById('mobile-sidebar-overlay').classList.add('hidden');
             }
-
-            if(tabId === 'support' && currentUserData) {
-                document.getElementById('support-name').value = currentUserData.name || '';
-                document.getElementById('support-phone').value = currentUserData.phone || '';
-                document.getElementById('support-email').value = currentUserData.email || '';
-            }
-
-            if(tabId === 'home') renderUserChart();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        let unsubUser, unsubOrders, unsubProducts;
-
         function loadUserDashboardData() {
             if(!currentUser) return;
-            if(unsubUser) unsubUser();
-            if(unsubOrders) unsubOrders();
-            if(unsubProducts) unsubProducts();
-
-            unsubUser = db.collection("users").doc(currentUser.uid).onSnapshot((docSnap) => {
-                if(docSnap.exists) {
-                    currentUserData = docSnap.data();
-                    if(currentUserData.isBanned) { auth.signOut(); return; }
-                    document.getElementById('dash-name').innerText = currentUserData.name || 'مسوق';
-                    document.getElementById('dash-email').innerText = currentUserData.email;
-                    document.getElementById('dash-avatar').innerText = (currentUserData.name || 'م').charAt(0);
-                    document.getElementById('user-balance').innerText = currentUserData.balance || 0;
-                    document.getElementById('withdraw-available-balance').innerText = (currentUserData.balance || 0) + ' دج';
-                    document.getElementById('user-total').innerText = currentUserData.balance || 0;
-                    document.getElementById('user-clicks').innerText = currentUserData.clicks || 0;
-                }
+            db.collection("users").doc(currentUser.uid).onSnapshot(doc => {
+                if(!doc.exists || doc.data().isBanned) { auth.signOut(); return; }
+                currentUserData = doc.data();
+                document.getElementById('dash-name').innerText = currentUserData.name || 'مسوق';
+                document.getElementById('dash-email').innerText = currentUserData.email;
+                document.getElementById('dash-avatar').innerText = (currentUserData.name || 'م').charAt(0);
+                document.getElementById('user-balance').innerText = currentUserData.balance || 0;
+                document.getElementById('user-total').innerText = currentUserData.balance || 0;
+                document.getElementById('withdraw-available-balance').innerText = (currentUserData.balance || 0) + ' دج';
+                document.getElementById('user-clicks').innerText = currentUserData.clicks || 0;
             });
 
-            unsubOrders = db.collection("orders").where("affiliateId", "==", currentUser.uid).onSnapshot((snapshot) => {
-                let pendingSum = 0; let confirmedCount = 0; let ordersHtml = '';
-                if(snapshot.empty) {
-                    ordersHtml = `<div class="flex flex-col justify-center items-center h-full text-gray-400 py-6"><i class="fas fa-box-open text-3xl mb-2 opacity-50"></i><span class="text-sm">لم تقم بأي مبيعات بعد</span></div>`;
-                } else {
-                    snapshot.forEach((docSnap) => {
-                        const order = docSnap.data();
-                        if(order.status === 'pending') pendingSum += Number(order.commission);
-                        if(order.status === 'confirmed') confirmedCount++;
-
-                        let statusUI = order.status === 'pending' 
-                            ? `<span class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-md"><i class="fas fa-clock"></i> قيد الانتظار</span>`
-                            : `<span class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-md"><i class="fas fa-check"></i> تم الدفع</span>`;
-
-                        ordersHtml += `
-                            <div class="p-3 hover:bg-gray-50 dark:hover:bg-bgDark rounded-xl border border-gray-100 dark:border-gray-800 flex justify-between items-center transition-colors">
-                                <div>
-                                    <div class="font-bold text-xs md:text-sm text-blue-600 mb-1"><i class="fas fa-user"></i> ${order.customerName}</div>
-                                    <div class="text-[10px] text-gray-500">${order.productName} (كمية: ${order.quantity})</div>
-                                </div>
-                                <div class="text-left">
-                                    <div class="font-black text-xs md:text-sm ${order.status === 'pending' ? 'text-yellow-500' : 'text-primary'} mb-1">+${order.commission} دج</div>
-                                    ${statusUI}
-                                </div>
-                            </div>`;
-                    });
-                }
-                document.getElementById('user-orders-list').innerHTML = ordersHtml;
-                document.getElementById('user-pending').innerText = pendingSum;
-                document.getElementById('user-orders-count').innerText = confirmedCount;
+            db.collection("orders").where("affiliateId", "==", currentUser.uid).onSnapshot(snap => {
+                let pend = 0, conf = 0, html = '';
+                if(snap.empty) html = `<div class="text-center py-6 text-gray-400">لا توجد طلبات</div>`;
+                snap.forEach(doc => {
+                    const o = doc.data();
+                    if(o.status === 'pending') pend += Number(o.commission);
+                    if(o.status === 'confirmed') conf++;
+                    const st = o.status === 'pending' ? `<span class="bg-yellow-100 text-yellow-700 px-2 rounded text-xs">معلق</span>` : `<span class="bg-green-100 text-green-700 px-2 rounded text-xs">مؤكد</span>`;
+                    html += `<div class="p-3 border rounded-xl flex justify-between"><div><div class="font-bold text-sm text-blue-600">${o.customerName}</div><div class="text-xs text-gray-500">${o.productName}</div></div><div class="text-left font-black text-sm">${o.commission} دج<br>${st}</div></div>`;
+                });
+                document.getElementById('user-orders-list').innerHTML = html;
+                document.getElementById('user-pending').innerText = pend;
+                document.getElementById('user-orders-count').innerText = conf;
             });
 
-            unsubProducts = db.collection("products").onSnapshot((snapshot) => {
-                let productsHtml = '';
-                if(snapshot.empty) {
-                    productsHtml = `<div class="col-span-full border border-gray-100 dark:border-gray-800 rounded-2xl p-6 bg-white dark:bg-cardDark text-center"><i class="fas fa-box-open text-4xl text-gray-300 mb-3"></i><h4 class="font-bold text-gray-500">لا توجد منتجات حالياً.</h4></div>`;
-                } else {
-                    snapshot.forEach((pDoc) => {
-                        const p = pDoc.data();
-                        const refLink = `https://tirourda.store/product/${pDoc.id}?ref=${currentUser.uid}`;
-                        productsHtml += `
-                            <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-4 bg-white dark:bg-cardDark flex flex-col h-full shadow-sm hover:shadow-xl transition-all group">
-                                <img src="${p.image || 'https://via.placeholder.com/150'}" class="w-full h-32 md:h-40 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform origin-bottom bg-gray-50">
-                                <h4 class="font-black text-sm md:text-base mb-1 text-center text-primary flex-1">${p.name}</h4>
-                                ${p.description ? `<p class="text-[10px] md:text-xs text-gray-500 text-center mb-3 line-clamp-2">${p.description}</p>` : ''}
-                                <div class="flex justify-between items-center mb-4 mt-auto">
-                                    <span class="text-xs text-gray-500 font-bold">السعر: ${p.price} دج</span>
-                                    <span class="text-[10px] md:text-xs font-black bg-primary/10 text-primary px-2 py-1 rounded-lg">عمولة: 500 دج</span>
-                                </div>
-                                <div class="grid grid-cols-2 gap-2 mt-2">
-                                    <button onclick="window.copyReferralLink('${refLink}')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white text-xs font-bold py-2 rounded-xl transition-colors">
-                                        <i class="fas fa-link"></i> نسخ الرابط
-                                    </button>
-                                    <button onclick="window.openOrderModal('${pDoc.id}', '${p.name}')" class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-2 rounded-xl transition-colors shadow-md">
-                                        <i class="fas fa-cart-plus"></i> تسجيل طلبية
-                                    </button>
-                                </div>
+            db.collection("products").onSnapshot(snap => {
+                let html = '';
+                if(snap.empty) html = `<div class="text-center col-span-full py-6 text-gray-400">لا منتجات حاليا</div>`;
+                snap.forEach(doc => {
+                    const p = doc.data();
+                    html += `
+                        <div class="border rounded-2xl p-4 flex flex-col group bg-white dark:bg-cardDark">
+                            <img src="${p.image}" class="w-full h-32 object-cover rounded-xl mb-3">
+                            <h4 class="font-black text-sm text-center text-primary">${p.name}</h4>
+                            <div class="flex justify-between items-center my-3"><span class="text-xs font-bold">${p.price} دج</span><span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded">500 دج عمولة</span></div>
+                            <div class="grid grid-cols-2 gap-2 mt-auto">
+                                <button onclick="window.copyLink('${doc.id}')" class="bg-gray-100 text-xs font-bold py-2 rounded-xl"><i class="fas fa-link"></i> نسخ</button>
+                                <button onclick="window.openOrderModal('${doc.id}', '${p.name}')" class="bg-blue-500 text-white text-xs font-bold py-2 rounded-xl">طلب</button>
                             </div>
-                        `;
-                    });
-                }
-                document.getElementById('affiliate-products-list').innerHTML = productsHtml;
+                        </div>`;
+                });
+                document.getElementById('affiliate-products-list').innerHTML = html;
             });
         }
 
-        // --- SUPPORT TICKET LOGIC ---
-        window.submitSupportTicket = async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-            try {
-                await db.collection("support_tickets").add({
-                    uid: currentUser.uid,
-                    name: document.getElementById('support-name').value,
-                    phone: document.getElementById('support-phone').value,
-                    email: document.getElementById('support-email').value,
-                    description: document.getElementById('support-desc').value,
-                    date: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                Swal.fire('تم الاستلام', 'تم إرسال بلاغك بنجاح، سنقوم بالرد عليك قريباً.', 'success');
-                e.target.reset();
-            } catch(error) {
-                Swal.fire('خطأ', error.message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'إرسال البلاغ';
-            }
+        window.copyLink = async (id) => {
+            await navigator.clipboard.writeText(`https://tirourda.store/product/${id}?ref=${currentUser.uid}`);
+            Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'تم النسخ!', showConfirmButton: false, timer: 1500 });
+            db.collection("users").doc(currentUser.uid).update({ clicks: firebase.firestore.FieldValue.increment(1) });
         };
 
-        // --- NEW ORDER LOGIC ---
-        window.openOrderModal = (productId, productName) => {
+        window.openOrderModal = (id, name) => {
             document.getElementById('order-modal').style.display = 'flex';
             setTimeout(() => document.getElementById('order-modal-content').classList.replace('scale-95','scale-100'), 10);
-            document.getElementById('order-product-id').value = productId;
-            document.getElementById('order-product-name').innerText = productName;
+            document.getElementById('order-product-id').value = id;
+            document.getElementById('order-product-name').innerText = name;
         };
 
         window.closeOrderModal = () => {
@@ -1026,66 +634,54 @@
             e.preventDefault();
             const btn = document.getElementById('order-submit-btn');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التسجيل...';
-
             try {
                 await db.collection("orders").add({
-                    productId: document.getElementById('order-product-id').value,
-                    productName: document.getElementById('order-product-name').innerText,
-                    customerName: document.getElementById('order-customer-name').value,
-                    customerPhone: document.getElementById('order-customer-phone').value,
-                    customerState: document.getElementById('order-customer-state').value,
-                    quantity: document.getElementById('order-qty').value,
-                    affiliateId: currentUser.uid,
-                    affiliateName: currentUserData?.name || 'مسوق',
-                    commission: FIXED_COMMISSION,
-                    status: 'pending',
-                    date: firebase.firestore.FieldValue.serverTimestamp()
+                    productId: document.getElementById('order-product-id').value, productName: document.getElementById('order-product-name').innerText,
+                    customerName: document.getElementById('order-customer-name').value, customerPhone: document.getElementById('order-customer-phone').value,
+                    customerState: document.getElementById('order-customer-state').value, quantity: document.getElementById('order-qty').value,
+                    affiliateId: currentUser.uid, affiliateName: currentUserData.name || 'مسوق', commission: FIXED_COMMISSION, status: 'pending', date: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                Swal.fire({icon: 'success', title: 'تم تسجيل الطلبية بنجاح!', text: 'العمولة 500 دج معلقة حتى يتم التأكيد من الإدارة.', showConfirmButton: true});
+                Swal.fire({icon: 'success', title: 'نجاح!', text: 'تم تسجيل الطلبية', showConfirmButton: false, timer: 1500});
                 window.closeOrderModal();
-            } catch(error) {
-                Swal.fire('خطأ', error.message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<span id="order-btn-text">تأكيد وتسجيل الطلب</span>';
-            }
+            } catch(e) { Swal.fire('خطأ', e.message, 'error'); } finally { btn.disabled = false; }
+        };
+
+        window.submitSupportTicket = async (e) => {
+            e.preventDefault();
+            try {
+                await db.collection("support_tickets").add({
+                    uid: currentUser.uid, name: document.getElementById('support-name').value, phone: document.getElementById('support-phone').value,
+                    email: document.getElementById('support-email').value, description: document.getElementById('support-desc').value, date: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                Swal.fire('تم', 'أرسلنا رسالتك', 'success'); e.target.reset();
+            } catch(error) { Swal.fire('خطأ', error.message, 'error'); }
         };
 
         window.handleWithdrawRequest = (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-            setTimeout(() => {
-                Swal.fire('تم الاستلام', 'تم إرسال طلب السحب الخاص بك بنجاح، ستتم المراجعة خلال 24 ساعة.', 'success');
-                e.target.reset();
-                btn.disabled = false;
-                btn.innerText = "إرسال الطلب";
-            }, 1000);
+            e.preventDefault(); Swal.fire('تم الاستلام', 'ستتم المراجعة', 'success'); e.target.reset();
         };
 
+        // --- ADMIN ---
+        window.handleAdminLogin = (e) => {
+            e.preventDefault();
+            if (document.getElementById('admin-password').value === 'abobob123#') {
+                sessionStorage.setItem('tirourda_admin', 'true');
+                document.getElementById('admin-password').value = '';
+                window.navigate('admin-dashboard');
+            } else Swal.fire('مرفوض', 'الرمز خاطئ', 'error');
+        };
 
-        // --- ADMIN LOGIC ---
+        window.logoutAdmin = () => { sessionStorage.removeItem('tirourda_admin'); window.navigate('landing'); };
+
         window.switchAdminTab = (tabId, event) => {
             if(event) event.preventDefault();
-            document.querySelectorAll('.admin-tab-content').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('block');
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('admin-tab-' + tabId).classList.remove('hidden');
+            document.querySelectorAll('.admin-dash-link').forEach(el => {
+                el.classList.remove('bg-primary/20', 'text-primary');
+                el.classList.add('text-gray-300');
+                if(el.getAttribute('data-tab') === tabId) el.classList.add('bg-primary/20', 'text-primary');
             });
-            const targetTab = document.getElementById('admin-tab-' + tabId);
-            targetTab.classList.remove('hidden');
-            targetTab.classList.add('block');
-            
-            if(event) {
-                document.querySelectorAll('.admin-dash-link').forEach(el => {
-                    el.classList.remove('bg-primary/20', 'text-primary');
-                    el.classList.add('hover:bg-gray-800', 'text-gray-300');
-                });
-                event.currentTarget.classList.add('bg-primary/20', 'text-primary');
-                event.currentTarget.classList.remove('hover:bg-gray-800', 'text-gray-300');
-            }
-            
             if(window.innerWidth < 768) {
                 document.getElementById('admin-sidebar').classList.add('translate-x-full');
                 document.getElementById('mobile-admin-overlay').classList.add('hidden');
@@ -1093,315 +689,133 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.handleAdminLogin = (e) => {
-            e.preventDefault();
-            const pass = document.getElementById('admin-password').value;
-            if (pass === 'abobob123#') {
-                sessionStorage.setItem('tirourda_admin', 'true');
-                document.getElementById('admin-password').value = '';
-                window.navigate('admin-dashboard');
-            } else {
-                Swal.fire('رفض الوصول', 'كلمة المرور الإدارية غير صحيحة', 'error');
-            }
-        };
-
-        window.logoutAdmin = () => { sessionStorage.removeItem('tirourda_admin'); window.navigate('landing'); };
-
-        let unsubAdminOrders, unsubAdminProds, unsubAdminUsers, unsubAdminSupport;
-        let adminProductsCache = {}; 
-
+        let adminProdsCache = {};
         function loadAdminDashboardData() {
-            if(unsubAdminOrders) unsubAdminOrders();
-            if(unsubAdminProds) unsubAdminProds();
-            if(unsubAdminUsers) unsubAdminUsers();
-            if(unsubAdminSupport) unsubAdminSupport();
-
-            // Orders
-            unsubAdminOrders = db.collection("orders").orderBy('date', 'desc').onSnapshot((snapshot) => {
-                let pendingCount = 0; let totalPaid = 0; let ordersHtml = '';
-                if(snapshot.empty) {
-                    ordersHtml = `<tr><td colspan="5" class="text-center py-10 text-gray-500 font-bold text-xs">لا توجد طلبات.</td></tr>`;
-                } else {
-                    snapshot.forEach((docSnap) => {
-                        const order = docSnap.data();
-                        if(order.status === 'confirmed') totalPaid += Number(order.commission);
-                        else if(order.status === 'pending') {
-                            pendingCount++;
-                            ordersHtml += `
-                                <tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
-                                    <td class="p-3">
-                                        <div class="text-[10px] text-gray-400">#${docSnap.id.slice(0,6)}</div>
-                                        <div class="font-bold text-xs text-blue-600"><i class="fas fa-user-tie"></i> ${order.affiliateName || 'غير معروف'}</div>
-                                    </td>
-                                    <td class="p-3 text-right">
-                                        <div class="font-bold text-xs">${order.customerName}</div>
-                                        <div class="text-[10px] text-gray-500" dir="ltr">${order.customerPhone}</div>
-                                        <div class="text-[10px] text-gray-500"><i class="fas fa-map-marker-alt"></i> ${order.customerState}</div>
-                                    </td>
-                                    <td class="p-3">
-                                        <div class="font-bold text-xs">${order.productName}</div>
-                                        <div class="text-[10px] text-gray-500">الكمية: ${order.quantity}</div>
-                                    </td>
-                                    <td class="p-3 text-primary font-black text-xs md:text-sm">${order.commission} دج</td>
-                                    <td class="p-3 text-center">
-                                        <button type="button" onclick="window.confirmAdminOrder(this, '${docSnap.id}', '${order.affiliateId}', ${order.commission})" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transform hover:scale-105 transition-all w-full">
-                                            تأكيد ودفع
-                                        </button>
-                                    </td>
-                                </tr>
-                            `;
-                        }
-                    });
-                    if(pendingCount === 0) ordersHtml = `<tr><td colspan="5" class="text-center py-10 text-green-500 font-bold text-xs">تمت مراجعة جميع الطلبات.</td></tr>`;
-                }
-                document.getElementById('admin-pending-count').innerText = pendingCount;
-                document.getElementById('admin-total-paid').innerText = totalPaid + ' دج';
-                document.getElementById('admin-orders-list').innerHTML = ordersHtml;
+            db.collection("orders").orderBy('date', 'desc').onSnapshot(snap => {
+                let pend = 0, paid = 0, html = '';
+                snap.forEach(doc => {
+                    const o = doc.data();
+                    if(o.status === 'confirmed') paid += Number(o.commission);
+                    else {
+                        pend++;
+                        html += `
+                        <tr class="border-b dark:border-gray-800 text-xs">
+                            <td class="p-3 text-blue-600 font-bold">${o.affiliateName}</td>
+                            <td class="p-3">${o.customerName}<br><span class="text-gray-400" dir="ltr">${o.customerPhone}</span></td>
+                            <td class="p-3">${o.productName} (${o.quantity})</td>
+                            <td class="p-3 text-primary font-black">${o.commission} دج</td>
+                            <td class="p-3 text-center"><button onclick="window.confirmAdminOrder(this, '${doc.id}', '${o.affiliateId}')" class="bg-primary text-white px-3 py-1 rounded">تأكيد</button></td>
+                        </tr>`;
+                    }
+                });
+                document.getElementById('admin-pending-count').innerText = pend;
+                document.getElementById('admin-total-paid').innerText = paid + ' دج';
+                document.getElementById('admin-orders-list').innerHTML = html || `<tr><td colspan="5" class="text-center p-4">لا توجد طلبات معلقة</td></tr>`;
             });
 
-            // Products
-            unsubAdminProds = db.collection("products").onSnapshot((snap) => {
+            db.collection("products").onSnapshot(snap => {
                 document.getElementById('admin-products-count').innerText = snap.size;
-                let html = '';
-                adminProductsCache = {};
+                let html = ''; adminProdsCache = {};
                 snap.forEach(doc => {
-                    const p = doc.data();
-                    adminProductsCache[doc.id] = p; 
-                    html += `
-                    <tr class="border-b dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
-                        <td class="p-3"><img src="${p.image || 'https://via.placeholder.com/150'}" class="w-10 h-10 rounded object-cover"></td>
-                        <td class="p-3 font-bold">${p.name}</td>
-                        <td class="p-3 text-primary font-black">${p.price} دج</td>
-                        <td class="p-3 text-center flex justify-center gap-2">
-                            <button onclick="window.editProduct('${doc.id}')" class="text-blue-500 hover:bg-blue-100 p-2 rounded-lg transition-colors" title="تعديل"><i class="fas fa-edit"></i></button>
-                            <button onclick="window.deleteProduct('${doc.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="حذف"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>`;
+                    const p = doc.data(); adminProdsCache[doc.id] = p;
+                    html += `<tr class="border-b dark:border-gray-800"><td class="p-3"><img src="${p.image}" class="w-8 h-8 rounded"></td><td class="p-3">${p.name}</td><td class="p-3 font-black">${p.price} دج</td><td class="p-3"><button onclick="window.editProduct('${doc.id}')" class="text-blue-500 mx-2"><i class="fas fa-edit"></i></button><button onclick="window.deleteProduct('${doc.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`;
                 });
                 document.getElementById('admin-products-table-body').innerHTML = html;
             });
 
-            // Users
-            unsubAdminUsers = db.collection("users").onSnapshot((snap) => {
+            db.collection("users").onSnapshot(snap => {
                 document.getElementById('admin-users-count').innerText = snap.size;
                 let html = '';
                 snap.forEach(doc => {
                     const u = doc.data();
-                    const statusClass = u.isBanned ? 'text-red-500 bg-red-100' : 'text-green-500 bg-green-100';
-                    const statusText = u.isBanned ? 'محظور' : 'نشط';
-                    html += `
-                    <tr class="border-b dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
-                        <td class="p-3 font-bold">${u.name || 'مسوق'}</td>
-                        <td class="p-3 text-gray-500">${u.email}</td>
-                        <td class="p-3 text-gray-500" dir="ltr">${u.phone || '-'}</td>
-                        <td class="p-3 text-primary font-black">${u.balance || 0} دج</td>
-                        <td class="p-3">
-                            <span class="px-2 py-1 rounded-md text-[10px] font-bold ${statusClass}">${statusText}</span>
-                        </td>
-                        <td class="p-3 text-center">
-                            <button onclick="window.toggleBanUser('${doc.id}', ${!!u.isBanned})" class="bg-${u.isBanned ? 'green' : 'red'}-500 hover:bg-${u.isBanned ? 'green' : 'red'}-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-colors">
-                                ${u.isBanned ? 'فك الحظر' : 'حظر الحساب'}
-                            </button>
-                        </td>
-                    </tr>`;
+                    html += `<tr class="border-b dark:border-gray-800"><td class="p-3 font-bold">${u.name}</td><td class="p-3">${u.email}</td><td class="p-3 font-black text-primary">${u.balance} دج</td><td class="p-3 text-${u.isBanned?'red':'green'}-500">${u.isBanned?'محظور':'نشط'}</td><td class="p-3"><button onclick="window.toggleBanUser('${doc.id}', ${!!u.isBanned})" class="bg-${u.isBanned?'green':'red'}-500 text-white px-2 py-1 rounded text-xs">${u.isBanned?'فك حظر':'حظر'}</button></td></tr>`;
                 });
                 document.getElementById('admin-users-table-body').innerHTML = html;
             });
 
-            // Support Tickets
-            unsubAdminSupport = db.collection("support_tickets").orderBy('date', 'desc').onSnapshot(snap => {
+            db.collection("support_tickets").orderBy('date','desc').onSnapshot(snap => {
                 let html = '';
-                if(snap.empty) html = '<div class="col-span-full text-center text-gray-500 py-4 font-bold text-sm">لا توجد بلاغات حالياً.</div>';
                 snap.forEach(doc => {
                     const t = doc.data();
-                    const date = t.date ? t.date.toDate().toLocaleDateString('ar-DZ') : '';
-                    html += `
-                    <div class="bg-gray-50 dark:bg-bgDark p-4 rounded-xl border border-gray-100 dark:border-gray-700">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h4 class="font-bold text-primary flex items-center gap-2"><i class="fas fa-user-circle"></i> ${t.name}</h4>
-                                <div class="text-[10px] text-gray-500 mt-1">${date}</div>
-                            </div>
-                            <div class="text-left">
-                                <div class="text-xs font-bold" dir="ltr">${t.phone}</div>
-                                <div class="text-[10px] text-gray-500">${t.email}</div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-cardDark p-3 rounded-lg border border-gray-100 dark:border-gray-800 leading-relaxed break-words">${t.description}</p>
-                    </div>`;
+                    html += `<div class="bg-gray-50 dark:bg-bgDark p-4 rounded-xl border dark:border-gray-700"><b>${t.name}</b> (${t.phone})<br><p class="text-xs mt-2 p-2 bg-white dark:bg-cardDark border rounded break-words">${t.description}</p></div>`;
                 });
-                document.getElementById('admin-support-list').innerHTML = html;
+                document.getElementById('admin-support-list').innerHTML = html || '<div class="col-span-full">لا بلاغات</div>';
             });
         }
 
-        // Admin Edit / Add Product (FIXED: Firebase Storage issue bypassed entirely)
+        // --- COMPRESS & SAVE IMAGE WITHOUT FIREBASE STORAGE ---
         window.submitProduct = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('prod-submit-btn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
-            
+            btn.disabled = true; btn.innerHTML = 'جاري...';
             try {
                 const id = document.getElementById('prod-id').value;
                 const name = document.getElementById('prod-name').value;
                 const price = document.getElementById('prod-price').value;
                 const desc = document.getElementById('prod-desc').value;
                 const fileInput = document.getElementById('prod-image');
+                let imgData = '';
                 
-                let imageUrl = '';
+                // تحويل لـ Base64 مباشر مع الضغط الخفيف حتى لا نعتمد على ال Storage
                 if (fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    // تحويل الصورة لـ Base64 مباشر وتصغيرها لرفعها دون مشاكل Storage
-                    imageUrl = await new Promise((resolve, reject) => {
+                    imgData = await new Promise((resolve) => {
                         const reader = new FileReader();
-                        reader.onload = function(event) {
+                        reader.onload = e => {
                             const img = new Image();
-                            img.onload = function() {
-                                const canvas = document.createElement('canvas');
-                                const MAX_SIZE = 500;
-                                let width = img.width;
-                                let height = img.height;
-                                if (width > height && width > MAX_SIZE) {
-                                    height *= MAX_SIZE / width;
-                                    width = MAX_SIZE;
-                                } else if (height > MAX_SIZE) {
-                                    width *= MAX_SIZE / height;
-                                    height = MAX_SIZE;
-                                }
-                                canvas.width = width;
-                                canvas.height = height;
-                                const ctx = canvas.getContext('2d');
-                                ctx.drawImage(img, 0, 0, width, height);
-                                resolve(canvas.toDataURL('image/jpeg', 0.6));
+                            img.onload = () => {
+                                const cvs = document.createElement('canvas');
+                                let w = img.width, h = img.height, max = 300;
+                                if(w>h && w>max){ h*=max/w; w=max; } else if(h>max){ w*=max/h; h=max; }
+                                cvs.width=w; cvs.height=h;
+                                cvs.getContext('2d').drawImage(img,0,0,w,h);
+                                resolve(cvs.toDataURL('image/jpeg',0.7));
                             };
                             img.onerror = () => resolve('');
-                            img.src = event.target.result;
+                            img.src = e.target.result;
                         };
-                        reader.onerror = () => resolve('');
-                        reader.readAsDataURL(file);
+                        reader.readAsDataURL(fileInput.files[0]);
                     });
                 }
                 
-                const productData = { name, price: Number(price), description: desc, commission: FIXED_COMMISSION };
-                if (imageUrl) productData.image = imageUrl;
+                const data = { name, price: Number(price), description: desc, commission: 500 };
+                if(imgData) data.image = imgData;
                 
-                if (id) {
-                    await db.collection('products').doc(id).update(productData);
-                    Swal.fire('نجاح', 'تم تعديل المنتج بنجاح.', 'success');
-                } else {
-                    if (!imageUrl) productData.image = 'https://via.placeholder.com/150';
-                    productData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-                    await db.collection('products').add(productData);
-                    Swal.fire('نجاح', 'تمت إضافة المنتج بنجاح.', 'success');
+                if (id) { await db.collection('products').doc(id).update(data); } 
+                else { 
+                    if(!imgData) data.image = 'https://via.placeholder.com/150';
+                    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await db.collection('products').add(data); 
                 }
-                
                 document.getElementById('admin-product-form').reset();
                 document.getElementById('prod-id').value = '';
-            } catch(err) {
-                console.error(err);
-                Swal.fire('خطأ', err.message || 'خطأ غير معروف، الرجاء المحاولة مجدداً.', 'error');
-            } finally {
-                btn.innerHTML = 'حفظ المنتج';
-                btn.disabled = false;
-            }
+                Swal.fire('نجاح', 'تم الحفظ', 'success');
+            } catch(err) { Swal.fire('خطأ', err.message, 'error'); } 
+            finally { btn.innerHTML = 'حفظ'; btn.disabled = false; }
         };
 
         window.editProduct = (id) => {
-            const p = adminProductsCache[id];
-            if(!p) return;
+            const p = adminProdsCache[id];
             document.getElementById('prod-id').value = id;
             document.getElementById('prod-name').value = p.name;
             document.getElementById('prod-price').value = p.price;
             document.getElementById('prod-desc').value = p.description || '';
-            document.getElementById('prod-submit-btn').innerHTML = '<i class="fas fa-save"></i> تحديث المنتج';
-            document.getElementById('prod-name').focus();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.deleteProduct = async (id) => {
-            const res = await Swal.fire({title:'تأكيد الحذف', text:'هل أنت متأكد من حذف هذا المنتج نهائياً؟', icon:'warning', showCancelButton:true, confirmButtonText:'نعم، احذف', cancelButtonText:'إلغاء'});
-            if(res.isConfirmed) {
-                try {
-                    await db.collection('products').doc(id).delete();
-                    Swal.fire('نجاح', 'تم الحذف.', 'success');
-                } catch(e) { Swal.fire('خطأ', e.message, 'error'); }
-            }
+            if((await Swal.fire({title:'حذف؟', icon:'warning', showCancelButton:true})).isConfirmed) db.collection('products').doc(id).delete();
         };
 
-        // Admin Ban User
-        window.toggleBanUser = async (id, isBanned) => {
-            const actionText = isBanned ? 'فك الحظر عن' : 'حظر';
-            const res = await Swal.fire({title:'تأكيد', text:`هل تريد فعلاً ${actionText} هذا المستخدم؟`, icon:'warning', showCancelButton:true, confirmButtonText:'نعم', cancelButtonText:'إلغاء'});
-            if(res.isConfirmed) {
-                try {
-                    await db.collection("users").doc(id).update({ isBanned: !isBanned });
-                    Swal.fire('نجاح', 'تم تحديث حالة الحساب.', 'success');
-                } catch(e) { Swal.fire('خطأ', e.message, 'error'); }
-            }
+        window.toggleBanUser = async (id, banned) => {
+            if((await Swal.fire({title:'تأكيد؟', icon:'warning', showCancelButton:true})).isConfirmed) db.collection("users").doc(id).update({ isBanned: !banned });
         };
 
-        window.confirmAdminOrder = async (btn, orderId, affiliateId, commission) => {
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            try {
-                await db.collection("orders").doc(orderId).update({ status: 'confirmed' });
-                await db.collection("users").doc(affiliateId).update({ balance: firebase.firestore.FieldValue.increment(commission) });
-                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `تمت إضافة ${commission} دج لـلمسوق`, showConfirmButton: false, timer: 3000 });
-            } catch(e) { 
-                Swal.fire('خطأ', 'حدث خطأ أثناء التأكيد.', 'error');
-                btn.disabled = false;
-                btn.innerHTML = 'تأكيد ودفع';
-            }
+        window.confirmAdminOrder = async (btn, oId, uId) => {
+            btn.disabled=true; btn.innerText='..';
+            await db.collection("orders").doc(oId).update({ status: 'confirmed' });
+            await db.collection("users").doc(uId).update({ balance: firebase.firestore.FieldValue.increment(500) });
+            Swal.fire({toast:true, position:'top', icon:'success', title:'تم!', showConfirmButton:false, timer:1500});
         };
-
-        window.copyReferralLink = async (link) => {
-            try {
-                await navigator.clipboard.writeText(link);
-                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم نسخ الرابط بنجاح!', showConfirmButton: false, timer: 2000 });
-                if(currentUser) await db.collection("users").doc(currentUser.uid).update({ clicks: firebase.firestore.FieldValue.increment(1) });
-            } catch(e) {}
-        };
-        
-        let userChartInst = null;
-        function renderUserChart() {
-            const ctx = document.getElementById('userChart');
-            if(!ctx || ctx.offsetParent === null) return; 
-            
-            const isDark = document.documentElement.classList.contains('dark');
-            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
-            const textColor = isDark ? '#94a3b8' : '#64748b';
-            
-            if(userChartInst) {
-                userChartInst.options.scales.y.grid.color = gridColor;
-                userChartInst.options.scales.x.grid.color = gridColor;
-                userChartInst.options.scales.y.ticks.color = textColor;
-                userChartInst.options.scales.x.ticks.color = textColor;
-                userChartInst.update();
-                return;
-            }
-
-            userChartInst = new Chart(ctx.getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: ['أسبوع 1', 'أسبوع 2', 'أسبوع 3', 'أسبوع 4'],
-                    datasets: [{ 
-                        label: 'أرباح (دج)', data: [1500, 4000, 3500, 8500], 
-                        borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', 
-                        borderWidth: 3, pointBackgroundColor: '#ffffff', pointBorderColor: '#10b981', pointRadius: 4, fill: true, tension: 0.4 
-                    }]
-                },
-                options: {
-                    responsive: true, 
-                    maintainAspectRatio: false,
-                    animation: false,
-                    plugins: { legend: { display: false } },
-                    scales: { 
-                        y: { grid: { color: gridColor }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } }, 
-                        x: { grid: { display: false }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } } 
-                    }
-                }
-            });
-        }
     </script>
 </body>
 </html>
