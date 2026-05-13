@@ -63,7 +63,7 @@
     </button>
 
     <!-- ==========================================
-         AUTH MODAL (Login / Register / Google)
+         AUTH MODAL
     =========================================== -->
     <div id="auth-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
         <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="auth-modal-content">
@@ -134,7 +134,7 @@
                 </div>
                 
                 <nav class="hidden lg:flex gap-8 font-semibold text-sm">
-                    <a href="#landing-view" class="hover:text-primary transition-colors">الرئيسية</a>
+                    <a href="javascript:void(0)" onclick="window.scrollTo(0,0)" class="hover:text-primary transition-colors">الرئيسية</a>
                     <a href="#how-it-works" class="hover:text-primary transition-colors">كيف يعمل</a>
                     <a href="#features" class="hover:text-primary transition-colors">المميزات</a>
                     <a href="#faq" class="hover:text-primary transition-colors">الأسئلة الشائعة</a>
@@ -184,7 +184,7 @@
                                 <div class="w-1/6 bg-gradient-to-t from-primary/20 to-primary/40 rounded-t-xl h-1/3"></div>
                                 <div class="w-1/6 bg-gradient-to-t from-primary/30 to-primary/50 rounded-t-xl h-1/2"></div>
                                 <div class="w-1/6 bg-gradient-to-t from-primary/40 to-primary/70 rounded-t-xl h-3/4"></div>
-                                <div class="w-1/6 bg-gradient-to-t from-primary to-green-400 rounded-t-xl h-full animate-glow shadow-lg shadow-primary/50 relative">
+                                <div class="w-1/6 bg-gradient-to-t from-primary to-green-400 rounded-t-xl h-full shadow-lg shadow-primary/50 relative">
                                     <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-2 rounded font-bold">+2,500</div>
                                 </div>
                                 <div class="w-1/6 bg-gradient-to-t from-primary/30 to-primary/60 rounded-t-xl h-2/3"></div>
@@ -312,9 +312,9 @@
                 <div>
                     <h4 class="font-bold text-lg mb-4">روابط سريعة</h4>
                     <ul class="space-y-2 text-gray-500 dark:text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-primary">الرئيسية</a></li>
-                        <li><a href="#" class="hover:text-primary">شروط الاستخدام</a></li>
-                        <li><a href="#admin09" class="hover:text-primary border-b border-dashed">دخول الإدارة</a></li>
+                        <li><a href="javascript:void(0)" onclick="window.scrollTo(0,0)" class="hover:text-primary">الرئيسية</a></li>
+                        <li><a href="javascript:void(0)" class="hover:text-primary">شروط الاستخدام</a></li>
+                        <li><a href="javascript:void(0)" onclick="window.navigate('admin-login')" class="hover:text-primary border-b border-dashed">دخول الإدارة</a></li>
                     </ul>
                 </div>
             </div>
@@ -339,17 +339,17 @@
             
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
                 <div class="text-xs text-gray-400 font-bold mb-4 mt-2">القائمة الرئيسية</div>
-                <a href="#" onclick="switchUserTab('home')" class="dash-link active flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-tachometer-alt w-5"></i> لوحة القيادة</a>
-                <a href="#" onclick="switchUserTab('products')" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box-open w-5"></i> المنتجات (الروابط)</a>
-                <a href="#" onclick="switchUserTab('withdraw')" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-hand-holding-usd w-5"></i> سحب الأرباح</a>
+                <!-- Changed href="#" to javascript:void(0) to prevent redirect bugs -->
+                <a href="javascript:void(0)" onclick="switchUserTab('home', event)" class="dash-link active flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-tachometer-alt w-5"></i> لوحة القيادة</a>
+                <a href="javascript:void(0)" onclick="switchUserTab('products', event)" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box-open w-5"></i> المنتجات (الروابط)</a>
+                <a href="javascript:void(0)" onclick="switchUserTab('withdraw', event)" class="dash-link flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-hand-holding-usd w-5"></i> سحب الأرباح</a>
                 
                 <div class="text-xs text-gray-400 font-bold mb-4 mt-8">أخرى</div>
-                <a href="#" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-chart-bar w-5"></i> الإحصائيات (قريباً)</a>
-                <a href="#" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-headset w-5"></i> الدعم الفني</a>
-                <a href="#" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-cog w-5"></i> الإعدادات</a>
+                <a href="javascript:void(0)" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-chart-bar w-5"></i> الإحصائيات (قريباً)</a>
+                <a href="javascript:void(0)" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-headset w-5"></i> الدعم الفني</a>
+                <a href="javascript:void(0)" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-cog w-5"></i> الإعدادات</a>
             </nav>
 
-            <!-- Gamification Level Bar (Restored) -->
             <div class="p-4 border-t border-gray-100 dark:border-gray-800">
                 <div class="bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-xl p-4 text-gray-800 dark:text-white text-center shadow-inner relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-1/3 h-full bg-white/20 skew-x-12"></div>
@@ -489,7 +489,7 @@
                 <input type="password" id="admin-password" placeholder="كلمة المرور: abobob123#" class="w-full bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 outline-none focus:border-gray-900 mb-4 text-center font-bold tracking-widest text-sm" dir="ltr">
                 <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold py-3.5 rounded-xl hover:bg-primary dark:hover:bg-primary transition-all shadow-lg text-sm md:text-base">دخول مشفر</button>
             </form>
-            <button onclick="window.navigate('landing')" class="w-full mt-6 text-xs md:text-sm text-gray-500 hover:text-primary transition-colors">العودة كزائر</button>
+            <button type="button" onclick="window.navigate('landing')" class="w-full mt-6 text-xs md:text-sm text-gray-500 hover:text-primary transition-colors">العودة كزائر</button>
         </div>
     </div>
 
@@ -507,12 +507,12 @@
                 <button onclick="window.toggleAdminSidebar()" class="md:hidden text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
             </div>
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <a href="#" class="flex items-center gap-3 bg-primary/20 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-tachometer-alt w-5"></i> لوحة التحكم الرئيسية</a>
-                <a href="#" class="flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-users w-5"></i> إدارة المسوقين</a>
-                <a href="#" class="flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box w-5"></i> إدارة المنتجات</a>
+                <a href="javascript:void(0)" class="flex items-center gap-3 bg-primary/20 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-tachometer-alt w-5"></i> لوحة التحكم</a>
+                <a href="javascript:void(0)" class="flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-users w-5"></i> إدارة المسوقين</a>
+                <a href="javascript:void(0)" class="flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold transition-all"><i class="fas fa-box w-5"></i> إدارة المنتجات</a>
             </nav>
             <div class="p-4 border-t border-gray-800">
-                <button onclick="window.navigate('landing')" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3 rounded-xl transition-all font-bold text-sm">
+                <button type="button" onclick="window.navigate('landing')" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3 rounded-xl transition-all font-bold text-sm">
                     <i class="fas fa-sign-out-alt"></i> إغلاق لوحة الإدارة
                 </button>
             </div>
@@ -524,7 +524,7 @@
                     <button onclick="window.toggleAdminSidebar()" class="md:hidden w-10 h-10 rounded-xl bg-gray-50 dark:bg-bgDark text-gray-800 dark:text-white flex justify-center items-center"><i class="fas fa-bars"></i></button>
                     <h1 class="text-lg md:text-xl font-black flex items-center gap-2"><i class="fas fa-chart-pie text-gray-400"></i> نظرة عامة حية</h1>
                 </div>
-                <span class="bg-green-100 text-green-700 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold border border-green-200 animate-pulse"><i class="fas fa-wifi"></i> متصل بـ Firebase</span>
+                <span class="bg-green-100 text-green-700 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold border border-green-200"><i class="fas fa-wifi"></i> متصل بـ Firebase</span>
             </header>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
@@ -547,8 +547,7 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8">
-                
-                <!-- CSV UPLOAD (Restored) -->
+                <!-- CSV UPLOAD -->
                 <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
                     <h3 class="font-black text-lg mb-2 flex items-center gap-2"><i class="fas fa-file-excel text-green-600"></i> رفع منتجات عبر ملف CSV</h3>
                     <p class="text-sm text-gray-500 mb-6">الصيغة المطلوبة: <code>الاسم,السعر,العمولة,رابط_الصورة</code></p>
@@ -556,7 +555,7 @@
                     <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl p-8 text-center hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
                         <i class="fas fa-cloud-upload-alt text-5xl text-gray-400 mb-4"></i>
                         <input type="file" id="csv-file" accept=".csv" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all cursor-pointer mx-auto mb-4">
-                        <button onclick="window.importCSV()" class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:scale-105">رفع وحفظ في Firebase</button>
+                        <button type="button" onclick="window.importCSV()" class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:scale-105">رفع وحفظ في Firebase</button>
                     </div>
                 </div>
 
@@ -584,7 +583,7 @@
     </div>
 
     <!-- ==========================================
-         JAVASCRIPT & FIREBASE LOGIC (The Real Fonctionnement)
+         JAVASCRIPT & FIREBASE LOGIC
     =========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -608,6 +607,7 @@
 
         let currentUser = null;
         let isSignupMode = false;
+        let isAuthReady = false; // To fix the premature logout bug
 
         // UI HELPERS
         window.toggleTheme = () => {
@@ -628,25 +628,43 @@
             document.getElementById('mobile-admin-overlay').classList.toggle('hidden');
         };
 
-        // Routing SPA
-        const views = ['landing-view', 'user-dashboard-view', 'admin-login-view', 'admin-dashboard-view'];
+        // Routing SPA with Auth Guard Fix
         window.navigate = (target) => {
             views.forEach(v => document.getElementById(v).classList.remove('active'));
             document.getElementById(target + '-view').classList.add('active');
-            window.location.hash = target;
-            if(target === 'user-dashboard') { renderUserChart(); loadUserDashboardData(); }
-            if(target === 'admin-dashboard') { loadAdminDashboardData(); }
+            
+            // Do not force hash change if it's not necessary, to prevent loops
+            if(window.location.hash !== '#' + target) {
+                history.replaceState(null, null, '#' + target);
+            }
+            
+            if(target === 'user-dashboard') { 
+                renderUserChart(); 
+                loadUserDashboardData(); 
+            }
+            if(target === 'admin-dashboard') { 
+                loadAdminDashboardData(); 
+            }
         };
 
-        window.addEventListener('hashchange', () => {
+        function handleRouting() {
+            if(!isAuthReady) return; // Don't route until Firebase tells us if user is logged in or not
+            
             const hash = window.location.hash;
-            if (hash === '#admin09') window.navigate('admin-login');
-            else if (hash === '#user-dashboard' && currentUser) window.navigate('user-dashboard');
+            if (hash === '#admin-login') window.navigate('admin-login');
             else if (hash === '#admin-dashboard') window.navigate('admin-dashboard');
-            else window.navigate('landing');
-        });
+            else if (currentUser && (hash === '#user-dashboard' || hash === '' || hash === '#')) {
+                window.navigate('user-dashboard');
+            } else if (!currentUser && hash === '#user-dashboard') {
+                window.navigate('landing');
+            } else if (hash === '#landing' || hash === '' || hash === '#') {
+                window.navigate('landing');
+            }
+        }
 
-        // AUTH LOGIC (Real Firebase Auth)
+        window.addEventListener('hashchange', handleRouting);
+
+        // AUTH LOGIC
         window.openAuthModal = (signup) => {
             isSignupMode = signup;
             document.getElementById('auth-modal').style.display = 'flex';
@@ -678,21 +696,17 @@
                     const phone = document.getElementById('auth-phone').value;
                     if(!name) return Swal.fire('تنبيه', 'يرجى إدخال الاسم الكامل', 'warning');
 
-                    // Register with Firebase
                     const cred = await createUserWithEmailAndPassword(auth, email, password);
-                    // Create Profile in Firestore
                     await setDoc(doc(db, "users", cred.user.uid), { 
                         name: name, email: email, phone: phone, balance: 0, clicks: 0, role: 'affiliate', createdAt: serverTimestamp() 
                     });
                     Swal.fire({icon: 'success', title: 'تم إنشاء الحساب بنجاح!', showConfirmButton: false, timer: 1500});
                 } else {
-                    // Login with Firebase
                     await signInWithEmailAndPassword(auth, email, password);
                     Swal.fire({icon: 'success', title: 'تم تسجيل الدخول', showConfirmButton: false, timer: 1500});
                 }
                 window.closeAuthModal();
             } catch (error) {
-                // Better Error Handling for Users
                 let msg = error.message;
                 if(error.code === 'auth/email-already-in-use') msg = "هذا البريد الإلكتروني مسجل مسبقاً.";
                 if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
@@ -705,7 +719,6 @@
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
-                // Check if user exists in Firestore
                 const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
                 if (!docSnap.exists()) {
@@ -720,27 +733,24 @@
                 window.closeAuthModal();
             } catch (error) {
                 let msg = error.message;
-                if(error.code === 'auth/unauthorized-domain') msg = "هذا النطاق (أو الرابط الحالي) غير مسموح به في إعدادات Firebase. يجب إضافته في لوحة التحكم (Authorized Domains).";
+                if(error.code === 'auth/unauthorized-domain') msg = "هذا النطاق غير مسموح به في إعدادات Firebase.";
                 Swal.fire('خطأ جوجل', msg, 'error');
             }
         };
 
+        // Initialize App State
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                if(window.location.hash !== '#admin-dashboard') {
-                    window.navigate('user-dashboard');
-                }
-            } else {
-                currentUser = null;
-                if(window.location.hash === '#user-dashboard') window.navigate('landing');
-            }
+            currentUser = user;
+            isAuthReady = true;
+            handleRouting();
         });
 
         window.logoutUser = async () => { await signOut(auth); window.navigate('landing'); };
 
-        // USER DASHBOARD REALTIME DATA
-        window.switchUserTab = (tabId) => {
+        // USER DASHBOARD LOGIC
+        window.switchUserTab = (tabId, event) => {
+            if(event) event.preventDefault(); // Stop any # link jumping behavior completely
+            
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
             
@@ -750,102 +760,107 @@
             });
             event.currentTarget.classList.add('bg-primary/10', 'text-primary');
             event.currentTarget.classList.remove('hover:bg-gray-50', 'dark:hover:bg-bgDark', 'text-gray-600', 'dark:text-gray-300');
+            
             if(window.innerWidth < 768) window.toggleUserSidebar();
             if(tabId === 'home') renderUserChart();
         };
 
+        let unsubUser = null;
+        let unsubOrders = null;
+        let unsubProducts = null;
+
         function loadUserDashboardData() {
             if(!currentUser) return;
             
-            // 1. Listen to Profile Data
-            onSnapshot(doc(db, "users", currentUser.uid), (docSnap) => {
-                if(docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('dash-name').innerText = data.name || 'مسوق';
-                    document.getElementById('dash-email').innerText = data.email;
-                    document.getElementById('dash-avatar').innerText = (data.name || 'م').charAt(0);
-                    document.getElementById('user-balance').innerText = data.balance || 0;
-                    document.getElementById('withdraw-available-balance').innerText = (data.balance || 0) + ' دج';
-                    document.getElementById('user-total').innerText = data.balance || 0;
-                    document.getElementById('user-clicks').innerText = data.clicks || 0;
-                }
-            });
+            // Clean up previous listeners if any
+            if(unsubUser) unsubUser();
+            if(unsubOrders) unsubOrders();
+            if(unsubProducts) unsubProducts();
 
-            // 2. Listen to Orders
-            const q = query(collection(db, "orders"), where("affiliateId", "==", currentUser.uid));
-            onSnapshot(q, (snapshot) => {
-                let pendingSum = 0; let confirmedCount = 0; let ordersHtml = '';
-                snapshot.forEach((docSnap) => {
-                    const order = docSnap.data();
-                    if(order.status === 'pending') pendingSum += Number(order.commission);
-                    if(order.status === 'confirmed') confirmedCount++;
-
-                    let statusUI = order.status === 'pending' 
-                        ? `<div class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-1 rounded-md mt-1 inline-block"><i class="fas fa-clock"></i> بانتظار التأكيد</div>`
-                        : `<div class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-md mt-1 inline-block"><i class="fas fa-check"></i> تم الدفع</div>`;
-
-                    ordersHtml += `
-                        <div class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-bgDark rounded-xl border border-gray-100 dark:border-gray-800 transition-colors">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400"><i class="fas fa-box"></i></div>
-                                <div><div class="font-bold text-xs md:text-sm">${order.productName}</div>${statusUI}</div>
-                            </div>
-                            <div class="font-black text-xs md:text-sm ${order.status === 'pending' ? 'text-yellow-500' : 'text-primary'}">+${order.commission} دج</div>
-                        </div>
-                    `;
+            try {
+                unsubUser = onSnapshot(doc(db, "users", currentUser.uid), (docSnap) => {
+                    if(docSnap.exists()) {
+                        const data = docSnap.data();
+                        document.getElementById('dash-name').innerText = data.name || 'مسوق';
+                        document.getElementById('dash-email').innerText = data.email;
+                        document.getElementById('dash-avatar').innerText = (data.name || 'م').charAt(0);
+                        document.getElementById('user-balance').innerText = data.balance || 0;
+                        document.getElementById('withdraw-available-balance').innerText = (data.balance || 0) + ' دج';
+                        document.getElementById('user-total').innerText = data.balance || 0;
+                        document.getElementById('user-clicks').innerText = data.clicks || 0;
+                    }
                 });
-                document.getElementById('user-pending').innerText = pendingSum;
-                document.getElementById('user-orders-count').innerText = confirmedCount;
-                document.getElementById('user-orders-list').innerHTML = ordersHtml || '<p class="text-xs text-gray-500 text-center p-4">لم تقم بأي مبيعات بعد.</p>';
-            });
 
-            // 3. Listen to Products
-            onSnapshot(collection(db, "products"), (snapshot) => {
-                let productsHtml = '';
-                snapshot.forEach((pDoc) => {
-                    const p = pDoc.data();
-                    const refLink = `https://tirourda.store/product/${pDoc.id}?ref=${currentUser.uid}`;
-                    productsHtml += `
-                        <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-3 md:p-4 hover:shadow-xl transition-all group bg-white dark:bg-cardDark flex flex-col h-full">
-                            <img src="${p.image || 'https://via.placeholder.com/150'}" class="w-full h-32 md:h-40 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform origin-bottom">
-                            <h4 class="font-black text-sm md:text-base mb-2 flex-1">${p.name}</h4>
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-[10px] md:text-xs text-gray-500 font-bold line-through">السعر: ${p.price}</span>
-                                <span class="text-xs md:text-sm font-black text-primary bg-primary/10 px-2 py-1 rounded-lg">العمولة: ${p.commission} دج</span>
+                const q = query(collection(db, "orders"), where("affiliateId", "==", currentUser.uid));
+                unsubOrders = onSnapshot(q, (snapshot) => {
+                    let pendingSum = 0; let confirmedCount = 0; let ordersHtml = '';
+                    snapshot.forEach((docSnap) => {
+                        const order = docSnap.data();
+                        if(order.status === 'pending') pendingSum += Number(order.commission);
+                        if(order.status === 'confirmed') confirmedCount++;
+
+                        let statusUI = order.status === 'pending' 
+                            ? `<div class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-1 rounded-md mt-1 inline-block"><i class="fas fa-clock"></i> بانتظار التأكيد</div>`
+                            : `<div class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-md mt-1 inline-block"><i class="fas fa-check"></i> تم الدفع</div>`;
+
+                        ordersHtml += `
+                            <div class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-bgDark rounded-xl border border-gray-100 dark:border-gray-800 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400"><i class="fas fa-box"></i></div>
+                                    <div><div class="font-bold text-xs md:text-sm">${order.productName}</div>${statusUI}</div>
+                                </div>
+                                <div class="font-black text-xs md:text-sm ${order.status === 'pending' ? 'text-yellow-500' : 'text-primary'}">+${order.commission} دج</div>
                             </div>
-                            <button onclick="window.copyReferralLink('${refLink}')" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-primary dark:hover:bg-primary text-xs md:text-sm font-bold py-2 md:py-2.5 rounded-xl transition-colors mb-2 shadow-md">
-                                <i class="fas fa-copy"></i> نسخ الرابط
-                            </button>
-                            <button onclick="window.testSimulateOrder('${pDoc.id}', '${p.name}', ${p.commission})" class="w-full text-[10px] md:text-xs text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-500 py-1.5 rounded-lg transition-colors border-dashed mt-2">
-                                <i class="fas fa-vial"></i> تسجيل طلب تجريبي لك
-                            </button>
-                        </div>
-                    `;
+                        `;
+                    });
+                    document.getElementById('user-pending').innerText = pendingSum;
+                    document.getElementById('user-orders-count').innerText = confirmedCount;
+                    document.getElementById('user-orders-list').innerHTML = ordersHtml || '<p class="text-xs text-gray-500 text-center p-4">لم تقم بأي مبيعات بعد.</p>';
                 });
-                
-                // إضافة منتجات افتراضية للتجربة في حال كانت القاعدة فارغة
-                if(snapshot.empty) {
-                    productsHtml = `
-                        <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-4 bg-white dark:bg-cardDark">
-                            <h4 class="font-black text-base mb-2">عسل سدر طبيعي (مثال)</h4>
-                            <span class="text-sm font-black text-primary bg-primary/10 px-2 py-1 rounded-lg mb-4 inline-block">العمولة: 1000 دج</span>
-                            <button onclick="window.testSimulateOrder('test_id', 'عسل سدر طبيعي', 1000)" class="w-full text-xs text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-500 py-1.5 rounded-lg transition-colors border-dashed">
-                                تسجيل طلب تجريبي 
-                            </button>
-                        </div>
-                    `;
-                }
 
-                document.getElementById('affiliate-products-list').innerHTML = productsHtml;
-            });
+                unsubProducts = onSnapshot(collection(db, "products"), (snapshot) => {
+                    let productsHtml = '';
+                    snapshot.forEach((pDoc) => {
+                        const p = pDoc.data();
+                        const refLink = `https://tirourda.store/product/${pDoc.id}?ref=${currentUser.uid}`;
+                        productsHtml += `
+                            <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-3 md:p-4 hover:shadow-xl transition-all group bg-white dark:bg-cardDark flex flex-col h-full">
+                                <img src="${p.image || 'https://via.placeholder.com/150'}" class="w-full h-32 md:h-40 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform origin-bottom">
+                                <h4 class="font-black text-sm md:text-base mb-2 flex-1">${p.name}</h4>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-[10px] md:text-xs text-gray-500 font-bold line-through">السعر: ${p.price}</span>
+                                    <span class="text-xs md:text-sm font-black text-primary bg-primary/10 px-2 py-1 rounded-lg">العمولة: ${p.commission} دج</span>
+                                </div>
+                                <button type="button" onclick="window.copyReferralLink('${refLink}')" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-primary dark:hover:bg-primary text-xs md:text-sm font-bold py-2 md:py-2.5 rounded-xl transition-colors mb-2 shadow-md">
+                                    <i class="fas fa-copy"></i> نسخ الرابط
+                                </button>
+                                <button type="button" onclick="window.testSimulateOrder('${pDoc.id}', '${p.name}', ${p.commission})" class="w-full text-[10px] md:text-xs text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-500 py-1.5 rounded-lg transition-colors border-dashed mt-2">
+                                    <i class="fas fa-vial"></i> تسجيل طلب تجريبي
+                                </button>
+                            </div>
+                        `;
+                    });
+                    
+                    if(snapshot.empty) {
+                        productsHtml = `
+                            <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-4 bg-white dark:bg-cardDark">
+                                <h4 class="font-black text-base mb-2">عسل سدر طبيعي (للتجربة)</h4>
+                                <span class="text-sm font-black text-primary bg-primary/10 px-2 py-1 rounded-lg mb-4 inline-block">العمولة: 1000 دج</span>
+                                <button type="button" onclick="window.testSimulateOrder('test_id', 'عسل سدر طبيعي', 1000)" class="w-full text-xs text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-500 py-1.5 rounded-lg transition-colors border-dashed">
+                                    تسجيل طلب تجريبي 
+                                </button>
+                            </div>
+                        `;
+                    }
+                    document.getElementById('affiliate-products-list').innerHTML = productsHtml;
+                });
+            } catch (err) { console.error("Firebase Rule Error or Network Error: ", err); }
         }
 
         window.copyReferralLink = async (link) => {
             navigator.clipboard.writeText(link);
             Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم نسخ الرابط! أي مبيعة عبره ستسجل لك.', showConfirmButton: false, timer: 2000 });
-            try {
-                await updateDoc(doc(db, "users", currentUser.uid), { clicks: increment(1) });
-            } catch(e) { console.error("Error updating clicks:", e); }
+            try { await updateDoc(doc(db, "users", currentUser.uid), { clicks: increment(1) }); } catch(e) { }
         };
 
         window.testSimulateOrder = async (productId, productName, commission) => {
@@ -853,13 +868,11 @@
                 await addDoc(collection(db, "orders"), {
                     productId, productName, affiliateId: currentUser.uid, commission: Number(commission), status: 'pending', date: serverTimestamp()
                 });
-                Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'تم تسجيل طلبية! اذهب للوحة القيادة لترى رصيد قيد الانتظار.', showConfirmButton: false, timer: 3000 });
-            } catch(e) {
-                Swal.fire('خطأ', e.message, 'error');
-            }
+                Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'تم تسجيل طلبية! اذهب للوحة القيادة لترى الرصيد.', showConfirmButton: false, timer: 3000 });
+            } catch(e) { Swal.fire('خطأ', e.message, 'error'); }
         };
 
-        // ADMIN LOGIC (Real Firebase connection)
+        // ADMIN LOGIC
         window.handleAdminLogin = (e) => {
             e.preventDefault();
             if (document.getElementById('admin-password').value === 'abobob123#') {
@@ -869,53 +882,56 @@
             }
         };
 
-        function loadAdminDashboardData() {
-            // Listen to All Orders
-            onSnapshot(collection(db, "orders"), (snapshot) => {
-                let pendingCount = 0; let totalPaid = 0; let ordersHtml = '';
-                snapshot.forEach((docSnap) => {
-                    const order = docSnap.data();
-                    if(order.status === 'confirmed') totalPaid += Number(order.commission);
-                    else if(order.status === 'pending') {
-                        pendingCount++;
-                        ordersHtml += `
-                            <tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
-                                <td class="p-2 md:p-3">
-                                    <div class="text-[10px] text-gray-400">#${docSnap.id.slice(0,6)}</div>
-                                    <div class="font-bold text-[10px]" dir="ltr">${order.affiliateId.slice(0,6)}...</div>
-                                </td>
-                                <td class="p-2 md:p-3 font-bold text-xs md:text-sm">${order.productName}</td>
-                                <td class="p-2 md:p-3 text-primary font-black text-xs md:text-sm">${order.commission} دج</td>
-                                <td class="p-2 md:p-3 text-center">
-                                    <button onclick="window.confirmAdminOrder('${docSnap.id}', '${order.affiliateId}', ${order.commission})" class="bg-primary hover:bg-primaryDark text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-md transform hover:scale-105 transition-all">
-                                        <i class="fas fa-check"></i> دفع
-                                    </button>
-                                </td>
-                            </tr>
-                        `;
-                    }
-                });
-                document.getElementById('admin-pending-count').innerText = pendingCount;
-                document.getElementById('admin-total-paid').innerText = totalPaid + ' دج';
-                document.getElementById('admin-orders-list').innerHTML = ordersHtml || '<tr><td colspan="4" class="text-center p-6 text-gray-500 font-bold text-xs">لا توجد طلبات معلقة</td></tr>';
-            });
+        let unsubAdminOrders, unsubAdminProds, unsubAdminUsers;
 
-            onSnapshot(collection(db, "products"), (snap) => document.getElementById('admin-products-count').innerText = snap.size);
-            onSnapshot(collection(db, "users"), (snap) => document.getElementById('admin-users-count').innerText = snap.size);
+        function loadAdminDashboardData() {
+            if(unsubAdminOrders) unsubAdminOrders();
+            if(unsubAdminProds) unsubAdminProds();
+            if(unsubAdminUsers) unsubAdminUsers();
+
+            try {
+                unsubAdminOrders = onSnapshot(collection(db, "orders"), (snapshot) => {
+                    let pendingCount = 0; let totalPaid = 0; let ordersHtml = '';
+                    snapshot.forEach((docSnap) => {
+                        const order = docSnap.data();
+                        if(order.status === 'confirmed') totalPaid += Number(order.commission);
+                        else if(order.status === 'pending') {
+                            pendingCount++;
+                            ordersHtml += `
+                                <tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
+                                    <td class="p-2 md:p-3">
+                                        <div class="text-[10px] text-gray-400">#${docSnap.id.slice(0,6)}</div>
+                                        <div class="font-bold text-[10px]" dir="ltr">${order.affiliateId.slice(0,6)}...</div>
+                                    </td>
+                                    <td class="p-2 md:p-3 font-bold text-xs md:text-sm">${order.productName}</td>
+                                    <td class="p-2 md:p-3 text-primary font-black text-xs md:text-sm">${order.commission} دج</td>
+                                    <td class="p-2 md:p-3 text-center">
+                                        <button type="button" onclick="window.confirmAdminOrder('${docSnap.id}', '${order.affiliateId}', ${order.commission})" class="bg-primary hover:bg-primaryDark text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-md transform hover:scale-105 transition-all">
+                                            <i class="fas fa-check"></i> دفع
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    });
+                    document.getElementById('admin-pending-count').innerText = pendingCount;
+                    document.getElementById('admin-total-paid').innerText = totalPaid + ' دج';
+                    document.getElementById('admin-orders-list').innerHTML = ordersHtml || '<tr><td colspan="4" class="text-center p-6 text-gray-500 font-bold text-xs">لا توجد طلبات معلقة</td></tr>';
+                });
+
+                unsubAdminProds = onSnapshot(collection(db, "products"), (snap) => document.getElementById('admin-products-count').innerText = snap.size);
+                unsubAdminUsers = onSnapshot(collection(db, "users"), (snap) => document.getElementById('admin-users-count').innerText = snap.size);
+            } catch (err) { console.log(err); }
         }
 
         window.confirmAdminOrder = async (orderId, affiliateId, commission) => {
             try {
-                // Update Order Status
                 await updateDoc(doc(db, "orders", orderId), { status: 'confirmed' });
-                // Add Money to User Balance
                 await updateDoc(doc(db, "users", affiliateId), { balance: increment(commission) });
-                
                 Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم تأكيد الطلب، رصيد المسوق ارتفع الآن!', showConfirmButton: false, timer: 2000 });
             } catch(e) { Swal.fire('خطأ', e.message, 'error'); }
         };
 
-        // CSV UPLOAD LOGIC RESTORED
         window.importCSV = () => {
             const fileInput = document.getElementById('csv-file');
             if(!fileInput.files.length) return Swal.fire('تنبيه', 'الرجاء اختيار ملف CSV أولاً', 'warning');
@@ -924,15 +940,13 @@
             reader.onload = async (e) => {
                 const lines = e.target.result.split('\n');
                 let count = 0;
-                for(let i=1; i<lines.length; i++) { // Skip header
+                for(let i=1; i<lines.length; i++) {
                     if(!lines[i].trim()) continue;
                     const cols = lines[i].split(',');
                     if(cols.length >= 3) {
                         try {
                             await addDoc(collection(db, "products"), {
-                                name: cols[0].trim(), 
-                                price: Number(cols[1].trim()), 
-                                commission: Number(cols[2].trim()),
+                                name: cols[0].trim(), price: Number(cols[1].trim()), commission: Number(cols[2].trim()),
                                 image: cols[3] ? cols[3].trim() : 'https://images.unsplash.com/photo-1611078489935-0cb964de46d6?auto=format&fit=crop&w=300&q=80',
                                 createdAt: serverTimestamp()
                             });
@@ -946,16 +960,26 @@
             reader.readAsText(fileInput.files[0]);
         };
 
-        // CHART VISUALS
+        // FIXED CHART (No excessive animations)
         let userChartInst = null;
         function renderUserChart() {
             const ctx = document.getElementById('userChart');
             if(!ctx || ctx.offsetParent === null) return;
+            
             const isDark = document.documentElement.classList.contains('dark');
             const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
             const textColor = isDark ? '#94a3b8' : '#64748b';
             
-            if(userChartInst) userChartInst.destroy();
+            if(userChartInst) {
+                // Just update colors if already exists, don't recreate completely
+                userChartInst.options.scales.y.grid.color = gridColor;
+                userChartInst.options.scales.x.grid.color = gridColor;
+                userChartInst.options.scales.y.ticks.color = textColor;
+                userChartInst.options.scales.x.ticks.color = textColor;
+                userChartInst.update();
+                return;
+            }
+
             userChartInst = new Chart(ctx.getContext('2d'), {
                 type: 'line',
                 data: {
@@ -967,9 +991,14 @@
                     }]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false,
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    animation: false, // THIS STOPS THE CHART FROM MOVING/ANIMATING CONSTANTLY
                     plugins: { legend: { display: false } },
-                    scales: { y: { grid: { color: gridColor }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } }, x: { grid: { display: false }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } } }
+                    scales: { 
+                        y: { grid: { color: gridColor }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } }, 
+                        x: { grid: { display: false }, ticks: { color: textColor, font:{family:'Cairo', size: 10} } } 
+                    }
                 }
             });
         }
