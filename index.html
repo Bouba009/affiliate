@@ -127,34 +127,7 @@
         </div>
     </div>
 
-    <!-- NEW ORDER MODAL -->
-    <div id="order-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4 w-full h-full">
-        <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="order-modal-content">
-            <button onclick="window.closeOrderModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-xl"></i></button>
-            <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-blue-100 text-blue-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4"><i class="fas fa-shopping-cart"></i></div>
-                <h2 class="text-xl font-black">تسجيل طلبية للزبون</h2>
-                <p class="text-gray-500 text-xs mt-1" id="order-product-name">اسم المنتج</p>
-                <div class="mt-2 inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold">العمولة: 500 دج</div>
-            </div>
-            <form id="order-form" onsubmit="window.submitCustomerOrder(event)">
-                <input type="hidden" id="order-product-id">
-                <div class="space-y-4 mb-6">
-                    <div><input type="text" id="order-customer-name" placeholder="اسم الزبون الكامل" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required></div>
-                    <div><input type="tel" id="order-customer-phone" placeholder="رقم الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 text-right" dir="ltr" required></div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><input type="text" id="order-customer-state" placeholder="الولاية" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" required></div>
-                        <div><input type="number" id="order-qty" value="1" min="1" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 text-center" required></div>
-                    </div>
-                </div>
-                <button type="submit" id="order-submit-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
-                    <span id="order-btn-text">تأكيد وتسجيل الطلب</span>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- NEW: PRODUCT LANDING PAGE VIEW (للزبائن عند الضغط على رابط المسوق) -->
+    <!-- PRODUCT LANDING PAGE VIEW (للزبائن عند الضغط على رابط المسوق) -->
     <div id="product-landing-view" class="view min-h-screen bg-bgLight dark:bg-bgDark w-full relative">
         <header class="bg-white dark:bg-cardDark shadow-sm py-4 border-b border-gray-100 dark:border-gray-800">
             <div class="container mx-auto px-4 flex items-center justify-center gap-3 text-2xl font-black">
@@ -165,7 +138,6 @@
 
         <div class="container mx-auto px-4 py-8 lg:py-16">
             <div class="bg-white dark:bg-cardDark rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col lg:flex-row max-w-6xl mx-auto">
-                <!-- Product Image & Details -->
                 <div class="lg:w-1/2 relative bg-gray-50 dark:bg-bgDark border-b lg:border-b-0 lg:border-l border-gray-100 dark:border-gray-800">
                     <img id="lp-image" src="" alt="Product" class="w-full h-80 lg:h-full object-cover">
                     <div class="absolute top-4 right-4 bg-primary text-white font-black px-4 py-2 rounded-xl shadow-lg animate-pulse-slow">
@@ -173,7 +145,6 @@
                     </div>
                 </div>
 
-                <!-- Order Form & Info -->
                 <div class="lg:w-1/2 p-6 lg:p-12 flex flex-col justify-center">
                     <h1 id="lp-name" class="text-3xl lg:text-4xl font-black mb-4 text-gray-900 dark:text-white">جاري التحميل...</h1>
                     <div class="text-3xl font-black text-primary mb-6" id="lp-price">0 دج</div>
@@ -213,7 +184,6 @@
 
     <!-- 1. LANDING PAGE VIEW -->
     <div id="landing-view" class="view active relative w-full h-full">
-        <!-- الخفيات والتأثيرات -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10 w-full h-full">
             <svg class="absolute top-[5vh] left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
                 <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320Z"></path>
@@ -261,56 +231,29 @@
         <section class="py-12 border-y border-gray-100 dark:border-gray-800 bg-white dark:bg-cardDark">
             <div class="container mx-auto px-6">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                    <div>
-                        <h3 class="text-3xl md:text-4xl font-black text-primary mb-2">150<span class="text-gray-800 dark:text-gray-100">+</span></h3>
-                        <p class="text-gray-500 font-bold text-sm">مسوق نشط</p>
-                    </div>
-                    <div>
-                        <h3 class="text-3xl md:text-4xl font-black text-primary mb-2">500K<span class="text-gray-800 dark:text-gray-100">+</span></h3>
-                        <p class="text-gray-500 font-bold text-sm">دج مدفوعة</p>
-                    </div>
-                    <div>
-                        <h3 class="text-3xl md:text-4xl font-black text-primary mb-2">1,200<span class="text-gray-800 dark:text-gray-100">+</span></h3>
-                        <p class="text-gray-500 font-bold text-sm">طلب ناجح</p>
-                    </div>
-                    <div>
-                        <h3 class="text-3xl md:text-4xl font-black text-primary mb-2">45<span class="text-gray-800 dark:text-gray-100">+</span></h3>
-                        <p class="text-gray-500 font-bold text-sm">منتج مميز</p>
-                    </div>
+                    <div><h3 class="text-3xl md:text-4xl font-black text-primary mb-2">150<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm">مسوق نشط</p></div>
+                    <div><h3 class="text-3xl md:text-4xl font-black text-primary mb-2">500K<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm">دج مدفوعة</p></div>
+                    <div><h3 class="text-3xl md:text-4xl font-black text-primary mb-2">1,200<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm">طلب ناجح</p></div>
+                    <div><h3 class="text-3xl md:text-4xl font-black text-primary mb-2">45<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm">منتج مميز</p></div>
                 </div>
             </div>
         </section>
 
         <section class="py-16 bg-gray-50 dark:bg-bgDark relative overflow-hidden">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-black mb-4">كيف تبدأ <span class="text-primary">الربح؟</span></h2>
-                    <p class="text-gray-500 max-w-2xl mx-auto">خطوات بسيطة ومضمونة لتحقيق أولى أرباحك معنا</p>
-                </div>
-                
+                <div class="text-center mb-16"><h2 class="text-3xl font-black mb-4">كيف تبدأ <span class="text-primary">الربح؟</span></h2><p class="text-gray-500 max-w-2xl mx-auto">خطوات بسيطة ومضمونة لتحقيق أولى أرباحك معنا</p></div>
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative text-center">
                     <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative z-10 hover:-translate-y-2 transition-transform">
-                        <div class="w-16 h-16 mx-auto bg-primary/10 text-primary flex items-center justify-center rounded-full text-2xl font-black mb-6"><i class="fas fa-user-plus"></i></div>
-                        <h3 class="font-black text-lg mb-3">1. إنشاء حساب</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">سجل حسابك كمسوق مجاناً في ثوانٍ وادخل مباشرة إلى لوحة التحكم الخاصة بك.</p>
+                        <div class="w-16 h-16 mx-auto bg-primary/10 text-primary flex items-center justify-center rounded-full text-2xl font-black mb-6"><i class="fas fa-user-plus"></i></div><h3 class="font-black text-lg mb-3">1. إنشاء حساب</h3><p class="text-gray-500 text-sm leading-relaxed">سجل حسابك كمسوق مجاناً في ثوانٍ وادخل مباشرة إلى لوحة التحكم الخاصة بك.</p>
                     </div>
-                    
                     <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative z-10 hover:-translate-y-2 transition-transform">
-                        <div class="w-16 h-16 mx-auto bg-primary/10 text-primary flex items-center justify-center rounded-full text-2xl font-black mb-6"><i class="fas fa-bullhorn"></i></div>
-                        <h3 class="font-black text-lg mb-3">2. الترويج للمنتجات</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">في قسم المنتجات ستحصل على رابطك الخاص لكل منتج، انسخه وشاركه مع جمهورك. الرابط يوجه لصفحة هبوط احترافية (Landing Page) تتضمن اسم المنتج، وصفه، سعره، واستمارة الطلب.</p>
+                        <div class="w-16 h-16 mx-auto bg-primary/10 text-primary flex items-center justify-center rounded-full text-2xl font-black mb-6"><i class="fas fa-bullhorn"></i></div><h3 class="font-black text-lg mb-3">2. الترويج للمنتجات</h3><p class="text-gray-500 text-sm leading-relaxed">في قسم المنتجات ستحصل على رابطك الخاص لكل منتج، انسخه وشاركه مع جمهورك. الرابط يوجه لصفحة هبوط احترافية تتضمن اسم المنتج، وصفه، سعره، واستمارة الطلب.</p>
                     </div>
-                    
                     <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative z-10 hover:-translate-y-2 transition-transform">
-                        <div class="w-16 h-16 mx-auto bg-primary/10 text-primary flex items-center justify-center rounded-full text-2xl font-black mb-6"><i class="fas fa-chart-line"></i></div>
-                        <h3 class="font-black text-lg mb-3">3. تتبع الإحصائيات</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">ستظهر لك في الإحصائيات عدد النقرات الدقيقة على روابطك، وإذا تمت تسجيل طلبية.</p>
+                        <div class="w-16 h-16 mx-auto bg-primary/10 text-primary flex items-center justify-center rounded-full text-2xl font-black mb-6"><i class="fas fa-chart-line"></i></div><h3 class="font-black text-lg mb-3">3. تتبع الإحصائيات</h3><p class="text-gray-500 text-sm leading-relaxed">ستظهر لك في الإحصائيات عدد النقرات الدقيقة على روابطك، وإذا تمت تسجيل طلبية.</p>
                     </div>
-                    
                     <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative z-10 hover:-translate-y-2 transition-transform">
-                        <div class="w-16 h-16 mx-auto bg-primary/10 text-primary flex items-center justify-center rounded-full text-2xl font-black mb-6"><i class="fas fa-money-bill-wave"></i></div>
-                        <h3 class="font-black text-lg mb-3">4. استلام الأرباح</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">بمجرد التسجيل، تصل الطلبية للإدارة، وتقوم بتأكيدها. وبمجرد استلام الزبون، يتم احتساب الأموال فوراً في رصيدك.</p>
+                        <div class="w-16 h-16 mx-auto bg-primary/10 text-primary flex items-center justify-center rounded-full text-2xl font-black mb-6"><i class="fas fa-money-bill-wave"></i></div><h3 class="font-black text-lg mb-3">4. استلام الأرباح</h3><p class="text-gray-500 text-sm leading-relaxed">بمجرد التسجيل، تصل الطلبية للإدارة، وتقوم بتأكيدها. وبمجرد استلام الزبون، يتم احتساب الأموال فوراً في رصيدك.</p>
                     </div>
                 </div>
             </div>
@@ -322,34 +265,24 @@
                 <p class="text-gray-500 mb-12 max-w-2xl mx-auto">بيئة عمل احترافية تضمن نجاحك وتحقيق أعلى الأرباح بشفافية تامة.</p>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-right max-w-5xl mx-auto">
                     <div class="bg-gray-50 dark:bg-bgDark p-8 rounded-3xl border border-gray-100 dark:border-gray-800">
-                        <div class="w-14 h-14 bg-primary/10 text-primary flex items-center justify-center rounded-2xl text-2xl mb-6"><i class="fas fa-percent"></i></div>
-                        <h3 class="text-xl font-black mb-3">عمولة ثابتة ومجزية</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">نقدم 500 دج عمولة ثابتة على كل طلبية ناجحة لتكافئ جهودك بشكل عادل ومضمون.</p>
+                        <div class="w-14 h-14 bg-primary/10 text-primary flex items-center justify-center rounded-2xl text-2xl mb-6"><i class="fas fa-percent"></i></div><h3 class="text-xl font-black mb-3">عمولة ثابتة ومجزية</h3><p class="text-gray-500 text-sm leading-relaxed">نقدم 500 دج عمولة ثابتة على كل طلبية ناجحة لتكافئ جهودك بشكل عادل ومضمون.</p>
                     </div>
                     <div class="bg-gray-50 dark:bg-bgDark p-8 rounded-3xl border border-gray-100 dark:border-gray-800">
-                        <div class="w-14 h-14 bg-blue-50 dark:bg-blue-900/20 text-blue-500 flex items-center justify-center rounded-2xl text-2xl mb-6"><i class="fas fa-bolt"></i></div>
-                        <h3 class="text-xl font-black mb-3">سحب سريع ومضمون</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي CCP أو كرصيد هاتف (Flexy) بكل سهولة.</p>
+                        <div class="w-14 h-14 bg-blue-50 dark:bg-blue-900/20 text-blue-500 flex items-center justify-center rounded-2xl text-2xl mb-6"><i class="fas fa-bolt"></i></div><h3 class="text-xl font-black mb-3">سحب سريع ومضمون</h3><p class="text-gray-500 text-sm leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي CCP أو كرصيد هاتف (Flexy) بكل سهولة.</p>
                     </div>
                     <div class="bg-gray-50 dark:bg-bgDark p-8 rounded-3xl border border-gray-100 dark:border-gray-800 md:col-span-2 lg:col-span-1">
-                        <div class="w-14 h-14 bg-purple-50 dark:bg-purple-900/20 text-purple-500 flex items-center justify-center rounded-2xl text-2xl mb-6"><i class="fas fa-link"></i></div>
-                        <h3 class="text-xl font-black mb-3">رابط خاص لكل منتج</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">تحصل على رابط فريد يوجه زبائنك لصفحة شراء محترفة تزيد من نسبة مبيعاتك.</p>
+                        <div class="w-14 h-14 bg-purple-50 dark:bg-purple-900/20 text-purple-500 flex items-center justify-center rounded-2xl text-2xl mb-6"><i class="fas fa-link"></i></div><h3 class="text-xl font-black mb-3">رابط خاص لكل منتج</h3><p class="text-gray-500 text-sm leading-relaxed">تحصل على رابط فريد يوجه زبائنك لصفحة شراء محترفة تزيد من نسبة مبيعاتك.</p>
                     </div>
                 </div>
             </div>
         </section>
         
-        <!-- MODIFIED: تم تغيير لوغوات طرق السحب وإضافة الصور المطلوبة -->
         <section class="py-16 bg-gray-50 dark:bg-bgDark text-center">
             <h2 class="text-3xl font-black mb-10">طرق سحب <span class="text-primary">متعددة ومحلية</span></h2>
             <div class="flex flex-col sm:flex-row justify-center gap-6 max-w-3xl mx-auto px-6">
-                <!-- CCP / BaridiMob -->
                 <div class="flex-1 bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center justify-center gap-4">
-                    <span class="font-black text-xl">CCP / BaridiMob</span>
-                    <img src="https://ebourse.dz/wp-content/uploads/2017/12/AlgeriePoste.svg_.png" alt="Algérie Poste" class="h-10 object-contain bg-white rounded p-1">
+                    <span class="font-black text-xl">CCP / BaridiMob</span><img src="https://ebourse.dz/wp-content/uploads/2017/12/AlgeriePoste.svg_.png" alt="Algérie Poste" class="h-10 object-contain bg-white rounded p-1">
                 </div>
-                <!-- Flexy -->
                 <div class="flex-1 bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-4">
                     <div class="flex gap-4 items-center justify-center">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFM2lbUhHLa_c7IrFn2oMdC8j1zXX7xZ4tkZPQI1Q7YqRk2i7rgNDDPjQV&s=10" alt="Ooredoo" class="h-8 object-contain rounded">
@@ -367,8 +300,7 @@
         <div id="mobile-sidebar-overlay" onclick="window.toggleUserSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
         <aside id="user-sidebar" class="w-64 bg-white dark:bg-cardDark border-l border-gray-100 dark:border-gray-800 fixed top-0 h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0">
             <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center text-lg font-black">
-                <div class="flex items-center gap-2"><i class="fas fa-leaf text-primary"></i> لوحة المسوق</div>
-                <button onclick="window.toggleUserSidebar()" class="md:hidden text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
+                <div class="flex items-center gap-2"><i class="fas fa-leaf text-primary"></i> لوحة المسوق</div><button onclick="window.toggleUserSidebar()" class="md:hidden text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
             </div>
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
                 <a href="#" onclick="window.switchUserTab('home', event)" data-tab="home" class="dash-link flex items-center gap-3 bg-primary/10 text-primary px-4 py-3 rounded-xl font-bold"><i class="fas fa-tachometer-alt w-5"></i> الرئيسية</a>
@@ -410,15 +342,31 @@
             </div>
 
             <div id="tab-withdraw" class="tab-content hidden animate-fade-in w-full">
-                <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border dark:border-gray-800 max-w-lg mx-auto">
-                    <h3 class="font-black text-lg mb-4"><i class="fas fa-money-check text-primary"></i> طلب سحب</h3>
-                    <div class="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-4 flex justify-between font-bold text-primary"><span>متاح للسحب:</span> <span id="withdraw-available-balance">0 دج</span></div>
-                    <form onsubmit="window.handleWithdrawRequest(event)" class="space-y-4">
-                        <input type="number" id="withdraw-amount" min="500" placeholder="المبلغ (الأدنى 500)" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 font-bold" required>
-                        <select id="withdraw-method" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 font-bold"><option value="ccp">CCP / BaridiMob</option><option value="flexy">Flexy</option></select>
-                        <input type="text" id="withdraw-account" placeholder="رقم الحساب / الهاتف" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" dir="ltr" required>
-                        <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl">تأكيد السحب</button>
-                    </form>
+                <div class="grid md:grid-cols-2 gap-6 items-start">
+                    <!-- طلب سحب جديد -->
+                    <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border dark:border-gray-800">
+                        <h3 class="font-black text-lg mb-4"><i class="fas fa-money-check text-primary"></i> طلب سحب جديد</h3>
+                        <div class="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-4 flex justify-between font-bold text-primary">
+                            <span>متاح للسحب:</span> <span id="withdraw-available-balance">0 دج</span>
+                        </div>
+                        <form onsubmit="window.handleWithdrawRequest(event)" class="space-y-4">
+                            <input type="number" id="withdraw-amount" min="500" placeholder="المبلغ (الأدنى 500)" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 font-bold" required>
+                            <select id="withdraw-method" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3 font-bold">
+                                <option value="ccp">CCP / BaridiMob (حساب بريدي)</option>
+                                <option value="flexy">Flexy (رصيد هاتف)</option>
+                            </select>
+                            <input type="text" id="withdraw-account" placeholder="رقم الحساب أو رقم الهاتف المربوط" class="w-full bg-gray-50 dark:bg-bgDark border dark:border-gray-700 rounded-xl px-4 py-3" dir="ltr" required>
+                            <button type="submit" id="withdraw-submit-btn" class="w-full bg-primary text-white font-bold py-3 rounded-xl">تأكيد السحب</button>
+                        </form>
+                    </div>
+
+                    <!-- سجل السحوبات -->
+                    <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border dark:border-gray-800">
+                        <h3 class="font-black text-lg mb-4"><i class="fas fa-history text-gray-500"></i> أرشيف السحوبات</h3>
+                        <div id="user-withdraw-history" class="space-y-3 h-64 overflow-y-auto pr-2">
+                            <div class="text-center py-6 text-gray-400 text-sm">جاري التحميل...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -462,6 +410,7 @@
                 <a href="#" onclick="window.switchAdminTab('products', event)" data-tab="products" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-box w-5"></i> المنتجات</a>
                 <a href="#" onclick="window.switchAdminTab('users', event)" data-tab="users" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-users w-5"></i> المسوقين</a>
                 <a href="#" onclick="window.switchAdminTab('support', event)" data-tab="support" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-flag w-5"></i> الإبلاغات</a>
+                <a href="#" onclick="window.switchAdminTab('withdrawals', event)" data-tab="withdrawals" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 px-4 py-3 rounded-xl font-bold"><i class="fas fa-hand-holding-usd w-5"></i> طلبات السحب</a>
             </nav>
             <div class="p-4 border-t border-gray-800"><button onclick="window.logoutAdmin()" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3 rounded-xl font-bold"><i class="fas fa-sign-out-alt"></i> إغلاق</button></div>
         </aside>
@@ -481,6 +430,7 @@
             <div class="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
                 <button onclick="window.switchAdminTab('products')" class="whitespace-nowrap bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold"><i class="fas fa-plus"></i> إضافة منتج</button>
                 <button onclick="window.switchAdminTab('users')" class="whitespace-nowrap bg-purple-500 text-white px-4 py-2 rounded-xl text-xs font-bold"><i class="fas fa-users"></i> إدارة المسوقين</button>
+                <button onclick="window.switchAdminTab('withdrawals')" class="whitespace-nowrap bg-green-500 text-white px-4 py-2 rounded-xl text-xs font-bold"><i class="fas fa-hand-holding-usd"></i> طلبات السحب</button>
                 <button onclick="window.switchAdminTab('support')" class="whitespace-nowrap bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold"><i class="fas fa-flag"></i> الإبلاغات</button>
             </div>
 
@@ -533,6 +483,27 @@
                     <div id="admin-support-list" class="space-y-4 grid md:grid-cols-2 gap-4">جاري التحميل...</div>
                 </div>
             </div>
+
+            <div id="admin-tab-withdrawals" class="admin-tab-content hidden w-full">
+                <div class="bg-white dark:bg-cardDark p-4 md:p-6 rounded-2xl shadow-sm border dark:border-gray-800 overflow-x-auto w-full">
+                    <h3 class="font-black text-lg mb-4"><i class="fas fa-hand-holding-usd text-green-500"></i> مراجعة طلبات السحب</h3>
+                    <table class="w-full text-xs md:text-sm text-right min-w-[900px]">
+                        <thead class="bg-gray-50 dark:bg-bgDark text-gray-500">
+                            <tr>
+                                <th class="p-3">المسوق (تواصل)</th>
+                                <th class="p-3">المبلغ المطلوب</th>
+                                <th class="p-3">طريقة الدفع</th>
+                                <th class="p-3">رقم الحساب / الهاتف</th>
+                                <th class="p-3 text-center">تحديث الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-withdrawals-list">
+                            <tr><td colspan="5" class="text-center py-4">جاري التحميل...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </main>
     </div>
 
@@ -827,6 +798,34 @@
                 });
                 document.getElementById('affiliate-products-list').innerHTML = html;
             });
+
+            // جلب أرشيف السحوبات للمسوق
+            db.collection("withdraw_requests").where("uid", "==", currentUser.uid).onSnapshot(snap => {
+                let requests = [];
+                snap.forEach(doc => requests.push({id: doc.id, ...doc.data()}));
+                // ترتيب تنازلي حسب التاريخ 
+                requests.sort((a,b) => (b.date?.seconds || 0) - (a.date?.seconds || 0));
+
+                let html = '';
+                if(requests.length === 0) html = '<div class="text-center py-6 text-gray-400 text-sm">لا توجد سجلات سحب سابقة</div>';
+                
+                requests.forEach(req => {
+                    let statusHtml = '';
+                    if(req.status === 'pending') statusHtml = '<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-lg text-xs font-bold">قيد المراجعة <i class="fas fa-hourglass-half ml-1"></i></span>';
+                    else if(req.status === 'paid') statusHtml = '<span class="bg-green-100 text-green-700 px-2 py-1 rounded-lg text-xs font-bold">تم الدفع <i class="fas fa-check ml-1"></i></span>';
+                    else statusHtml = '<span class="bg-red-100 text-red-700 px-2 py-1 rounded-lg text-xs font-bold">مرفوض <i class="fas fa-times ml-1"></i></span>';
+
+                    html += `
+                    <div class="bg-gray-50 dark:bg-bgDark p-3 rounded-xl border dark:border-gray-700 flex justify-between items-center">
+                        <div>
+                            <div class="font-black text-primary text-sm">${req.amount} دج</div>
+                            <div class="text-xs text-gray-500 mt-1 uppercase" dir="ltr">${req.method} - ${req.accountDetails}</div>
+                        </div>
+                        <div>${statusHtml}</div>
+                    </div>`;
+                });
+                document.getElementById('user-withdraw-history').innerHTML = html;
+            });
         }
 
         window.copyGeneratedLink = async (link) => {
@@ -896,8 +895,42 @@
             } catch(error) { Swal.fire('خطأ', error.message, 'error'); }
         };
 
-        window.handleWithdrawRequest = (e) => {
-            e.preventDefault(); Swal.fire('تم الاستلام', 'ستتم المراجعة', 'success'); e.target.reset();
+        // معالجة طلب السحب من المسوق
+        window.handleWithdrawRequest = async (e) => {
+            e.preventDefault();
+            const amount = Number(document.getElementById('withdraw-amount').value);
+            const method = document.getElementById('withdraw-method').value;
+            const account = document.getElementById('withdraw-account').value;
+            const btn = document.getElementById('withdraw-submit-btn');
+
+            if(amount > (currentUserData.balance || 0)) {
+                return Swal.fire('عذراً', 'الرصيد المتوفر لا يكفي لسحب هذا المبلغ.', 'error');
+            }
+
+            btn.disabled = true;
+            btn.innerText = 'جاري الإرسال...';
+
+            try {
+                await db.collection("withdraw_requests").add({
+                    uid: currentUser.uid,
+                    userName: currentUserData.name,
+                    userEmail: currentUserData.email,
+                    userPhone: currentUserData.phone || 'غير مدرج',
+                    amount: amount,
+                    method: method,
+                    accountDetails: account,
+                    status: 'pending', 
+                    date: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                Swal.fire('تم بنجاح', 'تم إرسال طلب السحب للإدارة للمراجعة.', 'success');
+                e.target.reset();
+            } catch (error) {
+                Swal.fire('خطأ', error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'تأكيد السحب';
+            }
         };
 
         window.handleAdminLogin = (e) => {
@@ -979,7 +1012,80 @@
                 });
                 document.getElementById('admin-support-list').innerHTML = html || '<div class="col-span-full text-center text-gray-500">لا توجد بلاغات</div>';
             });
+
+            // جلب طلبات السحب للإدمن
+            db.collection("withdraw_requests").orderBy('date', 'desc').onSnapshot(snap => {
+                let html = '';
+                snap.forEach(doc => {
+                    const req = doc.data();
+                    let actions = '';
+                    
+                    if(req.status === 'pending') {
+                        actions = `
+                            <select onchange="window.updateWithdrawStatus('${doc.id}', '${req.uid}', ${req.amount}, this.value, this)" class="bg-white dark:bg-bgDark border dark:border-gray-600 rounded-lg px-3 py-2 text-xs font-bold w-full outline-none">
+                                <option value="pending" selected>قيد المراجعة ⏳</option>
+                                <option value="paid" class="text-green-600">تم الدفع ✔️</option>
+                                <option value="rejected" class="text-red-600">رفض الدفع ❌</option>
+                            </select>
+                        `;
+                    } else if(req.status === 'paid') {
+                        actions = '<span class="bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold block w-full">دفع مكتمل ✔️</span>';
+                    } else {
+                        actions = '<span class="bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold block w-full">تم الرفض ❌</span>';
+                    }
+
+                    html += `
+                    <tr class="border-b dark:border-gray-800 text-xs md:text-sm hover:bg-gray-50 dark:hover:bg-bgDark transition-colors">
+                        <td class="p-3">
+                            <div class="font-black text-primary mb-1">${req.userName}</div>
+                            <div class="text-gray-500 mb-1"><i class="fas fa-envelope"></i> ${req.userEmail}</div>
+                            <div class="text-gray-500 font-bold" dir="ltr"><i class="fas fa-phone"></i> ${req.userPhone}</div>
+                        </td>
+                        <td class="p-3 font-black text-lg">${req.amount} دج</td>
+                        <td class="p-3 font-bold uppercase"><span class="${req.method === 'flexy' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'} px-2 py-1 rounded">${req.method}</span></td>
+                        <td class="p-3 text-gray-800 dark:text-gray-200 font-bold tracking-wider" dir="ltr">${req.accountDetails}</td>
+                        <td class="p-3 text-center w-36">${actions}</td>
+                    </tr>`;
+                });
+                document.getElementById('admin-withdrawals-list').innerHTML = html || `<tr><td colspan="5" class="text-center p-6 text-gray-500">لا توجد طلبات سحب حالياً</td></tr>`;
+            });
         }
+
+        // تحديث حالة السحب من طرف الإدمن
+        window.updateWithdrawStatus = async (reqId, uid, amount, newStatus, selectElement) => {
+            if(newStatus === 'pending') return;
+
+            const actionText = newStatus === 'paid' ? 'هل تم الدفع فعلاً؟ (سيتم خصم المبلغ من رصيد المسوق)' : 'هل أنت متأكد من رفض الطلب؟';
+            
+            const confirm = await Swal.fire({
+                title: 'تأكيد الإجراء', text: actionText, icon: 'warning',
+                showCancelButton: true, confirmButtonText: 'تأكيد', cancelButtonText: 'إلغاء'
+            });
+
+            if(confirm.isConfirmed) {
+                try {
+                    const batch = db.batch();
+                    const reqRef = db.collection('withdraw_requests').doc(reqId);
+                    const userRef = db.collection('users').doc(uid);
+
+                    if (newStatus === 'paid') {
+                        batch.update(reqRef, { status: 'paid' });
+                        // خصم قيمة الطلب بدلاً من تصفير الرصيد كلياً للحفاظ على أي أرباح جديدة
+                        batch.update(userRef, { balance: firebase.firestore.FieldValue.increment(-amount) });
+                    } else if (newStatus === 'rejected') {
+                        batch.update(reqRef, { status: 'rejected' });
+                    }
+
+                    await batch.commit();
+                    Swal.fire('نجاح', 'تم تحديث حالة الطلب.', 'success');
+                } catch(e) {
+                    Swal.fire('خطأ', e.message, 'error');
+                    selectElement.value = 'pending'; // إعادة السيلكت للحالة السابقة
+                }
+            } else {
+                selectElement.value = 'pending'; // إعادة السيلكت إذا تم الإلغاء
+            }
+        };
 
         window.submitProduct = async (e) => {
             e.preventDefault();
