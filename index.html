@@ -81,20 +81,6 @@
         .num-2 { left: 45%; top: 30%; animation-delay: 1.5s; font-size: 2.5rem; }
         .num-3 { left: 75%; top: 50%; animation-delay: 3s; font-size: 1.2rem; }
 
-        /* Motion Graphic Flying Money */
-        @keyframes flyMoney {
-            0% { transform: translateY(110vh) scale(0.5) rotate(0deg); opacity: 1; }
-            70% { opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5) rotate(360deg); opacity: 0; }
-        }
-        .money-particle {
-            position: fixed;
-            z-index: 99999;
-            pointer-events: none;
-            animation: flyMoney cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
-        }
-
         /* Trend Arrow Animation */
         @keyframes trendBounce {
             0%, 100% { transform: translateY(0) scale(1); }
@@ -237,13 +223,6 @@
 
     <!-- 1. LANDING PAGE VIEW -->
     <div id="landing-view" class="view active relative w-full h-full">
-        <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10 w-full h-full">
-            <svg class="absolute top-[5vh] left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
-                <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320Z"></path>
-                <defs><linearGradient id="gradientChart" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.8" /><stop offset="100%" stop-color="#3b82f6" stop-opacity="0" /></linearGradient></defs>
-            </svg>
-            <div class="floating-num num-1">+500 دج</div><div class="floating-num num-2">+1,500 دج</div><div class="floating-num num-3">+500 دج</div>
-        </div>
 
         <header class="fixed top-0 w-full glass z-40 transition-all border-b border-white/10 dark:border-gray-800/50">
             <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center w-full">
@@ -258,18 +237,25 @@
             </div>
         </header>
 
-        <section class="pt-36 pb-16 relative min-h-[95vh] flex items-center">
-            <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Hero Section with Full-Screen Background Image -->
+        <section class="pt-36 pb-16 relative min-h-[95vh] flex items-center bg-cover bg-center bg-no-repeat overflow-hidden" style="background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJbkFNdrIyGwoDIQ3uaEFhxzMrnwfoW723llQtGoufMdqC8npfEjnaRo5tddA6MdOzeO4TiyEbyS8zwoJ2lfvSDcfqy7zw1xOSsdd9l_QhP5F-m0qOfp-fS1hHm3i-73YbWlJIhyXR7034JHH3PV6yNj-DPzVTHGFDZK26IvJKf8C9Csfi_3no1oKQn88/s1220/1000017792.jpg');">
+            
+            <!-- Dark / Light Gradient Overlay to make the text perfectly readable -->
+            <div class="absolute inset-0 bg-white/85 dark:bg-bgDark/90 lg:bg-gradient-to-l lg:from-white/95 lg:via-white/70 lg:to-white/10 lg:dark:from-bgDark/95 lg:dark:via-bgDark/70 lg:dark:to-bgDark/10 z-0"></div>
+            
+            <!-- Floating Background Elements -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none z-0 w-full h-full">
+                <svg class="absolute top-[5vh] left-0 w-full h-[60vh] opacity-30 dark:opacity-10" preserveAspectRatio="none" viewBox="0 0 1440 320">
+                    <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320Z"></path>
+                    <defs><linearGradient id="gradientChart" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.8" /><stop offset="100%" stop-color="#3b82f6" stop-opacity="0" /></linearGradient></defs>
+                </svg>
+                <div class="floating-num num-1">+500 دج</div><div class="floating-num num-2">+1,500 دج</div><div class="floating-num num-3">+500 دج</div>
+            </div>
+
+            <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
                 <div class="text-center lg:text-right z-10">
-                    <!-- الصورة المطلوبة بدلا من الجملة السابقة -->
-                    <div class="separator animate-fade-up mb-6" style="clear: both;">
-                        <a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJbkFNdrIyGwoDIQ3uaEFhxzMrnwfoW723llQtGoufMdqC8npfEjnaRo5tddA6MdOzeO4TiyEbyS8zwoJ2lfvSDcfqy7zw1xOSsdd9l_QhP5F-m0qOfp-fS1hHm3i-73YbWlJIhyXR7034JHH3PV6yNj-DPzVTHGFDZK26IvJKf8C9Csfi_3no1oKQn88/s1220/1000017792.jpg" class="inline-block transition-transform duration-500 hover:scale-105" target="_blank">
-                            <img alt="Tirourda Elite" class="rounded-3xl shadow-2xl border-[6px] border-white dark:border-gray-800 w-56 md:w-72 object-cover block mx-auto lg:mx-0" data-original-height="1055" data-original-width="1220" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJbkFNdrIyGwoDIQ3uaEFhxzMrnwfoW723llQtGoufMdqC8npfEjnaRo5tddA6MdOzeO4TiyEbyS8zwoJ2lfvSDcfqy7zw1xOSsdd9l_QhP5F-m0qOfp-fS1hHm3i-73YbWlJIhyXR7034JHH3PV6yNj-DPzVTHGFDZK26IvJKf8C9Csfi_3no1oKQn88/s320/1000017792.jpg"/>
-                        </a>
-                    </div>
-                    
                     <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6 animate-fade-up delay-100">اربح المال مع <br> <span class="gradient-text">Tirourda Affiliate</span> <i class="fas fa-arrow-trend-up trend-arrow mr-2 text-4xl md:text-6xl text-primary drop-shadow-md align-middle"></i></h1>
-                    <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto lg:mx-0 animate-fade-up delay-200 leading-relaxed">شارك منتجاتنا المتميزة واحصل على <span class="font-bold text-primary px-2 bg-primary/10 rounded-lg">500 دج عمولة ثابتة</span> على كل طلبية ناجحة.</p>
+                    <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto lg:mx-0 animate-fade-up delay-200 leading-relaxed font-semibold">شارك منتجاتنا المتميزة واحصل على <span class="font-bold text-white px-2 py-1 bg-primary rounded-lg">500 دج عمولة ثابتة</span> على كل طلبية ناجحة.</p>
                     <div id="hero-cta" class="animate-fade-up delay-300"><button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-green-500 hover:from-primaryDark hover:to-primary text-white text-lg px-10 py-4 rounded-2xl shadow-xl hover:shadow-primary/50 transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-1">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button></div>
                 </div>
                 <div class="relative z-10 hidden lg:block w-full animate-fade-up delay-200">
@@ -1490,37 +1476,9 @@
             }
         };
         
-        // تشغيل الوظائف الأساسية، الترجمة، الموشن جرافيك والمؤثرات البصرية
+        // تشغيل الوظائف الأساسية، الترجمة والمؤثرات البصرية
         document.addEventListener('DOMContentLoaded', () => {
             autoTranslate();
-
-            // Flying Money Animation (Motion Graphic Once on Load)
-            const moneySymbols = ['💵', '💸', '💰', '🪙', '🟢'];
-            const container = document.createElement('div');
-            container.style.position = 'fixed';
-            container.style.top = '0';
-            container.style.left = '0';
-            container.style.width = '100vw';
-            container.style.height = '100vh';
-            container.style.pointerEvents = 'none';
-            container.style.zIndex = '99999';
-            container.style.overflow = 'hidden';
-            document.body.appendChild(container);
-
-            for(let i = 0; i < 25; i++) {
-                const span = document.createElement('span');
-                span.innerText = moneySymbols[Math.floor(Math.random() * moneySymbols.length)];
-                span.className = 'money-particle';
-                span.style.left = (Math.random() * 100) + 'vw';
-                span.style.animationDuration = (2 + Math.random() * 2) + 's';
-                span.style.animationDelay = (Math.random() * 0.5) + 's';
-                span.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
-                container.appendChild(span);
-            }
-            
-            setTimeout(() => {
-                if(container.parentNode) container.parentNode.removeChild(container);
-            }, 5000);
 
             // Scroll reveal animation
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
