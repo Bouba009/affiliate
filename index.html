@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
@@ -7,9 +8,7 @@
     <title>Tirourda Affiliate | المنصة الأقوى</title>
     
     <!-- Google Fonts & FontAwesome -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2 family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Tailwind CSS -->
@@ -21,17 +20,15 @@
                 extend: {
                     fontFamily: { cairo: ['Cairo', 'sans-serif'] },
                     colors: {
-                        primary: '#4ade80',      
-                        primaryDark: '#16a34a',  
-                        bgLight: '#f8fafc',      
+                        primary: '#4ade80',      // أخضر فاتح منعش
+                        primaryDark: '#16a34a',  // أخضر أغمق قليلاً للنصوص والأزرار عند التمرير
+                        bgLight: '#ffffff',      // أبيض ناصع للخلفية
                         bgDark: '#0f172a',
                         cardLight: '#ffffff',
                         cardDark: '#1e293b'
                     },
                     animation: {
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 4s ease-in-out infinite',
-                        'spin-slow': 'spin 12s linear infinite',
                     }
                 }
             }
@@ -47,11 +44,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
-        html, body { font-family: 'Cairo', sans-serif; overflow-x: hidden; width: 100%; min-height: 100%; margin: 0; padding: 0; background-color: #f8fafc; }
-        .dark body { background-color: #0f172a; }
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-        .dark .glass { background: rgba(15, 23, 42, 0.8); }
-        .glass-card { background: rgba(255, 255, 255, 1); border: 1px solid rgba(74, 222, 128, 0.15); }
+        html, body { font-family: 'Cairo', sans-serif; overflow-x: hidden; width: 100%; min-height: 100%; margin: 0; padding: 0; background-color: #ffffff; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); }
+        .dark .glass { background: rgba(15, 23, 42, 0.9); }
+        .glass-card { background: rgba(255, 255, 255, 1); border: 1px solid rgba(74, 222, 128, 0.2); }
         .dark .glass-card { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -59,24 +55,21 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         
         /* Layout Fixes */
-        .view { display: none !important; opacity: 0; transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; min-height: 100vh; }
+        .view { display: none !important; opacity: 0; transition: opacity 0.5s ease-in-out; width: 100%; min-height: 100vh; }
         .view.active { display: block !important; opacity: 1; }
         .view.active.flex-view { display: flex !important; opacity: 1; }
         
         .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to left, #4ade80, #16a34a); }
-        .loader { border: 3px solid rgba(74, 222, 128, 0.2); border-left-color: #4ade80; border-radius: 50%; width: 22px; height: 22px; animation: spin 1s linear infinite; display: none; }
+        .loader { border: 4px solid rgba(74, 222, 128, 0.2); border-left-color: #4ade80; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; }
         
+        /* Smooth Modern Animations */
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-        }
         
         @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(30px); }
+            0% { opacity: 0; transform: translateY(40px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-up { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade-up { opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
         .delay-300 { animation-delay: 300ms; }
@@ -84,59 +77,56 @@
         @keyframes floatUpNum {
             0% { transform: translateY(0px) scale(0.9); opacity: 0; }
             20% { opacity: 0.8; transform: scale(1); }
-            80% { opacity: 0.8; transform: translateY(-120px) scale(1.05); }
+            80% { opacity: 0.8; transform: translateY(-120px) scale(1.1); }
             100% { transform: translateY(-160px) scale(1); opacity: 0; }
         }
-        .floating-num { position: absolute; color: #4ade80; font-weight: 900; opacity: 0; z-index: 0; animation: floatUpNum 5s ease-in-out infinite; pointer-events: none; text-shadow: 0 4px 15px rgba(74,222,128,0.3); }
-        .num-1 { left: 8%; top: 35%; animation-delay: 0s; font-size: 1.3rem; }
-        .num-2 { left: 40%; top: 25%; animation-delay: 1.8s; font-size: 2.2rem; }
-        .num-3 { left: 80%; top: 45%; animation-delay: 3.2s; font-size: 1.1rem; }
+        .floating-num { position: absolute; color: #4ade80; font-weight: 900; opacity: 0; z-index: 0; animation: floatUpNum 5s ease-in-out infinite; pointer-events: none; text-shadow: 0 4px 15px rgba(74,222,128,0.4); }
+        .num-1 { left: 10%; top: 40%; animation-delay: 0s; font-size: 1.5rem; }
+        .num-2 { left: 45%; top: 30%; animation-delay: 1.5s; font-size: 2.5rem; }
+        .num-3 { left: 75%; top: 50%; animation-delay: 3s; font-size: 1.2rem; }
 
+        /* Trend Arrow Animation */
         @keyframes trendBounce {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.05); color: #16a34a; }
+            50% { transform: translateY(-10px) scale(1.1); color: #16a34a; }
         }
         .trend-arrow {
             display: inline-block;
             animation: trendBounce 2s ease-in-out infinite;
             color: #4ade80;
-            filter: drop-shadow(0 4px 6px rgba(74,222,128,0.3));
+            filter: drop-shadow(0 4px 6px rgba(74,222,128,0.4));
         }
 
+        /* Elegant Hover Cards */
         .hover-card-elegant {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-color: white;
         }
         .hover-card-elegant:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 35px -5px rgba(74, 222, 128, 0.15);
-            border-color: rgba(74, 222, 128, 0.3);
-        }
-        
-        /* Glow Focus for Inputs */
-        .glow-focus:focus {
-            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.25);
-            border-color: #4ade80;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -5px rgba(74, 222, 128, 0.2);
+            border-color: rgba(74, 222, 128, 0.4);
         }
     </style>
 </head>
 <body class="bg-bgLight dark:bg-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-300 relative w-full h-full">
 
     <!-- THEME TOGGLE -->
-    <button onclick="window.toggleTheme()" class="fixed bottom-6 left-6 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/30 transition-all text-xl border border-primary/20 dark:border-gray-800 opacity-95 hover:opacity-100 hover:scale-110 duration-300">
+    <button onclick="window.toggleTheme()" class="fixed bottom-6 left-6 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all text-xl border border-primary/20 dark:border-gray-800 opacity-90 hover:opacity-100 hover:scale-110 duration-300">
         <i id="theme-icon" class="fas fa-moon text-primaryDark dark:text-yellow-400"></i>
     </button>
     
     <!-- LANGUAGE TOGGLE -->
-    <button onclick="window.toggleLanguage()" class="fixed bottom-6 left-24 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/30 transition-all text-sm font-black border border-primary/20 dark:border-gray-800 opacity-95 hover:opacity-100 hover:scale-110 duration-300 text-primaryDark">
+    <button onclick="window.toggleLanguage()" class="fixed bottom-6 left-24 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all text-sm font-black border border-primary/20 dark:border-gray-800 opacity-90 hover:opacity-100 hover:scale-110 duration-300 text-primaryDark">
         <span id="lang-text" class="tracking-widest">FR</span>
     </button>
 
     <!-- AUTH MODAL -->
-    <div id="auth-modal" class="fixed inset-0 bg-white/85 dark:bg-black/85 backdrop-blur-md z-[100] hidden items-center justify-center p-4 w-full h-full transition-opacity duration-300">
-        <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.15)] w-full max-w-md border border-primary/25 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="auth-modal-content">
+    <div id="auth-modal" class="fixed inset-0 bg-white/80 dark:bg-black/80 backdrop-blur-md z-[100] hidden items-center justify-center p-4 w-full h-full transition-opacity duration-300">
+        <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.2)] w-full max-w-md border border-primary/20 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="auth-modal-content">
             <button onclick="window.closeAuthModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 hover:rotate-90 transition-all duration-300"><i class="fas fa-times text-2xl"></i></button>
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-gradient-to-tr from-primary to-primaryDark text-white rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-md hover:scale-105 transition-transform"><i class="fas fa-leaf"></i></div>
+                <div class="w-16 h-16 bg-gradient-to-tr from-primary to-primaryDark text-white rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg hover:scale-105 transition-transform"><i class="fas fa-leaf"></i></div>
                 <h2 id="auth-title" class="text-2xl font-black">مرحباً بك مجدداً</h2>
                 <p id="auth-subtitle" class="text-gray-500 text-sm mt-1">سجل دخولك للوصول إلى لوحة التحكم</p>
             </div>
@@ -144,31 +134,31 @@
                 <div id="register-fields" class="hidden space-y-4 mb-4">
                     <div class="relative group">
                         <i class="fas fa-user absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                        <input type="text" id="auth-name" placeholder="الاسم الكامل" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none glow-focus transition-all">
+                        <input type="text" id="auth-name" placeholder="الاسم الكامل" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
                     <div class="relative group">
                         <i class="fas fa-phone absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                        <input type="tel" id="auth-phone" placeholder="رقم الهاتف (اختياري)" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none glow-focus transition-all text-right" dir="ltr">
+                        <input type="tel" id="auth-phone" placeholder="رقم الهاتف (اختياري)" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-right" dir="ltr">
                     </div>
                 </div>
                 <div class="space-y-4 mb-6">
                     <div class="relative group">
                         <i class="fas fa-envelope absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                        <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none glow-focus transition-all" required>
+                        <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" required>
                     </div>
                     <div class="relative group">
                         <i class="fas fa-lock absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                        <input type="password" id="auth-password" placeholder="كلمة المرور" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none glow-focus transition-all" required>
+                        <input type="password" id="auth-password" placeholder="كلمة المرور" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" required>
                     </div>
                 </div>
-                <button type="submit" id="auth-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-bold py-3.5 rounded-xl transition-all shadow-md hover:shadow-primary/30 mb-4 flex items-center justify-center gap-2 transform hover:-translate-y-0.5">
+                <button type="submit" id="auth-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-bold py-3.5 rounded-xl transition-all shadow-lg hover:shadow-primary/40 mb-4 flex items-center justify-center gap-2 transform hover:-translate-y-1">
                     <span id="auth-btn-text">تسجيل الدخول</span>
                     <div class="loader" id="auth-loader"></div>
                 </button>
                 <div class="flex items-center gap-4 mb-4">
                     <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div><span class="text-sm text-gray-400">أو</span><div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
                 </div>
-                <button type="button" onclick="window.handleGoogleAuth()" id="google-auth-btn" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 hover:bg-green-50 dark:hover:bg-gray-800 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-3 mb-6 transform hover:-translate-y-0.5">
+                <button type="button" onclick="window.handleGoogleAuth()" id="google-auth-btn" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 hover:bg-green-50 dark:hover:bg-gray-800 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-3 mb-6 transform hover:-translate-y-1">
                     <svg id="google-icon" class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                     <div class="loader hidden !border-gray-500 !border-l-gray-300" id="google-loader"></div>
                     <span id="google-btn-text" class="text-gray-700 dark:text-gray-200">المتابعة باستخدام Google</span>
@@ -204,7 +194,7 @@
                     <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-l from-primaryDark to-primary mb-6" id="lp-price">0 دج</div>
                     <p id="lp-desc" class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed whitespace-pre-line text-sm lg:text-base"></p>
                     
-                    <div class="bg-green-50/50 dark:bg-bgDark p-8 rounded-3xl border border-primary/25 dark:border-gray-800 relative shadow-inner">
+                    <div class="bg-green-50/50 dark:bg-bgDark p-8 rounded-3xl border border-primary/20 dark:border-gray-800 relative shadow-inner">
                         <h3 class="text-xl font-black mb-6 flex items-center gap-2"><i class="fas fa-shopping-bag text-primaryDark"></i> قدم طلبك الآن</h3>
                         
                         <form id="lp-order-form" onsubmit="window.submitLandingOrder(event)" class="space-y-5">
@@ -214,18 +204,18 @@
                             
                             <div class="relative group">
                                 <i class="fas fa-user absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                                <input type="text" id="lp-customer-name" placeholder="الاسم الكامل" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none glow-focus font-bold shadow-sm transition-all" required>
+                                <input type="text" id="lp-customer-name" placeholder="الاسم الكامل" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all" required>
                             </div>
                             <div class="relative group">
                                 <i class="fas fa-phone absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                                <input type="tel" id="lp-customer-phone" placeholder="رقم الهاتف" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none glow-focus text-right font-bold shadow-sm transition-all" dir="ltr" required>
+                                <input type="tel" id="lp-customer-phone" placeholder="رقم الهاتف" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-right font-bold shadow-sm transition-all" dir="ltr" required>
                             </div>
                             <div class="relative group">
                                 <i class="fas fa-map-marker-alt absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                                <input type="text" id="lp-customer-state" placeholder="الولاية" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none glow-focus font-bold shadow-sm transition-all" required>
+                                <input type="text" id="lp-customer-state" placeholder="الولاية" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all" required>
                             </div>
                             
-                            <button type="submit" id="lp-submit-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-black text-lg py-4 rounded-xl transition-all shadow-md hover:shadow-lg mt-4 flex items-center justify-center gap-3 transform hover:-translate-y-0.5">
+                            <button type="submit" id="lp-submit-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-black text-lg py-4 rounded-xl transition-all shadow-[0_10px_20px_rgba(74,222,128,0.4)] mt-4 flex items-center justify-center gap-3 transform hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(74,222,128,0.6)]">
                                 تأكيد الطلب <i class="fas fa-check-circle"></i>
                             </button>
                             <p class="text-center text-xs text-primaryDark mt-4 font-bold"><i class="fas fa-shield-alt text-primary"></i> الدفع عند الاستلام - معلوماتك محمية</p>
@@ -237,23 +227,23 @@
     </div>
 
     <!-- 1. LANDING PAGE VIEW -->
-    <div id="landing-view" class="view active relative w-full h-full bg-slate-50 dark:bg-bgDark">
+    <div id="landing-view" class="view active relative w-full h-full bg-white dark:bg-bgDark">
 
         <header class="fixed top-0 w-full glass z-40 transition-all border-b border-primary/10 dark:border-gray-800/50">
             <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center w-full">
                 <div class="flex items-center gap-3 text-xl font-black cursor-pointer hover:scale-105 transition-transform duration-300" onclick="window.scrollTo(0,0)">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-primaryDark flex items-center justify-center text-white shadow-md"><i class="fas fa-leaf"></i></div>
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-primaryDark flex items-center justify-center text-white shadow-[0_5px_15px_rgba(74,222,128,0.5)]"><i class="fas fa-leaf"></i></div>
                     Tirourda <span class="text-primary font-light">Affiliate</span>
                 </div>
                 <div class="flex gap-3" id="nav-auth-buttons">
                     <button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primaryDark font-bold px-3 text-sm md:text-base transition-colors">دخول</button>
-                    <button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg font-bold text-sm md:text-base transition-all transform hover:-translate-y-0.5">إنشاء حساب</button>
+                    <button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white px-5 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(74,222,128,0.4)] hover:shadow-[0_8px_20px_rgba(74,222,128,0.6)] font-bold text-sm md:text-base transition-all transform hover:-translate-y-0.5">إنشاء حساب</button>
                 </div>
             </div>
         </header>
 
-        <!-- Hero Section Updated: Premium interactive CSS Smartphone Display with floating Money & Growth Chart -->
-        <section class="pt-28 pb-16 relative min-h-[95vh] flex flex-col justify-center items-center overflow-hidden bg-white dark:bg-bgDark">
+        <!-- Hero Section Updated: Static Image Replaced with Live Earnings & Stats Simulation Card -->
+        <section class="pt-28 pb-16 relative min-h-[90vh] flex flex-col justify-center items-center overflow-hidden bg-white dark:bg-bgDark">
             
             <!-- Floating Background Elements (Green/White) -->
             <div class="absolute inset-0 overflow-hidden pointer-events-none w-full h-full">
@@ -269,162 +259,114 @@
 
             <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
                 
-                <!-- MOBILE SMARTPHONE HERO IMAGE (Shows on top for mobile, hidden on large screens) -->
+                <!-- NEW MOBILE STATS CARD (Replaces original top mobile image) -->
                 <div class="w-full flex justify-center lg:hidden order-1 animate-fade-up">
-                    <div class="relative w-full max-w-sm flex justify-center items-center py-6">
-                        <!-- Premium Interactive CSS Smartphone with Floating Wealth Components -->
-                        <div class="relative mx-auto w-72 h-[520px] bg-slate-900 dark:bg-slate-800 rounded-[45px] p-3 shadow-[0_25px_60px_-15px_rgba(74,222,128,0.3)] border-4 border-slate-700/80 flex flex-col justify-between overflow-hidden animate-float">
-                            <!-- Screen -->
-                            <div class="bg-slate-950 w-full h-full rounded-[35px] overflow-hidden relative flex flex-col p-4 text-white">
-                                <!-- Phone Notch -->
-                                <div class="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-5 bg-slate-900 rounded-full z-20 flex items-center justify-around px-3">
-                                    <span class="w-2 h-2 rounded-full bg-slate-800"></span>
-                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-900"></span>
-                                </div>
-                                <!-- Status Bar -->
-                                <div class="flex justify-between items-center text-[10px] text-gray-400 mt-3 px-2 mb-4">
-                                    <span>09:41</span>
-                                    <div class="flex gap-1 items-center">
-                                        <i class="fas fa-signal"></i>
-                                        <i class="fas fa-wifi"></i>
-                                        <i class="fas fa-battery-three-quarters text-green-400"></i>
-                                    </div>
-                                </div>
-                                <!-- Header inside app -->
-                                <div class="flex items-center gap-2 mb-4 px-1">
-                                    <div class="w-7 h-7 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400 text-xs"><i class="fas fa-leaf"></i></div>
-                                    <div>
-                                        <div class="text-[10px] text-gray-300 font-black">Tirourda Affiliate</div>
-                                        <div class="text-[8px] text-gray-500">Live Dashboard</div>
-                                    </div>
-                                </div>
-                                <!-- Earnings Card Mockup -->
-                                <div class="bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl p-4 shadow-lg mb-4 relative overflow-hidden">
-                                    <span class="text-[9px] opacity-90 block font-bold">الرصيد المتاح للسحب</span>
-                                    <span class="text-lg font-black tracking-wide">+ 85,500 دج</span>
-                                    <span class="text-[8px] bg-black/25 px-2 py-0.5 rounded-full block mt-2 w-max">شريك نشط ⭐</span>
-                                    <i class="fas fa-wallet absolute right-3 bottom-3 text-white/10 text-3xl"></i>
-                                </div>
-                                <!-- Charts inside app screen -->
-                                <div class="bg-slate-900/80 rounded-2xl p-3 border border-white/5 mb-4 flex-1 flex flex-col justify-between">
-                                    <div class="flex justify-between items-center text-[9px] text-gray-400">
-                                        <span>معدل الأرباح هذا الشهر</span>
-                                        <span class="text-green-400 font-bold">+28% <i class="fas fa-arrow-up"></i></span>
-                                    </div>
-                                    <div class="h-20 flex items-end gap-2 px-1 mt-2">
-                                        <div class="w-full bg-slate-800 rounded-t-sm h-[30%]"></div>
-                                        <div class="w-full bg-slate-800 rounded-t-sm h-[45%]"></div>
-                                        <div class="w-full bg-slate-800 rounded-t-sm h-[40%]"></div>
-                                        <div class="w-full bg-slate-800 rounded-t-sm h-[65%]"></div>
-                                        <div class="w-full bg-green-500/30 rounded-t-sm h-[80%] relative">
-                                            <div class="absolute inset-x-0 bottom-0 bg-green-400 rounded-t-sm h-[70%]"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Notification mock -->
-                                <div class="bg-slate-900/50 rounded-xl p-2 border border-white/5 flex items-center justify-between text-[8px]">
-                                    <div class="flex items-center gap-1.5">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping"></span>
-                                        <span class="text-gray-300 font-medium">طلب ناجح عمولة (+500 دج)</span>
-                                    </div>
-                                    <span class="text-gray-500">الآن</span>
+                    <div class="relative w-full max-w-sm bg-gradient-to-br from-white to-green-50/50 dark:from-cardDark dark:to-bgDark p-6 rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.15)] border border-primary/20 relative z-10">
+                        <div class="flex items-center justify-between mb-4 border-b border-gray-100 dark:border-gray-800 pb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center text-primaryDark"><i class="fas fa-chart-pie text-lg"></i></div>
+                                <div>
+                                    <h4 class="font-black text-sm text-gray-800 dark:text-white">مؤشرات الأرباح التفاعلية</h4>
+                                    <span class="text-[10px] text-green-500 font-bold flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span> مباشر الآن</span>
                                 </div>
                             </div>
-                            
-                            <!-- Floating Money Assets Outside the screen -->
-                            <div class="absolute -top-4 -right-4 bg-white dark:bg-cardDark p-2.5 rounded-2xl shadow-lg z-20 flex items-center gap-1.5 border border-primary/20 text-primaryDark font-black text-xs animate-bounce" style="animation-duration: 3s">
-                                <span>💵</span> <span>+1,500 دج</span>
+                            <span class="text-[10px] bg-primary/10 text-primaryDark px-2 py-1 rounded-lg font-bold">تحديث فوري</span>
+                        </div>
+                        
+                        <div class="space-y-3 mb-4">
+                            <div class="p-3 bg-green-50/40 dark:bg-bgDark/40 rounded-2xl border border-primary/10">
+                                <div class="text-[10px] text-gray-400 font-bold mb-1">العمولات المدفوعة للمسوقين</div>
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-2xl font-black text-primaryDark tracking-wider">3,850,500 دج</span>
+                                    <span class="text-[10px] text-green-500 font-bold"><i class="fas fa-caret-up"></i> +18.4%</span>
+                                </div>
                             </div>
-                            <div class="absolute top-1/2 -left-10 bg-white dark:bg-cardDark p-2.5 rounded-2xl shadow-lg z-20 flex items-center gap-1.5 border border-primary/20 text-primaryDark font-black text-[10px] animate-pulse">
-                                <span>📈</span> <span>عمولات فورية</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="p-2.5 bg-white dark:bg-cardDark border border-gray-100 dark:border-gray-800 rounded-xl">
+                                    <span class="text-[9px] text-gray-400 font-bold block mb-0.5">الطلبات المسلمة اليوم</span>
+                                    <span class="text-sm font-black text-gray-800 dark:text-white">+ 42 طلب</span>
+                                </div>
+                                <div class="p-2.5 bg-white dark:bg-cardDark border border-gray-100 dark:border-gray-800 rounded-xl">
+                                    <span class="text-[9px] text-gray-400 font-bold block mb-0.5">أعلى عمولة اليوم</span>
+                                    <span class="text-sm font-black text-primaryDark">24,500 دج</span>
+                                </div>
                             </div>
-                            <div class="absolute -bottom-2 -right-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 p-2 rounded-xl shadow-lg z-20 flex items-center gap-1.5 font-black text-[10px]">
-                                <span>💰 سحب فوري</span>
-                            </div>
+                        </div>
+
+                        <!-- Mini SVG chart decoration -->
+                        <div class="h-12 relative overflow-hidden rounded-xl bg-gray-50 dark:bg-bgDark/50 p-1 flex items-end border border-gray-100 dark:border-gray-800">
+                            <svg class="absolute inset-x-0 bottom-0 w-full h-10 text-primary/15" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                <path d="M0,80 Q15,40 30,60 T60,20 T90,40 T100,10 L100,100 L0,100 Z" fill="currentColor"></path>
+                                <path d="M0,80 Q15,40 30,60 T60,20 T90,40 T100,10" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round"></path>
+                            </svg>
                         </div>
                     </div>
                 </div>
 
                 <div class="text-center lg:text-right order-2 lg:order-1 z-10">
-                    <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6 animate-fade-up delay-100 text-gray-900 dark:text-white">اربح المال مع <br> <span class="gradient-text">Tirourda Affiliate</span> <i class="fas fa-arrow-trend-up trend-arrow mr-2 text-4xl md:text-6xl text-primary align-middle"></i></h1>
-                    <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto lg:mx-0 animate-fade-up delay-200 leading-relaxed font-semibold">شارك منتجاتنا المتميزة واحصل على <span class="font-bold text-primaryDark bg-green-50 dark:bg-green-950/30 px-3 py-1 rounded-lg border border-primary/20 inline-block mt-1 md:mt-0">500 دج عمولة ثابتة</span> على كل طلبية ناجحة.</p>
-                    <div id="hero-cta" class="animate-fade-up delay-300"><button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-0.5">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button></div>
+                    <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6 animate-fade-up delay-100 text-gray-900 dark:text-white">اربح المال مع <br> <span class="gradient-text">Tirourda Affiliate</span> <i class="fas fa-arrow-trend-up trend-arrow mr-2 text-4xl md:text-6xl text-primary drop-shadow-md align-middle"></i></h1>
+                    <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto lg:mx-0 animate-fade-up delay-200 leading-relaxed font-semibold">شارك منتجاتنا المتميزة واحصل على <span class="font-bold text-primaryDark bg-green-50 px-3 py-1 rounded-lg border border-primary/20 inline-block mt-1 md:mt-0">500 دج عمولة ثابتة</span> على كل طلبية ناجحة.</p>
+                    <div id="hero-cta" class="animate-fade-up delay-300"><button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-[0_10px_25px_rgba(74,222,128,0.5)] hover:shadow-[0_15px_35px_rgba(74,222,128,0.7)] transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-1">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button></div>
                 </div>
                 
-                <!-- DESKTOP SMARTPHONE HERO IMAGE (Hidden on mobile, shows on right side for large screens) -->
+                <!-- NEW DESKTOP STATS CARD (Replaces original desktop side image) -->
                 <div class="relative z-10 hidden lg:flex order-2 justify-center w-full animate-fade-up delay-200">
-                     <div class="relative w-full max-w-md ml-auto flex justify-center items-center">
-                         <!-- Premium Interactive CSS Smartphone with Floating Wealth Components -->
-                         <div class="relative mx-auto w-80 h-[560px] bg-slate-900 dark:bg-slate-800 rounded-[50px] p-3.5 shadow-[0_25px_60px_-15px_rgba(74,222,128,0.35)] border-4 border-slate-700/80 flex flex-col justify-between overflow-hidden animate-float">
-                             <!-- Screen -->
-                             <div class="bg-slate-950 w-full h-full rounded-[38px] overflow-hidden relative flex flex-col p-5 text-white">
-                                 <!-- Phone Notch -->
-                                 <div class="absolute top-2.5 left-1/2 -translate-x-1/2 w-32 h-5 bg-slate-900 rounded-full z-20 flex items-center justify-around px-3">
-                                     <span class="w-2 h-2 rounded-full bg-slate-800"></span>
-                                     <span class="w-1.5 h-1.5 rounded-full bg-blue-900"></span>
-                                 </div>
-                                 <!-- Status Bar -->
-                                 <div class="flex justify-between items-center text-[10px] text-gray-400 mt-3 px-2 mb-5">
-                                     <span>09:41</span>
-                                     <div class="flex gap-1 items-center">
-                                         <i class="fas fa-signal"></i>
-                                         <i class="fas fa-wifi"></i>
-                                         <i class="fas fa-battery-three-quarters text-green-400"></i>
-                                     </div>
-                                 </div>
-                                 <!-- Header inside app -->
-                                 <div class="flex items-center gap-2 mb-5 px-1">
-                                     <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400 text-sm"><i class="fas fa-leaf"></i></div>
-                                     <div>
-                                         <div class="text-[11px] text-gray-300 font-black">Tirourda Affiliate</div>
-                                         <div class="text-[9px] text-gray-500">Live Dashboard</div>
-                                     </div>
-                                 </div>
-                                 <!-- Earnings Card Mockup -->
-                                 <div class="bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl p-4 shadow-lg mb-5 relative overflow-hidden">
-                                     <span class="text-[10px] opacity-90 block font-bold">الرصيد المتاح للسحب</span>
-                                     <span class="text-xl font-black tracking-wide">+ 85,500 دج</span>
-                                     <span class="text-[8px] bg-black/25 px-2.5 py-0.5 rounded-full block mt-2.5 w-max">شريك نشط ⭐</span>
-                                     <i class="fas fa-wallet absolute right-4 bottom-4 text-white/10 text-4xl"></i>
-                                 </div>
-                                 <!-- Charts inside app screen -->
-                                 <div class="bg-slate-900/80 rounded-2xl p-4 border border-white/5 mb-5 flex-1 flex flex-col justify-between">
-                                     <div class="flex justify-between items-center text-[10px] text-gray-400">
-                                         <span>معدل الأرباح هذا الشهر</span>
-                                         <span class="text-green-400 font-bold">+28% <i class="fas fa-arrow-up"></i></span>
-                                     </div>
-                                     <div class="h-24 flex items-end gap-2.5 px-1 mt-3">
-                                         <div class="w-full bg-slate-800 rounded-t-sm h-[30%]"></div>
-                                         <div class="w-full bg-slate-800 rounded-t-sm h-[45%]"></div>
-                                         <div class="w-full bg-slate-800 rounded-t-sm h-[40%]"></div>
-                                         <div class="w-full bg-slate-800 rounded-t-sm h-[65%]"></div>
-                                         <div class="w-full bg-green-500/30 rounded-t-sm h-[80%] relative">
-                                             <div class="absolute inset-x-0 bottom-0 bg-green-400 rounded-t-sm h-[70%]"></div>
-                                         </div>
-                                     </div>
-                                 </div>
-                                 <!-- Notification mock -->
-                                 <div class="bg-slate-900/50 rounded-xl p-2.5 border border-white/5 flex items-center justify-between text-[9px]">
-                                     <div class="flex items-center gap-1.5">
-                                         <span class="w-2 h-2 rounded-full bg-green-400 animate-ping"></span>
-                                         <span class="text-gray-300 font-medium">طلب ناجح عمولة (+500 دج)</span>
-                                     </div>
-                                     <span class="text-gray-500">الآن</span>
-                                 </div>
-                             </div>
-                             
-                             <!-- Floating Money Assets Outside the screen -->
-                             <div class="absolute -top-5 -right-5 bg-white dark:bg-cardDark p-3.5 rounded-2xl shadow-xl z-20 flex items-center gap-2 border border-primary/20 text-primaryDark font-black text-sm animate-bounce" style="animation-duration: 3s">
-                                 <span>💵</span> <span>+1,500 دج</span>
-                             </div>
-                             <div class="absolute top-1/2 -left-12 bg-white dark:bg-cardDark p-3.5 rounded-2xl shadow-xl z-20 flex items-center gap-2 border border-primary/20 text-primaryDark font-black text-xs animate-pulse">
-                                 <span>📈</span> <span>عمولات فورية</span>
-                             </div>
-                             <div class="absolute -bottom-3 -right-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 p-2.5 rounded-xl shadow-xl z-20 flex items-center gap-2 font-black text-xs">
-                                 <span>💰 سحب فوري</span>
-                             </div>
-                         </div>
-                     </div>
+                     <div class="relative w-full max-w-md ml-auto bg-gradient-to-br from-white to-green-50/50 dark:from-cardDark dark:to-bgDark p-8 rounded-3xl shadow-[0_25px_60px_rgba(74,222,128,0.2)] border border-primary/20 relative z-10">
+                        <div class="flex items-center justify-between mb-6 border-b border-gray-100 dark:border-gray-800 pb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center text-primaryDark"><i class="fas fa-chart-pie text-lg"></i></div>
+                                <div>
+                                    <h4 class="font-black text-sm text-gray-800 dark:text-white">مؤشرات الأرباح التفاعلية</h4>
+                                    <span class="text-[10px] text-green-500 font-bold flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span> مباشر الآن</span>
+                                </div>
+                            </div>
+                            <span class="text-xs bg-primary/10 text-primaryDark px-2.5 py-1 rounded-lg font-bold">تحديث فوري</span>
+                        </div>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="p-4 bg-green-50/40 dark:bg-bgDark/40 rounded-2xl border border-primary/10">
+                                <div class="text-[11px] text-gray-400 font-bold mb-1">العمولات المدفوعة للمسوقين</div>
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-3xl font-black text-primaryDark tracking-wider">3,850,500 دج</span>
+                                    <span class="text-xs text-green-500 font-bold"><i class="fas fa-caret-up"></i> +18.4%</span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-3 bg-white dark:bg-cardDark border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm">
+                                    <span class="text-[10px] text-gray-400 font-bold block mb-1">الطلبات المسلمة اليوم</span>
+                                    <span class="text-base font-black text-gray-800 dark:text-white">+ 42 طلب</span>
+                                </div>
+                                <div class="p-3 bg-white dark:bg-cardDark border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm">
+                                    <span class="text-[10px] text-gray-400 font-bold block mb-1">أعلى عمولة اليوم</span>
+                                    <span class="text-base font-black text-primaryDark">24,500 دج</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SVG Chart Line -->
+                        <div class="mb-6 h-24 relative overflow-hidden rounded-xl bg-gray-50 dark:bg-bgDark/50 p-2 flex items-end border border-gray-100 dark:border-gray-800">
+                            <svg class="absolute inset-x-0 bottom-0 w-full h-16 text-primary/20" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                <path d="M0,80 Q15,40 30,60 T60,20 T90,40 T100,10 L100,100 L0,100 Z" fill="currentColor"></path>
+                                <path d="M0,80 Q15,40 30,60 T60,20 T90,40 T100,10" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round"></path>
+                            </svg>
+                            <div class="flex justify-between w-full text-[9px] text-gray-400 font-bold relative z-10 px-2 pb-1">
+                                <span>السبت</span>
+                                <span>الاثنين</span>
+                                <span>الأربعاء</span>
+                                <span>اليوم</span>
+                            </div>
+                        </div>
+
+                        <!-- Simulated Live Activity feed -->
+                        <div class="space-y-2 border-t border-gray-100 dark:border-gray-800 pt-4">
+                            <span class="text-[10px] text-gray-400 font-bold block uppercase tracking-wide">النشاط الأخير</span>
+                            <div class="flex items-center justify-between text-xs p-2 bg-gray-50/50 dark:bg-bgDark/30 rounded-xl border border-gray-100/50 dark:border-gray-800/50">
+                                <span class="font-bold text-gray-600 dark:text-gray-300">سحب (أحمد ب.) عبر CCP</span>
+                                <span class="text-green-500 font-black">9,500 دج ✔️</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -432,15 +374,15 @@
         <section class="py-12 border-y border-primary/10 dark:border-gray-800 bg-white dark:bg-cardDark/50 backdrop-blur-md reveal-on-scroll z-10 relative">
             <div class="container mx-auto px-6">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                    <div class="hover:scale-105 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">150<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">مسوق نشط</p></div>
-                    <div class="hover:scale-105 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">500K<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">دج مدفوعة</p></div>
-                    <div class="hover:scale-105 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">1,200<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">طلب ناجح</p></div>
-                    <div class="hover:scale-105 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">45<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">منتج مميز</p></div>
+                    <div class="hover:scale-110 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">150<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">مسوق نشط</p></div>
+                    <div class="hover:scale-110 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">500K<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">دج مدفوعة</p></div>
+                    <div class="hover:scale-110 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">1,200<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">طلب ناجح</p></div>
+                    <div class="hover:scale-110 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">45<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">منتج مميز</p></div>
                 </div>
             </div>
         </section>
 
-        <section class="py-20 bg-green-50/20 dark:bg-bgDark/50 relative overflow-hidden reveal-on-scroll">
+        <section class="py-20 bg-green-50/30 dark:bg-bgDark/50 relative overflow-hidden reveal-on-scroll">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16"><h2 class="text-4xl font-black mb-4 text-gray-900 dark:text-white">كيف تبدأ <span class="gradient-text">الربح؟</span></h2><p class="text-gray-500 max-w-2xl mx-auto text-lg">خطوات بسيطة ومضمونة لتحقيق أولى أرباحك معنا</p></div>
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative text-center">
@@ -467,15 +409,15 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-right max-w-6xl mx-auto">
                     <div class="bg-white dark:bg-bgDark p-10 rounded-3xl border border-primary/20 dark:border-gray-800 hover-card-elegant relative overflow-hidden shadow-sm">
                         <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center rounded-2xl text-2xl mb-8 shadow-md"><i class="fas fa-percent"></i></div><h3 class="text-2xl font-black mb-4 text-gray-800 dark:text-white">عمولة ثابتة ومجزية</h3><p class="text-gray-500 leading-relaxed">نقدم 500 دج عمولة ثابتة على كل طلبية ناجحة لتكافئ جهودك بشكل عادل ومضمون.</p>
+                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center rounded-2xl text-2xl mb-8 shadow-[0_5px_15px_rgba(74,222,128,0.4)]"><i class="fas fa-percent"></i></div><h3 class="text-2xl font-black mb-4 text-gray-800 dark:text-white">عمولة ثابتة ومجزية</h3><p class="text-gray-500 leading-relaxed">نقدم 500 دج عمولة ثابتة على كل طلبية ناجحة لتكافئ جهودك بشكل عادل ومضمون.</p>
                     </div>
                     <div class="bg-white dark:bg-bgDark p-10 rounded-3xl border border-primary/20 dark:border-gray-800 hover-card-elegant relative overflow-hidden shadow-sm">
                         <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center rounded-2xl text-2xl mb-8 shadow-md"><i class="fas fa-bolt"></i></div><h3 class="text-2xl font-black mb-4 text-gray-800 dark:text-white">سحب سريع ومضمون</h3><p class="text-gray-500 leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي CCP أو كرصيد هاتف (Flexy) بكل سهولة.</p>
+                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center rounded-2xl text-2xl mb-8 shadow-[0_5px_15px_rgba(74,222,128,0.4)]"><i class="fas fa-bolt"></i></div><h3 class="text-2xl font-black mb-4 text-gray-800 dark:text-white">سحب سريع ومضمون</h3><p class="text-gray-500 leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي CCP أو كرصيد هاتف (Flexy) بكل سهولة.</p>
                     </div>
                     <div class="bg-white dark:bg-bgDark p-10 rounded-3xl border border-primary/20 dark:border-gray-800 hover-card-elegant relative overflow-hidden md:col-span-2 lg:col-span-1 shadow-sm">
                         <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center rounded-2xl text-2xl mb-8 shadow-md"><i class="fas fa-link"></i></div><h3 class="text-2xl font-black mb-4 text-gray-800 dark:text-white">رابط خاص لكل منتج</h3><p class="text-gray-500 leading-relaxed">تحصل على رابط فريد يوجه زبائنك لصفحة شراء محترفة تزيد من نسبة مبيعاتك.</p>
+                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center rounded-2xl text-2xl mb-8 shadow-[0_5px_15px_rgba(74,222,128,0.4)]"><i class="fas fa-link"></i></div><h3 class="text-2xl font-black mb-4 text-gray-800 dark:text-white">رابط خاص لكل منتج</h3><p class="text-gray-500 leading-relaxed">تحصل على رابط فريد يوجه زبائنك لصفحة شراء محترفة تزيد من نسبة مبيعاتك.</p>
                     </div>
                 </div>
             </div>
@@ -526,10 +468,10 @@
 
             <div id="tab-home" class="tab-content block animate-fade-in w-full">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-yellow-400/10"><i class="fas fa-hourglass-half"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">معلق</div><div class="text-2xl md:text-3xl font-black text-yellow-500" id="user-pending">0</div></div>
-                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-primary/10"><i class="fas fa-wallet"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">إجمالي الأرباح</div><div class="text-2xl md:text-3xl font-black text-primaryDark" id="user-total">0</div></div>
-                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-slate-800/5 dark:text-white/5"><i class="fas fa-shopping-cart"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">مبيعات ناجحة</div><div class="text-2xl md:text-3xl font-black text-gray-800 dark:text-white" id="user-orders-count">0</div></div>
-                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-blue-400/10"><i class="fas fa-mouse-pointer"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">نقرات الروابط</div><div class="text-2xl md:text-3xl font-black text-blue-500" id="user-clicks">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-yellow-400/20"><i class="fas fa-hourglass-half"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">معلق</div><div class="text-2xl md:text-3xl font-black text-yellow-500" id="user-pending">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-primary/20"><i class="fas fa-wallet"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">إجمالي الأرباح</div><div class="text-2xl md:text-3xl font-black text-primaryDark" id="user-total">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-primary/10 dark:text-white/5"><i class="fas fa-shopping-cart"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">مبيعات ناجحة</div><div class="text-2xl md:text-3xl font-black text-gray-800 dark:text-white" id="user-orders-count">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-blue-400/20"><i class="fas fa-mouse-pointer"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">نقرات الروابط</div><div class="text-2xl md:text-3xl font-black text-blue-500" id="user-clicks">0</div></div>
                 </div>
                 <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 max-h-[500px] overflow-y-auto custom-scrollbar">
                     <h3 class="font-black text-lg mb-6 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-8 h-8 rounded-lg bg-primary/20 text-primaryDark flex items-center justify-center"><i class="fas fa-list"></i></div> الطلبات الأخيرة من روابطك</h3>
@@ -554,19 +496,19 @@
                         </div>
                         <form onsubmit="window.handleWithdrawRequest(event)" class="space-y-5">
                             <div class="relative group">
-                                <input type="number" id="withdraw-amount" min="500" placeholder="المبلغ (الأدنى 500)" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none glow-focus transition-all shadow-sm" required>
+                                <input type="number" id="withdraw-amount" min="500" placeholder="المبلغ (الأدنى 500)" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" required>
                             </div>
                             <div class="relative group">
-                                <select id="withdraw-method" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none glow-focus transition-all appearance-none cursor-pointer shadow-sm">
+                                <select id="withdraw-method" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer shadow-sm">
                                     <option value="ccp">CCP / BaridiMob (حساب بريدي)</option>
                                     <option value="flexy">Flexy (رصيد هاتف)</option>
                                 </select>
                                 <i class="fas fa-chevron-down absolute left-4 top-4 text-primary pointer-events-none"></i>
                             </div>
                             <div class="relative group">
-                                <input type="text" id="withdraw-account" placeholder="رقم الحساب أو رقم الهاتف المربوط" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none glow-focus transition-all shadow-sm" dir="ltr" required>
+                                <input type="text" id="withdraw-account" placeholder="رقم الحساب أو رقم الهاتف المربوط" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" dir="ltr" required>
                             </div>
-                            <button type="submit" id="withdraw-submit-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-black text-lg py-4 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">تأكيد السحب <i class="fas fa-paper-plane ml-2"></i></button>
+                            <button type="submit" id="withdraw-submit-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-black text-lg py-4 rounded-xl shadow-[0_10px_20px_rgba(74,222,128,0.4)] hover:shadow-[0_15px_30px_rgba(74,222,128,0.6)] transition-all transform hover:-translate-y-1">تأكيد السحب <i class="fas fa-paper-plane ml-2"></i></button>
                         </form>
                     </div>
 
@@ -581,15 +523,15 @@
 
             <div id="tab-support" class="tab-content hidden animate-fade-in w-full">
                 <div class="bg-white dark:bg-cardDark p-6 md:p-10 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 max-w-2xl mx-auto">
-                    <h3 class="font-black text-2xl mb-8 text-center flex items-center justify-center gap-3 text-gray-800 dark:text-white"><div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center shadow-md"><i class="fas fa-headset"></i></div> اتصل بالدعم</h3>
+                    <h3 class="font-black text-2xl mb-8 text-center flex items-center justify-center gap-3 text-gray-800 dark:text-white"><div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center shadow-[0_10px_20px_rgba(74,222,128,0.4)]"><i class="fas fa-headset"></i></div> اتصل بالدعم</h3>
                     <form onsubmit="window.submitSupportTicket(event)" class="space-y-5">
-                        <input type="text" id="support-name" placeholder="الاسم الكامل" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none glow-focus transition-all font-bold shadow-sm" required>
+                        <input type="text" id="support-name" placeholder="الاسم الكامل" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-bold shadow-sm" required>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <input type="tel" id="support-phone" placeholder="الهاتف" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none glow-focus transition-all font-bold text-right shadow-sm" dir="ltr" required>
-                            <input type="email" id="support-email" placeholder="الإيميل" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none glow-focus transition-all font-bold shadow-sm" required>
+                            <input type="tel" id="support-phone" placeholder="الهاتف" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-bold text-right shadow-sm" dir="ltr" required>
+                            <input type="email" id="support-email" placeholder="الإيميل" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-bold shadow-sm" required>
                         </div>
-                        <textarea id="support-desc" placeholder="وصف المشكلة بتفصيل..." rows="5" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none glow-focus transition-all resize-none font-bold shadow-sm" required></textarea>
-                        <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 dark:text-gray-900 text-white font-black text-lg py-4 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">إرسال الطلب <i class="fas fa-paper-plane ml-2"></i></button>
+                        <textarea id="support-desc" placeholder="وصف المشكلة بتفصيل..." rows="5" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none font-bold shadow-sm" required></textarea>
+                        <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 dark:text-gray-900 text-white font-black text-lg py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-1">إرسال الطلب <i class="fas fa-paper-plane ml-2"></i></button>
                     </form>
                 </div>
             </div>
@@ -598,12 +540,12 @@
 
     <!-- 3. ADMIN LOGIN VIEW -->
     <div id="admin-login-view" class="view flex-view items-center justify-center min-h-screen bg-white dark:bg-bgDark relative p-4">
-        <div class="bg-white dark:bg-cardDark p-10 rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.15)] border border-primary/20 dark:border-gray-800 w-full max-w-md text-center transform hover:scale-105 transition-transform duration-500">
+        <div class="bg-white dark:bg-cardDark p-10 rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.2)] border border-primary/20 dark:border-gray-800 w-full max-w-md text-center transform hover:scale-105 transition-transform duration-500">
             <div class="w-20 h-20 bg-gradient-to-br from-primary to-primaryDark text-white rounded-3xl mx-auto flex items-center justify-center text-4xl mb-8 shadow-xl"><i class="fas fa-shield-alt"></i></div>
             <h2 class="text-3xl font-black mb-8 text-gray-800 dark:text-white">الإدارة</h2>
             <form onsubmit="window.handleAdminLogin(event)">
-                <input type="password" id="admin-password" placeholder="كلمة المرور" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-center font-bold tracking-widest mb-6 outline-none glow-focus transition-all text-xl shadow-sm" dir="ltr" required>
-                <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 font-black text-lg py-4 rounded-xl shadow-md transform hover:-translate-y-0.5 transition-all">دخول آمن <i class="fas fa-lock ml-2"></i></button>
+                <input type="password" id="admin-password" placeholder="كلمة المرور" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-center font-bold tracking-widest mb-6 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-xl shadow-sm" dir="ltr" required>
+                <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 font-black text-lg py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all">دخول آمن <i class="fas fa-lock ml-2"></i></button>
             </form>
             <button type="button" onclick="window.navigate('landing')" class="mt-8 text-sm font-bold text-gray-500 hover:text-primary transition-colors">العودة للرئيسية <i class="fas fa-arrow-left ml-1 text-xs"></i></button>
         </div>
@@ -639,9 +581,9 @@
             </div>
 
             <div class="flex gap-3 mb-8 overflow-x-auto pb-4 scrollbar-hide">
-                <button onclick="window.switchAdminTab('products')" class="whitespace-nowrap bg-gray-800 hover:bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-0.5 transition-all shadow-md"><i class="fas fa-plus mr-1"></i> إضافة منتج</button>
-                <button onclick="window.switchAdminTab('users')" class="whitespace-nowrap bg-primaryDark hover:bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-0.5 transition-all shadow-md"><i class="fas fa-users mr-1"></i> إدارة المسوقين</button>
-                <button onclick="window.switchAdminTab('withdrawals')" class="whitespace-nowrap bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-0.5 transition-all shadow-md"><i class="fas fa-hand-holding-usd mr-1"></i> طلبات السحب</button>
+                <button onclick="window.switchAdminTab('products')" class="whitespace-nowrap bg-gray-800 hover:bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-plus mr-1"></i> إضافة منتج</button>
+                <button onclick="window.switchAdminTab('users')" class="whitespace-nowrap bg-primaryDark hover:bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-users mr-1"></i> إدارة المسوقين</button>
+                <button onclick="window.switchAdminTab('withdrawals')" class="whitespace-nowrap bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-hand-holding-usd mr-1"></i> طلبات السحب</button>
             </div>
 
             <div id="admin-tab-home" class="admin-tab-content block w-full animate-fade-in">
@@ -660,14 +602,14 @@
                         <form onsubmit="window.submitProduct(event)" id="admin-product-form" class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 space-y-5 sticky top-8">
                             <h3 class="font-black text-xl flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/20 text-primaryDark flex items-center justify-center"><i class="fas fa-plus"></i></div> منتج جديد</h3>
                             <input type="hidden" id="prod-id">
-                            <input type="text" id="prod-name" placeholder="اسم المنتج" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none glow-focus transition-all shadow-sm" required>
-                            <input type="number" id="prod-price" placeholder="السعر (دج)" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none glow-focus transition-all shadow-sm" required>
-                            <textarea id="prod-desc" placeholder="الوصف" rows="5" class="w-full bg-slate-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none glow-focus transition-all resize-none shadow-sm"></textarea>
+                            <input type="text" id="prod-name" placeholder="اسم المنتج" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary transition-all shadow-sm" required>
+                            <input type="number" id="prod-price" placeholder="السعر (دج)" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary transition-all shadow-sm" required>
+                            <textarea id="prod-desc" placeholder="الوصف" rows="5" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary transition-all resize-none shadow-sm"></textarea>
                             <div class="bg-green-50 dark:bg-bgDark border border-dashed border-primary/40 dark:border-gray-600 rounded-xl p-4 text-center relative hover:border-primary transition-colors group cursor-pointer">
                                 <label class="block text-sm font-bold text-gray-500 group-hover:text-primaryDark transition-colors cursor-pointer"><i class="fas fa-cloud-upload-alt text-2xl mb-2 block"></i> صورة المنتج</label>
                                 <input type="file" id="prod-image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
-                            <button type="submit" id="prod-submit-btn" class="bg-gradient-to-r from-primary to-primaryDark text-white w-full py-4 rounded-xl font-black text-lg shadow-md transform hover:-translate-y-0.5 transition-all">حفظ المنتج <i class="fas fa-save ml-2"></i></button>
+                            <button type="submit" id="prod-submit-btn" class="bg-gradient-to-r from-primary to-primaryDark text-white w-full py-4 rounded-xl font-black text-lg shadow-[0_10px_20px_rgba(74,222,128,0.4)] transform hover:-translate-y-1 transition-all">حفظ المنتج <i class="fas fa-save ml-2"></i></button>
                         </form>
                     </div>
                     <div class="lg:col-span-2 bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 overflow-x-auto w-full">
@@ -722,7 +664,7 @@
 
     <!-- TRANSLATION & JAVASCRIPT LOGIC -->
     <script>
-        // TRANSLATION DICTIONARY (AR -> FR) (Kept exactly as requested)
+        // TRANSLATION DICTIONARY (AR -> FR) (Kept exactly as requested, updated with new dashboard card texts)
         const frDict = {
             "المنصة الأقوى": "La plateforme ultime",
             "مرحباً بك مجدداً": "Bon retour",
@@ -863,7 +805,21 @@
             "حظر": "Bannir",
             "دج": "DZD",
             "تراجع": "Retour",
-            "حفظ المنتج": "Enregistrer le produit"
+            "حفظ المنتج": "Enregistrer le produit",
+            // New items for dashboard banner simulation card
+            "مؤشرات الأرباح التفاعلية": "Indicateurs de gains interactifs",
+            "مباشر الآن": "En direct",
+            "تحديث فوري": "Mise à jour instantanée",
+            "العمولات المدفوعة للمسوقين": "Commissions payées aux affiliés",
+            "الطلبات المسلمة اليوم": "Commandes livrées aujourd'hui",
+            "أعلى عمولة اليوم": "Meilleure commission du jour",
+            "السبت": "Samedi",
+            "الاثنين": "Lundi",
+            "الأربعاء": "Mercredi",
+            "اليوم": "Aujourd'hui",
+            "النشاط الأخير": "Activité récente",
+            "سحب (أحمد ب.) عبر CCP": "Retrait (Ahmed B.) via CCP",
+            "عمولة جديدة (سارة م.)": "Nouvelle commission (Sarah M.)"
         };
 
         let currentLang = localStorage.getItem('lang') || 'ar';
@@ -901,6 +857,7 @@
             location.reload(); 
         };
 
+        // Format Date
         const formatDate = (timestamp) => {
             if(!timestamp) return '';
             const d = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
@@ -971,11 +928,11 @@
             
             if(navButtons && heroCta && target === 'landing') {
                 if(currentUser) {
-                    navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-gradient-to-r from-primary to-primaryDark text-white px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg font-bold text-sm md:text-base transition-all transform hover:-translate-y-0.5">${t('لوحة التحكم')}</button>`;
-                    heroCta.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-0.5">${t('الذهاب للوحة التحكم')} <i class="fas fa-arrow-left"></i></button>`;
+                    navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-gradient-to-r from-primary to-primaryDark text-white px-5 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(74,222,128,0.4)] hover:shadow-[0_8px_20px_rgba(74,222,128,0.6)] font-bold text-sm md:text-base transition-all transform hover:-translate-y-1">${t('لوحة التحكم')}</button>`;
+                    heroCta.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-[0_10px_25px_rgba(74,222,128,0.5)] hover:shadow-[0_15px_35px_rgba(74,222,128,0.7)] transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-1">${t('الذهاب للوحة التحكم')} <i class="fas fa-arrow-left"></i></button>`;
                 } else {
-                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primaryDark font-bold px-3 text-sm md:text-base transition-colors">${t('دخول')}</button><button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg font-bold text-sm md:text-base transition-all transform hover:-translate-y-0.5">${t('إنشاء حساب')}</button>`;
-                    heroCta.innerHTML = `<button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-0.5">${t('ابدأ الآن مجانا')} <i class="fas fa-arrow-left"></i></button>`;
+                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primaryDark font-bold px-3 text-sm md:text-base transition-colors">${t('دخول')}</button><button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white px-5 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(74,222,128,0.4)] hover:shadow-[0_8px_20px_rgba(74,222,128,0.6)] font-bold text-sm md:text-base transition-all transform hover:-translate-y-1">${t('إنشاء حساب')}</button>`;
+                    heroCta.innerHTML = `<button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-[0_10px_25px_rgba(74,222,128,0.5)] hover:shadow-[0_15px_35px_rgba(74,222,128,0.7)] transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-1">${t('ابدأ الآن مجانا')} <i class="fas fa-arrow-left"></i></button>`;
                 }
             }
         };
@@ -1193,13 +1150,13 @@
                     if(o.status === 'confirmed') conf++;
                     
                     let st = '';
-                    if(o.status === 'pending') st = `<span class="bg-yellow-100 dark:bg-yellow-950/40 text-yellow-700 dark:text-yellow-400 px-3 py-1 rounded-lg text-xs font-bold">${t('معلق')}</span>`;
-                    else if(o.status === 'confirmed') st = `<span class="bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400 px-3 py-1 rounded-lg text-xs font-bold">${t('تم التوصيل')}</span>`;
-                    else if(o.status === 'cancelled') st = `<span class="bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-400 px-3 py-1 rounded-lg text-xs font-bold">${t('ملغاة')}</span>`;
+                    if(o.status === 'pending') st = `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-lg text-xs font-bold">${t('معلق')}</span>`;
+                    else if(o.status === 'confirmed') st = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-xs font-bold">${t('تم التوصيل')}</span>`;
+                    else if(o.status === 'cancelled') st = `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-lg text-xs font-bold">${t('ملغاة')}</span>`;
 
                     const dateStr = formatDate(o.date);
                     
-                    html += `<div class="p-5 border border-primary/10 dark:border-gray-700 rounded-2xl flex justify-between items-center bg-green-50/10 dark:bg-bgDark/50 mb-3 hover:shadow-md transition-shadow"><div><div class="font-black text-base mb-1 text-gray-800 dark:text-gray-100">${o.customerName}</div><div class="text-xs font-bold text-gray-500 mb-1"><i class="fas fa-box text-primaryDark ml-1"></i> ${o.productName}</div><div class="text-[11px] text-gray-400"><i class="fas fa-clock ml-1"></i> ${dateStr}</div></div><div class="text-left font-black text-lg text-primaryDark">${o.commission} دج<br><div class="mt-2 text-left w-full">${st}</div></div></div>`;
+                    html += `<div class="p-5 border border-primary/10 dark:border-gray-700 rounded-2xl flex justify-between items-center bg-green-50/20 dark:bg-bgDark/50 mb-3 hover:shadow-md transition-shadow"><div><div class="font-black text-base mb-1 text-gray-800 dark:text-gray-100">${o.customerName}</div><div class="text-xs font-bold text-gray-500 mb-1"><i class="fas fa-box text-primaryDark ml-1"></i> ${o.productName}</div><div class="text-[11px] text-gray-400"><i class="fas fa-clock ml-1"></i> ${dateStr}</div></div><div class="text-left font-black text-lg text-primaryDark">${o.commission} دج<br><div class="mt-2 text-left w-full">${st}</div></div></div>`;
                 });
                 document.getElementById('user-orders-list').innerHTML = html;
                 document.getElementById('user-pending').innerText = pend;
@@ -1217,7 +1174,7 @@
                     const productLink = `${window.location.origin}${window.location.pathname}#/${safeAffName}/${safeProdName}/${doc.id}?ref=${currentUser.uid}`;
                     
                     html += `
-                        <div class="border border-primary/20 dark:border-gray-850 rounded-3xl p-5 flex flex-col group bg-white dark:bg-cardDark shadow-sm hover-card-elegant">
+                        <div class="border border-primary/20 dark:border-gray-800 rounded-3xl p-5 flex flex-col group bg-white dark:bg-cardDark shadow-sm hover-card-elegant">
                             <div class="overflow-hidden rounded-2xl mb-5">
                                 <img src="${p.image}" class="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500">
                             </div>
@@ -1227,9 +1184,9 @@
                                 <span class="text-xs bg-green-50 dark:bg-primary/10 text-primaryDark font-bold px-3 py-1.5 rounded-xl border border-primary/20">${t('عمولة')}: 500 دج</span>
                             </div>
                             
-                            <div class="mt-auto bg-slate-50/50 dark:bg-bgDark p-2 rounded-xl border border-primary/20 dark:border-gray-700 flex items-center gap-2 group-hover:border-primary/50 transition-colors">
+                            <div class="mt-auto bg-green-50/50 dark:bg-bgDark p-2 rounded-xl border border-primary/20 dark:border-gray-700 flex items-center gap-2 group-hover:border-primary/50 transition-colors">
                                 <input type="text" readonly value="${productLink}" class="w-full bg-transparent text-xs outline-none text-gray-500 dir-ltr text-left px-3 font-medium" onclick="this.select()">
-                                <button onclick="window.copyGeneratedLink('${productLink}')" class="bg-gradient-to-r from-primary to-primaryDark text-white w-12 h-10 rounded-lg transition-all transform hover:scale-105 flex items-center justify-center shrink-0 shadow-md">
+                                <button onclick="window.copyGeneratedLink('${productLink}')" class="bg-gradient-to-r from-primary to-primaryDark text-white w-12 h-10 rounded-lg transition-all transform hover:scale-105 flex items-center justify-center shrink-0 shadow-[0_5px_15px_rgba(74,222,128,0.4)]">
                                     <i class="fas fa-copy"></i>
                                 </button>
                             </div>
@@ -1248,9 +1205,9 @@
                 
                 requests.forEach(req => {
                     let statusHtml = '';
-                    if(req.status === 'pending') statusHtml = `<span class="bg-yellow-100 dark:bg-yellow-950/40 text-yellow-700 dark:text-yellow-400 px-3 py-1.5 rounded-lg text-xs font-bold">${t('قيد المراجعة')} <i class="fas fa-hourglass-half ml-1"></i></span>`;
-                    else if(req.status === 'paid') statusHtml = `<span class="bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400 px-3 py-1.5 rounded-lg text-xs font-bold">${t('تم الدفع')} <i class="fas fa-check ml-1"></i></span>`;
-                    else statusHtml = `<span class="bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-400 px-3 py-1.5 rounded-lg text-xs font-bold">${t('مرفوض')} <i class="fas fa-times ml-1"></i></span>`;
+                    if(req.status === 'pending') statusHtml = `<span class="bg-yellow-100 text-yellow-700 px-3 py-1.5 rounded-lg text-xs font-bold">${t('قيد المراجعة')} <i class="fas fa-hourglass-half ml-1"></i></span>`;
+                    else if(req.status === 'paid') statusHtml = `<span class="bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold">${t('تم الدفع')} <i class="fas fa-check ml-1"></i></span>`;
+                    else statusHtml = `<span class="bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold">${t('مرفوض')} <i class="fas fa-times ml-1"></i></span>`;
 
                     const dateStr = formatDate(req.date);
 
@@ -1453,7 +1410,7 @@
                 let html = '';
                 snap.forEach(doc => {
                     const t_ticket = doc.data();
-                    html += `<div class="bg-green-50/50 dark:bg-bgDark p-5 rounded-2xl border border-primary/20 dark:border-gray-700 shadow-sm"><div class="flex items-center gap-2 mb-2"><i class="fas fa-user-circle text-primaryDark text-2xl"></i><b class="font-black text-lg">${t_ticket.name}</b></div><div class="text-sm text-gray-500 mb-3" dir="ltr"><i class="fas fa-phone mr-1"></i> ${t_ticket.phone}</div><p class="text-sm p-4 bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-600 rounded-xl break-words leading-relaxed font-medium">${t_ticket.description}</p></div>`;
+                    html += `<div class="bg-green-50 dark:bg-bgDark p-5 rounded-2xl border border-primary/20 dark:border-gray-700 shadow-sm"><div class="flex items-center gap-2 mb-2"><i class="fas fa-user-circle text-primaryDark text-2xl"></i><b class="font-black text-lg">${t_ticket.name}</b></div><div class="text-sm text-gray-500 mb-3" dir="ltr"><i class="fas fa-phone mr-1"></i> ${t_ticket.phone}</div><p class="text-sm p-4 bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-600 rounded-xl break-words leading-relaxed font-medium">${t_ticket.description}</p></div>`;
                 });
                 document.getElementById('admin-support-list').innerHTML = html || `<div class="col-span-full text-center text-gray-500 py-8"><i class="fas fa-envelope-open text-3xl mb-2 opacity-50 block"></i>${t('لا توجد طلبات بعد')}</div>`;
             });
@@ -1634,8 +1591,8 @@
 
             document.querySelectorAll('.reveal-on-scroll').forEach(el => {
                 el.style.opacity = '0';
-                el.style.transform = 'translateY(40px)';
-                el.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                el.style.transform = 'translateY(50px)';
+                el.style.transition = 'all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
                 observer.observe(el);
             });
         });
