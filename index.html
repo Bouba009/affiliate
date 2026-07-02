@@ -182,9 +182,27 @@
 
         <div class="container mx-auto px-4 py-8 lg:py-16">
             <div class="bg-white dark:bg-cardDark rounded-3xl shadow-2xl border border-primary/10 dark:border-gray-800 overflow-hidden flex flex-col lg:flex-row max-w-6xl mx-auto hover-card-elegant">
-                <div class="lg:w-1/2 relative bg-white dark:bg-bgDark border-b lg:border-b-0 lg:border-l border-primary/10 dark:border-gray-800">
-                    <img id="lp-image" src="" alt="Product" class="w-full h-80 lg:h-full object-cover">
-                    <div class="absolute top-4 right-4 bg-gradient-to-r from-primary to-primaryDark text-white font-black px-5 py-2.5 rounded-xl shadow-lg animate-pulse-slow">
+                <!-- Image Slider Container (Dynamic, High Quality and Auto Playing) -->
+                <div class="lg:w-1/2 relative bg-white dark:bg-bgDark border-b lg:border-b-0 lg:border-l border-primary/10 dark:border-gray-800 min-h-[350px] lg:min-h-[500px]">
+                    <div class="relative w-full h-full overflow-hidden" id="lp-slider-wrapper">
+                        <div id="lp-slider-container" class="flex transition-transform duration-500 ease-out w-full h-full">
+                            <!-- Injected dynamically in Javascript -->
+                        </div>
+                        
+                        <!-- Slider Controls -->
+                        <button onclick="window.prevSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 text-primaryDark w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform z-20">
+                            <i class="fas fa-chevron-right text-lg"></i>
+                        </button>
+                        <button onclick="window.nextSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 text-primaryDark w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform z-20">
+                            <i class="fas fa-chevron-left text-lg"></i>
+                        </button>
+
+                        <!-- Dots -->
+                        <div id="lp-slider-dots" class="absolute bottom-5 left-0 right-0 flex justify-center gap-2 z-20">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 bg-gradient-to-r from-primary to-primaryDark text-white font-black px-5 py-2.5 rounded-xl shadow-lg animate-pulse-slow z-20">
                         توصيل سريع <i class="fas fa-shipping-fast ml-1"></i>
                     </div>
                 </div>
@@ -201,6 +219,8 @@
                             <input type="hidden" id="lp-prod-id">
                             <input type="hidden" id="lp-ref-id">
                             <input type="hidden" id="lp-prod-name">
+                            <input type="hidden" id="lp-price-val" value="0">
+                            <input type="hidden" id="lp-shipping-cost-val" value="0">
                             
                             <div class="relative group">
                                 <i class="fas fa-user absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
@@ -210,9 +230,44 @@
                                 <i class="fas fa-phone absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
                                 <input type="tel" id="lp-customer-phone" placeholder="رقم الهاتف" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-right font-bold shadow-sm transition-all" dir="ltr" required>
                             </div>
+                            
+                            <!-- Dynamic Wilaya & Baladia Selection -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="relative group">
+                                    <select id="lp-customer-state-select" onchange="window.onStateChange()" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all" required>
+                                        <option value="">-- اختر الولاية --</option>
+                                    </select>
+                                </div>
+                                <div class="relative group">
+                                    <select id="lp-customer-mun-select" onchange="window.updateTotalLandingPrice()" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all" disabled required>
+                                        <option value="">-- اختر البلدية --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Shipping Method -->
                             <div class="relative group">
-                                <i class="fas fa-map-marker-alt absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                                <input type="text" id="lp-customer-state" placeholder="الولاية" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all" required>
+                                <select id="lp-shipping-type" onchange="window.updateTotalLandingPrice()" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all">
+                                    <option value="home">توصيل إلى المنزل</option>
+                                    <option value="desk">توصيل إلى المكتب (Stop Desk)</option>
+                                </select>
+                            </div>
+
+                            <!-- Order Summary Details -->
+                            <div class="bg-white dark:bg-cardDark p-4 rounded-2xl border border-primary/20 space-y-2 text-sm font-bold">
+                                <div class="flex justify-between text-gray-500">
+                                    <span>سعر المنتج:</span>
+                                    <span id="lp-subtotal-display">0 دج</span>
+                                </div>
+                                <div class="flex justify-between text-gray-500">
+                                    <span>سعر الشحن:</span>
+                                    <span id="lp-shipping-cost-display">0 دج</span>
+                                </div>
+                                <div class="h-px bg-gray-100 dark:bg-gray-700 my-2"></div>
+                                <div class="flex justify-between text-lg font-black text-primaryDark">
+                                    <span>المجموع الإجمالي:</span>
+                                    <span id="lp-total-price-display">0 دج</span>
+                                </div>
                             </div>
                             
                             <button type="submit" id="lp-submit-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-black text-lg py-4 rounded-xl transition-all shadow-[0_10px_20px_rgba(74,222,128,0.4)] mt-4 flex items-center justify-center gap-3 transform hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(74,222,128,0.6)]">
@@ -242,10 +297,9 @@
             </div>
         </header>
 
-        <!-- Hero Section Updated: Static Image Replaced with Live Earnings & Stats Simulation Card -->
+        <!-- Hero Section -->
         <section class="pt-28 pb-16 relative min-h-[90vh] flex flex-col justify-center items-center overflow-hidden bg-white dark:bg-bgDark">
             
-            <!-- Floating Background Elements (Green/White) -->
             <div class="absolute inset-0 overflow-hidden pointer-events-none w-full h-full">
                 <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                 <div class="absolute bottom-0 left-0 w-96 h-96 bg-primaryDark/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3"></div>
@@ -259,46 +313,12 @@
 
             <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
                 
-                <!-- NEW MOBILE STATS CARD (Replaces original top mobile image) -->
                 <div class="w-full flex justify-center lg:hidden order-1 animate-fade-up">
-                    <div class="relative w-full max-w-sm bg-gradient-to-br from-white to-green-50/50 dark:from-cardDark dark:to-bgDark p-6 rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.15)] border border-primary/20 relative z-10">
-                        <div class="flex items-center justify-between mb-4 border-b border-gray-100 dark:border-gray-800 pb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center text-primaryDark"><i class="fas fa-chart-pie text-lg"></i></div>
-                                <div>
-                                    <h4 class="font-black text-sm text-gray-800 dark:text-white">مؤشرات الأرباح التفاعلية</h4>
-                                    <span class="text-[10px] text-green-500 font-bold flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span> مباشر الآن</span>
-                                </div>
-                            </div>
-                            <span class="text-[10px] bg-primary/10 text-primaryDark px-2 py-1 rounded-lg font-bold">تحديث فوري</span>
-                        </div>
-                        
-                        <div class="space-y-3 mb-4">
-                            <div class="p-3 bg-green-50/40 dark:bg-bgDark/40 rounded-2xl border border-primary/10">
-                                <div class="text-[10px] text-gray-400 font-bold mb-1">العمولات المدفوعة للمسوقين</div>
-                                <div class="flex justify-between items-baseline">
-                                    <span class="text-2xl font-black text-primaryDark tracking-wider">3,850,500 دج</span>
-                                    <span class="text-[10px] text-green-500 font-bold"><i class="fas fa-caret-up"></i> +18.4%</span>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="p-2.5 bg-white dark:bg-cardDark border border-gray-100 dark:border-gray-800 rounded-xl">
-                                    <span class="text-[9px] text-gray-400 font-bold block mb-0.5">الطلبات المسلمة اليوم</span>
-                                    <span class="text-sm font-black text-gray-800 dark:text-white">+ 42 طلب</span>
-                                </div>
-                                <div class="p-2.5 bg-white dark:bg-cardDark border border-gray-100 dark:border-gray-800 rounded-xl">
-                                    <span class="text-[9px] text-gray-400 font-bold block mb-0.5">أعلى عمولة اليوم</span>
-                                    <span class="text-sm font-black text-primaryDark">24,500 دج</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mini SVG chart decoration -->
-                        <div class="h-12 relative overflow-hidden rounded-xl bg-gray-50 dark:bg-bgDark/50 p-1 flex items-end border border-gray-100 dark:border-gray-800">
-                            <svg class="absolute inset-x-0 bottom-0 w-full h-10 text-primary/15" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                <path d="M0,80 Q15,40 30,60 T60,20 T90,40 T100,10 L100,100 L0,100 Z" fill="currentColor"></path>
-                                <path d="M0,80 Q15,40 30,60 T60,20 T90,40 T100,10" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round"></path>
-                            </svg>
+                    <div class="relative w-full max-w-sm">
+                        <div class="absolute inset-0 bg-primary/20 rounded-3xl transform rotate-6 scale-105"></div>
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJbkFNdrIyGwoDIQ3uaEFhxzMrnwfoW723llQtGoufMdqC8npfEjnaRo5tddA6MdOzeO4TiyEbyS8zwoJ2lfvSDcfqy7zw1xOSsdd9l_QhP5F-m0qOfp-fS1hHm3i-73YbWlJIhyXR7034JHH3PV6yNj-DPzVTHGFDZK26IvJKf8C9Csfi_3no1oKQn88/s1220/1000017792.jpg" alt="Natural Products" class="w-full rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.2)] border-4 border-white dark:border-cardDark relative z-10 object-cover aspect-[4/5]">
+                        <div class="absolute -bottom-5 -right-5 bg-white dark:bg-cardDark p-3 rounded-2xl shadow-xl z-20 flex items-center gap-2 border border-primary/20 text-primaryDark font-black">
+                            <i class="fas fa-check-circle"></i> منتجات طبيعية
                         </div>
                     </div>
                 </div>
@@ -309,62 +329,13 @@
                     <div id="hero-cta" class="animate-fade-up delay-300"><button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-[0_10px_25px_rgba(74,222,128,0.5)] hover:shadow-[0_15px_35px_rgba(74,222,128,0.7)] transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-1">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button></div>
                 </div>
                 
-                <!-- NEW DESKTOP STATS CARD (Replaces original desktop side image) -->
                 <div class="relative z-10 hidden lg:flex order-2 justify-center w-full animate-fade-up delay-200">
-                     <div class="relative w-full max-w-md ml-auto bg-gradient-to-br from-white to-green-50/50 dark:from-cardDark dark:to-bgDark p-8 rounded-3xl shadow-[0_25px_60px_rgba(74,222,128,0.2)] border border-primary/20 relative z-10">
-                        <div class="flex items-center justify-between mb-6 border-b border-gray-100 dark:border-gray-800 pb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center text-primaryDark"><i class="fas fa-chart-pie text-lg"></i></div>
-                                <div>
-                                    <h4 class="font-black text-sm text-gray-800 dark:text-white">مؤشرات الأرباح التفاعلية</h4>
-                                    <span class="text-[10px] text-green-500 font-bold flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span> مباشر الآن</span>
-                                </div>
-                            </div>
-                            <span class="text-xs bg-primary/10 text-primaryDark px-2.5 py-1 rounded-lg font-bold">تحديث فوري</span>
-                        </div>
-                        
-                        <div class="space-y-4 mb-6">
-                            <div class="p-4 bg-green-50/40 dark:bg-bgDark/40 rounded-2xl border border-primary/10">
-                                <div class="text-[11px] text-gray-400 font-bold mb-1">العمولات المدفوعة للمسوقين</div>
-                                <div class="flex justify-between items-baseline">
-                                    <span class="text-3xl font-black text-primaryDark tracking-wider">3,850,500 دج</span>
-                                    <span class="text-xs text-green-500 font-bold"><i class="fas fa-caret-up"></i> +18.4%</span>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-3">
-                                <div class="p-3 bg-white dark:bg-cardDark border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm">
-                                    <span class="text-[10px] text-gray-400 font-bold block mb-1">الطلبات المسلمة اليوم</span>
-                                    <span class="text-base font-black text-gray-800 dark:text-white">+ 42 طلب</span>
-                                </div>
-                                <div class="p-3 bg-white dark:bg-cardDark border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm">
-                                    <span class="text-[10px] text-gray-400 font-bold block mb-1">أعلى عمولة اليوم</span>
-                                    <span class="text-base font-black text-primaryDark">24,500 دج</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- SVG Chart Line -->
-                        <div class="mb-6 h-24 relative overflow-hidden rounded-xl bg-gray-50 dark:bg-bgDark/50 p-2 flex items-end border border-gray-100 dark:border-gray-800">
-                            <svg class="absolute inset-x-0 bottom-0 w-full h-16 text-primary/20" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                <path d="M0,80 Q15,40 30,60 T60,20 T90,40 T100,10 L100,100 L0,100 Z" fill="currentColor"></path>
-                                <path d="M0,80 Q15,40 30,60 T60,20 T90,40 T100,10" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round"></path>
-                            </svg>
-                            <div class="flex justify-between w-full text-[9px] text-gray-400 font-bold relative z-10 px-2 pb-1">
-                                <span>السبت</span>
-                                <span>الاثنين</span>
-                                <span>الأربعاء</span>
-                                <span>اليوم</span>
-                            </div>
-                        </div>
-
-                        <!-- Simulated Live Activity feed -->
-                        <div class="space-y-2 border-t border-gray-100 dark:border-gray-800 pt-4">
-                            <span class="text-[10px] text-gray-400 font-bold block uppercase tracking-wide">النشاط الأخير</span>
-                            <div class="flex items-center justify-between text-xs p-2 bg-gray-50/50 dark:bg-bgDark/30 rounded-xl border border-gray-100/50 dark:border-gray-800/50">
-                                <span class="font-bold text-gray-600 dark:text-gray-300">سحب (أحمد ب.) عبر CCP</span>
-                                <span class="text-green-500 font-black">9,500 دج ✔️</span>
-                            </div>
+                     <div class="relative w-full max-w-md ml-auto">
+                        <div class="absolute inset-0 bg-primary/20 rounded-3xl transform -rotate-3 scale-105"></div>
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJbkFNdrIyGwoDIQ3uaEFhxzMrnwfoW723llQtGoufMdqC8npfEjnaRo5tddA6MdOzeO4TiyEbyS8zwoJ2lfvSDcfqy7zw1xOSsdd9l_QhP5F-m0qOfp-fS1hHm3i-73YbWlJIhyXR7034JHH3PV6yNj-DPzVTHGFDZK26IvJKf8C9Csfi_3no1oKQn88/s1220/1000017792.jpg" alt="Natural Products" class="w-full h-[600px] rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.2)] border-8 border-white dark:border-cardDark relative z-10 object-cover">
+                        <div class="absolute top-10 -right-10 bg-white/95 dark:bg-cardDark/95 backdrop-blur-xl p-5 rounded-2xl shadow-2xl z-20 border border-primary/20 transform hover:scale-105 transition-transform">
+                             <div class="text-sm text-gray-500 font-bold mb-1">أرباح اليوم</div>
+                             <div class="text-2xl font-black text-primaryDark">+ 4,500 دج</div>
                         </div>
                     </div>
                 </div>
@@ -564,6 +535,8 @@
                 <a href="#" onclick="window.switchAdminTab('users', event)" data-tab="users" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 border-r-4 border-transparent px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-users w-5"></i> المسوقين</a>
                 <a href="#" onclick="window.switchAdminTab('support', event)" data-tab="support" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 border-r-4 border-transparent px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-flag w-5"></i> الإبلاغات</a>
                 <a href="#" onclick="window.switchAdminTab('withdrawals', event)" data-tab="withdrawals" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 border-r-4 border-transparent px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-hand-holding-usd w-5"></i> طلبات السحب</a>
+                <!-- NEW: Admin Shipping Rates Editor tab -->
+                <a href="#" onclick="window.switchAdminTab('shipping', event)" data-tab="shipping" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 border-r-4 border-transparent px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-truck w-5"></i> إعدادات الشحن</a>
             </nav>
             <div class="p-4 border-t border-gray-800"><button onclick="window.logoutAdmin()" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-sign-out-alt"></i> إغلاق</button></div>
         </aside>
@@ -584,6 +557,7 @@
                 <button onclick="window.switchAdminTab('products')" class="whitespace-nowrap bg-gray-800 hover:bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-plus mr-1"></i> إضافة منتج</button>
                 <button onclick="window.switchAdminTab('users')" class="whitespace-nowrap bg-primaryDark hover:bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-users mr-1"></i> إدارة المسوقين</button>
                 <button onclick="window.switchAdminTab('withdrawals')" class="whitespace-nowrap bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-hand-holding-usd mr-1"></i> طلبات السحب</button>
+                <button onclick="window.switchAdminTab('shipping')" class="whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-truck mr-1"></i> أسعار الشحن</button>
             </div>
 
             <div id="admin-tab-home" class="admin-tab-content block w-full animate-fade-in">
@@ -605,9 +579,11 @@
                             <input type="text" id="prod-name" placeholder="اسم المنتج" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary transition-all shadow-sm" required>
                             <input type="number" id="prod-price" placeholder="السعر (دج)" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary transition-all shadow-sm" required>
                             <textarea id="prod-desc" placeholder="الوصف" rows="5" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary transition-all resize-none shadow-sm"></textarea>
+                            
+                            <!-- Updated Image Upload supporting multiple elegant high-quality images -->
                             <div class="bg-green-50 dark:bg-bgDark border border-dashed border-primary/40 dark:border-gray-600 rounded-xl p-4 text-center relative hover:border-primary transition-colors group cursor-pointer">
-                                <label class="block text-sm font-bold text-gray-500 group-hover:text-primaryDark transition-colors cursor-pointer"><i class="fas fa-cloud-upload-alt text-2xl mb-2 block"></i> صورة المنتج</label>
-                                <input type="file" id="prod-image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <label class="block text-sm font-bold text-gray-500 group-hover:text-primaryDark transition-colors cursor-pointer"><i class="fas fa-cloud-upload-alt text-2xl mb-2 block"></i> صور المنتج (يمكنك اختيار عدة صور)</label>
+                                <input type="file" id="prod-image" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
                             <button type="submit" id="prod-submit-btn" class="bg-gradient-to-r from-primary to-primaryDark text-white w-full py-4 rounded-xl font-black text-lg shadow-[0_10px_20px_rgba(74,222,128,0.4)] transform hover:-translate-y-1 transition-all">حفظ المنتج <i class="fas fa-save ml-2"></i></button>
                         </form>
@@ -659,12 +635,24 @@
                 </div>
             </div>
 
+            <!-- NEW: Admin Shipping Rates Editor Tab Container -->
+            <div id="admin-tab-shipping" class="admin-tab-content hidden w-full animate-fade-in">
+                <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800">
+                    <h3 class="font-black text-xl mb-4 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-truck"></i></div> إعدادات أسعار الشحن للولايات والبلديات</h3>
+                    <p class="text-gray-500 text-sm mb-6">يمكنك تعديل سكريبت أو ملف الـ JSON أدناه لتغيير أسعار التوصيل للمنزل وللمكتب والبلديات لكل ولاية. سيتم حفظ البيانات في السحابة وتطبيقها تلقائياً على كل صفحات الهبوط.</p>
+                    <form onsubmit="window.saveShippingSettings(event)">
+                        <textarea id="shipping-json-input" rows="15" class="w-full font-mono text-sm bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl p-4 outline-none focus:border-primary transition-all mb-6 text-left" dir="ltr" required></textarea>
+                        <button type="submit" class="bg-gradient-to-r from-primary to-primaryDark text-white px-8 py-3.5 rounded-xl font-black shadow-lg hover:shadow-primary/40 transform hover:-translate-y-0.5 transition-all">حفظ إعدادات الشحن <i class="fas fa-save ml-2"></i></button>
+                    </form>
+                </div>
+            </div>
+
         </main>
     </div>
 
     <!-- TRANSLATION & JAVASCRIPT LOGIC -->
     <script>
-        // TRANSLATION DICTIONARY (AR -> FR) (Kept exactly as requested, updated with new dashboard card texts)
+        // TRANSLATION DICTIONARY (AR -> FR) (Kept exactly as requested)
         const frDict = {
             "المنصة الأقوى": "La plateforme ultime",
             "مرحباً بك مجدداً": "Bon retour",
@@ -706,7 +694,7 @@
             "3. تتبع الإحصائيات": "3. Suivre les statistiques",
             "ستظهر لك في الإحصائيات عدد النقرات الدقيقة على روابطك، وإذا تمت تسجيل طلبية.": "Vous verrez les clics exacts sur vos liens et si une commande a été passée.",
             "4. استلام الأرباح": "4. Recevoir les gains",
-            "بمجرد التسجيل، تصل الطلبية للإدارة، وتقوم بتأكيدها. وبمجرد استلام الزبون، يتم احتساب الأموال فوراً في رصيدك.": "Dès qu'une commande est confirmée et livrée, les fonds sont ajoutés à votre solde.",
+            "بمجرد التسجيل، تصل الطلبية للإدارة، وتقوم بتأكيدها. وبمجرد استلام الزبون، يتم احتساب الأموال فوراً في رصيدك.": "Dès qu'une commande é confirmée et livrée, les fonds sont ajoutés à votre solde.",
             "لماذا تختار": "Pourquoi choisir",
             "بيئة عمل احترافية تضمن نجاحك وتحقيق أعلى الأرباح بشفافية تامة.": "Un environnement professionnel qui garantit votre succès.",
             "عمولة ثابتة ومجزية": "Commission fixe et gratifiante",
@@ -801,27 +789,28 @@
             "تم الرفض": "Refusé",
             "محظور": "Banni",
             "نشط": "Actif",
-            "فك حظر": "Débannir",
+            "فك حظر": "Débannير",
             "حظر": "Bannir",
             "دج": "DZD",
             "تراجع": "Retour",
-            "حفظ المنتج": "Enregistrer le produit",
-            // New items for dashboard banner simulation card
-            "مؤشرات الأرباح التفاعلية": "Indicateurs de gains interactifs",
-            "مباشر الآن": "En direct",
-            "تحديث فوري": "Mise à jour instantanée",
-            "العمولات المدفوعة للمسوقين": "Commissions payées aux affiliés",
-            "الطلبات المسلمة اليوم": "Commandes livrées aujourd'hui",
-            "أعلى عمولة اليوم": "Meilleure commission du jour",
-            "السبت": "Samedi",
-            "الاثنين": "Lundi",
-            "الأربعاء": "Mercredi",
-            "اليوم": "Aujourd'hui",
-            "النشاط الأخير": "Activité récente",
-            "سحب (أحمد ب.) عبر CCP": "Retrait (Ahmed B.) via CCP",
-            "عمولة جديدة (سارة م.)": "Nouvelle commission (Sarah M.)"
+            "حفظ المنتج": "Enregistrer le produit"
         };
 
+        // NEW: Default Shipping Script Data for Algerian Wilayas (Can be customized by Admin)
+        const defaultShippingData = {
+            "01": { "name": "01 - أدرار - Adrar", "home": 1000, "desk": 800, "municipalities": ["أدرار", "أولاد أحمد تيمي", "تسابيت", "بودا", "فنوغيل"] },
+            "02": { "name": "02 - الشلف - Chlef", "home": 600, "desk": 350, "municipalities": ["الشلف", "تنس", "أولاد فارس", "سنجاس", "الشطية"] },
+            "09": { "name": "09 - البليدة - Blida", "home": 400, "desk": 250, "municipalities": ["البليدة", "بوفاريك", "أولاد يعيش", "العفرون", "الصومعة"] },
+            "13": { "name": "13 - تلمسان - Tlemcen", "home": 700, "desk": 400, "municipalities": ["تلمسان", "منصورة", "مغنية", "الغزوات", "أولاد ميمون"] },
+            "15": { "name": "15 - تيزي وزو - Tizi Ouzou", "home": 500, "desk": 300, "municipalities": ["تيزي وزو", "عزازقة", "ذراع الميزان", "لاربعا نات ايراثن", "أزفون"] },
+            "16": { "name": "16 - الجزائر - Alger", "home": 400, "desk": 200, "municipalities": ["الجزائر الوسطى", "سيدي امحمد", "باب الواد", "الحراش", "الرويبة", "حسين داي", "الشراقة", "بئر مراد رايس"] },
+            "19": { "name": "19 - سطيف - Sétif", "home": 550, "desk": 300, "municipalities": ["سطيف", "العلمة", "عين أرنات", "عين ولمان", "بوقاعة"] },
+            "25": { "name": "25 - قسنطينة - Constantine", "home": 550, "desk": 300, "municipalities": ["قسنطينة", "الخروب", "حامة بوزيان", "عين سمارة", "علي منجلي"] },
+            "31": { "name": "31 - وهران - Oran", "home": 550, "desk": 300, "municipalities": ["وهران", "بئر الجير", "السانية", "عين الترك", "ارزيو"] },
+            "35": { "name": "35 - بومرداس - Boumerdès", "home": 400, "desk": 250, "municipalities": ["بومرداس", "بودواو", "خميس الخشنة", "دلس", "برج منايل"] }
+        };
+
+        let currentShippingData = defaultShippingData;
         let currentLang = localStorage.getItem('lang') || 'ar';
         document.getElementById('lang-text').innerText = currentLang === 'ar' ? 'FR' : 'AR';
 
@@ -888,6 +877,11 @@
         let isAuthReady = false; 
         const FIXED_COMMISSION = 500; 
 
+        // Slider variables for landing page
+        let landingImages = [];
+        let currentSlideIndex = 0;
+        let slideInterval = null;
+
         window.toggleTheme = () => {
             document.documentElement.classList.toggle('dark');
             const icon = document.getElementById('theme-icon');
@@ -937,6 +931,7 @@
             }
         };
 
+        // NEW: Load Product Landing page with support for Multiple High Quality Images and Auto-sliding
         async function loadProductLandingPage(prodId, refId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             const lpView = document.getElementById('product-landing-view');
@@ -951,14 +946,24 @@
                 }
                 
                 const p = doc.data();
-                document.getElementById('lp-image').src = p.image;
+                
+                // Get image array or fallback to single image
+                landingImages = p.images && p.images.length > 0 ? p.images : [p.image];
+                currentSlideIndex = 0;
+                setupLPSlider();
+
                 document.getElementById('lp-name').innerText = p.name;
                 document.getElementById('lp-price').innerText = p.price + ' دج';
+                document.getElementById('lp-subtotal-display').innerText = p.price + ' دج';
+                document.getElementById('lp-price-val').value = p.price;
                 document.getElementById('lp-desc').innerText = p.description || '';
                 
                 document.getElementById('lp-prod-id').value = prodId;
                 document.getElementById('lp-ref-id').value = refId;
                 document.getElementById('lp-prod-name').value = p.name;
+
+                // Setup dynamic Wilayas
+                populateLPShippingStates();
 
                 if(refId) {
                     db.collection('users').doc(refId).update({ clicks: firebase.firestore.FieldValue.increment(1) }).catch(e => console.log("Click tracking error", e));
@@ -969,17 +974,131 @@
             }
         }
 
+        // NEW: Slider Implementation
+        function setupLPSlider() {
+            const container = document.getElementById('lp-slider-container');
+            const dotsContainer = document.getElementById('lp-slider-dots');
+            
+            container.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            landingImages.forEach((imgSrc, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'w-full h-80 lg:h-full flex-shrink-0';
+                slide.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover" alt="Product Image ${index + 1}">`;
+                container.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = `lp-dot w-3 h-3 rounded-full transition-all duration-300 ${index === 0 ? 'bg-primary w-8' : 'bg-gray-300'}`;
+                dot.setAttribute('onclick', `window.goToSlide(${index})`);
+                dotsContainer.appendChild(dot);
+            });
+
+            // Start Auto slide
+            if(slideInterval) clearInterval(slideInterval);
+            slideInterval = setInterval(() => {
+                window.nextSlide();
+            }, 4000);
+        }
+
+        window.goToSlide = (idx) => {
+            currentSlideIndex = idx;
+            const container = document.getElementById('lp-slider-container');
+            const offset = currentSlideIndex * 100;
+            container.style.transform = `translateX(${offset}%)`;
+
+            // update dots
+            document.querySelectorAll('.lp-dot').forEach((dot, i) => {
+                if(i === currentSlideIndex) {
+                    dot.classList.add('bg-primary', 'w-8');
+                    dot.classList.remove('bg-gray-300', 'w-3');
+                } else {
+                    dot.classList.remove('bg-primary', 'w-8');
+                    dot.classList.add('bg-gray-300', 'w-3');
+                }
+            });
+        };
+
+        window.nextSlide = () => {
+            let nextIndex = currentSlideIndex + 1;
+            if(nextIndex >= landingImages.length) nextIndex = 0;
+            window.goToSlide(nextIndex);
+        };
+
+        window.prevSlide = () => {
+            let prevIndex = currentSlideIndex - 1;
+            if(prevIndex < 0) prevIndex = landingImages.length - 1;
+            window.goToSlide(prevIndex);
+        };
+
+        // NEW: Populate Landing Page Wilaya dropdown based on real configuration
+        function populateLPShippingStates() {
+            const stateSelect = document.getElementById('lp-customer-state-select');
+            stateSelect.innerHTML = `<option value="">-- اختر الولاية --</option>`;
+            
+            Object.keys(currentShippingData).forEach(code => {
+                const state = currentShippingData[code];
+                stateSelect.innerHTML += `<option value="${code}">${state.name}</option>`;
+            });
+
+            // Reset municipalities select
+            const munSelect = document.getElementById('lp-customer-mun-select');
+            munSelect.innerHTML = `<option value="">-- اختر البلدية --</option>`;
+            munSelect.disabled = true;
+
+            // Reset pricing summary
+            document.getElementById('lp-shipping-cost-display').innerText = '0 دج';
+            document.getElementById('lp-shipping-cost-val').value = 0;
+            updateTotalLandingPrice();
+        }
+
+        // NEW: Event listener for State selection change
+        window.onStateChange = () => {
+            const code = document.getElementById('lp-customer-state-select').value;
+            const munSelect = document.getElementById('lp-customer-mun-select');
+            munSelect.innerHTML = `<option value="">-- اختر البلدية --</option>`;
+            
+            if (code && currentShippingData[code]) {
+                const state = currentShippingData[code];
+                state.municipalities.forEach(mun => {
+                    munSelect.innerHTML += `<option value="${mun}">${mun}</option>`;
+                });
+                munSelect.disabled = false;
+            } else {
+                munSelect.disabled = true;
+            }
+            updateTotalLandingPrice();
+        };
+
+        // NEW: Live computation of dynamic shipping fees
+        window.updateTotalLandingPrice = () => {
+            const code = document.getElementById('lp-customer-state-select').value;
+            const shipType = document.getElementById('lp-shipping-type').value; // 'home' or 'desk'
+            const prodPrice = Number(document.getElementById('lp-price-val').value || 0);
+
+            let shippingCost = 0;
+            if (code && currentShippingData[code]) {
+                shippingCost = Number(currentShippingData[code][shipType] || 0);
+            }
+
+            document.getElementById('lp-shipping-cost-display').innerText = shippingCost + ' دج';
+            document.getElementById('lp-shipping-cost-val').value = shippingCost;
+            document.getElementById('lp-total-price-display').innerText = (prodPrice + shippingCost) + ' دج';
+        };
+
         function handleRouting() {
             const urlParams = new URLSearchParams(window.location.search);
             let prodId = urlParams.get('prod');
             let refId = urlParams.get('ref');
 
+            // Support restructured friendly routing links
             const hash = window.location.hash;
             if (hash.includes('?ref=')) {
                 const [pathPart, queryPart] = hash.split('?');
                 const parts = pathPart.split('/');
                 if(parts.length >= 4) {
-                    prodId = parts[3]; 
+                    prodId = parts[3]; // #/affiliate_name/product_name/productId
                 }
                 refId = new URLSearchParams('?' + queryPart).get('ref');
             }
@@ -992,7 +1111,7 @@
             if(!isAuthReady) return; 
             const isAdminAuth = sessionStorage.getItem('tirourda_admin') === 'true';
 
-            if (hash === '#admin09' || hash === '#admin-dashboard' || hash === '#admin-login') {
+            if (hash === '#admin09' || hash === '#admin-dashboard' || hash === '#admin-login' || hash === '#admin-shipping') {
                 return isAdminAuth ? window.navigate('admin-dashboard') : window.navigate('admin-login');
             }
             if (hash === '#user-dashboard' || currentUser) {
@@ -1156,7 +1275,10 @@
 
                     const dateStr = formatDate(o.date);
                     
-                    html += `<div class="p-5 border border-primary/10 dark:border-gray-700 rounded-2xl flex justify-between items-center bg-green-50/20 dark:bg-bgDark/50 mb-3 hover:shadow-md transition-shadow"><div><div class="font-black text-base mb-1 text-gray-800 dark:text-gray-100">${o.customerName}</div><div class="text-xs font-bold text-gray-500 mb-1"><i class="fas fa-box text-primaryDark ml-1"></i> ${o.productName}</div><div class="text-[11px] text-gray-400"><i class="fas fa-clock ml-1"></i> ${dateStr}</div></div><div class="text-left font-black text-lg text-primaryDark">${o.commission} دج<br><div class="mt-2 text-left w-full">${st}</div></div></div>`;
+                    // Display shipping details in User Dashboard Order List
+                    const shippingDetailText = o.customerMunicipality ? `<div class="text-xs text-primaryDark font-bold mt-1"><i class="fas fa-map-marker-alt"></i> ${o.customerState} - ${o.customerMunicipality} (${o.shippingType === 'home' ? 'توصيل للمنزل' : 'توصيل للمكتب'})</div>` : '';
+
+                    html += `<div class="p-5 border border-primary/10 dark:border-gray-700 rounded-2xl flex justify-between items-center bg-green-50/20 dark:bg-bgDark/50 mb-3 hover:shadow-md transition-shadow"><div><div class="font-black text-base mb-1 text-gray-800 dark:text-gray-100">${o.customerName}</div><div class="text-xs font-bold text-gray-500 mb-1"><i class="fas fa-box text-primaryDark ml-1"></i> ${o.productName}</div>${shippingDetailText}<div class="text-[11px] text-gray-400 mt-1"><i class="fas fa-clock ml-1"></i> ${dateStr}</div></div><div class="text-left font-black text-lg text-primaryDark">${o.commission} دج<br><div class="mt-2 text-left w-full">${st}</div></div></div>`;
                 });
                 document.getElementById('user-orders-list').innerHTML = html;
                 document.getElementById('user-pending').innerText = pend;
@@ -1175,8 +1297,9 @@
                     
                     html += `
                         <div class="border border-primary/20 dark:border-gray-800 rounded-3xl p-5 flex flex-col group bg-white dark:bg-cardDark shadow-sm hover-card-elegant">
-                            <div class="overflow-hidden rounded-2xl mb-5">
+                            <div class="overflow-hidden rounded-2xl mb-5 relative">
                                 <img src="${p.image}" class="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500">
+                                ${p.images && p.images.length > 1 ? `<span class="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] px-2 py-1 rounded-md font-bold"><i class="fas fa-images"></i> +${p.images.length} صور</span>` : ''}
                             </div>
                             <h4 class="font-black text-xl text-center mb-3 line-clamp-1 text-gray-800 dark:text-white">${p.name}</h4>
                             <div class="flex justify-between items-center mb-6">
@@ -1250,12 +1373,23 @@
                     if(userDoc.exists) affiliateName = userDoc.data().name || 'مسوق';
                 }
 
+                const stateSelect = document.getElementById('lp-customer-state-select');
+                const selectedStateText = stateSelect.options[stateSelect.selectedIndex].text;
+                const selectedMunVal = document.getElementById('lp-customer-mun-select').value;
+                const shippingType = document.getElementById('lp-shipping-type').value;
+                const shippingCost = Number(document.getElementById('lp-shipping-cost-val').value || 0);
+                const priceVal = Number(document.getElementById('lp-price-val').value || 0);
+
                 await db.collection("orders").add({
                     productId: document.getElementById('lp-prod-id').value, 
                     productName: document.getElementById('lp-prod-name').value,
                     customerName: document.getElementById('lp-customer-name').value, 
                     customerPhone: document.getElementById('lp-customer-phone').value,
-                    customerState: document.getElementById('lp-customer-state').value, 
+                    customerState: selectedStateText, 
+                    customerMunicipality: selectedMunVal, // New Dynamic Field
+                    shippingType: shippingType, // New Dynamic Field
+                    shippingCost: shippingCost, // New Dynamic Field
+                    totalPrice: (priceVal + shippingCost), // Calculated Dynamic Total Price
                     quantity: 1, 
                     affiliateId: refId || 'direct', 
                     affiliateName: affiliateName, 
@@ -1368,10 +1502,14 @@
                         paid += Number(o.commission);
                     } else if(o.status === 'pending') {
                         pend++;
+
+                        const extraShippingInfo = o.customerMunicipality ? `<br><span class="text-xs text-primaryDark font-bold"><i class="fas fa-map-marker-alt"></i> ${o.customerMunicipality} (${o.shippingType === 'home' ? 'توصيل للمنزل' : 'توصيل للمكتب'})</span>` : '';
+                        const totalOrderPrice = o.totalPrice ? `<br><span class="text-xs text-gray-500 font-bold">إجمالي الفاتورة: ${o.totalPrice} دج</span>` : '';
+
                         html += `
                         <tr class="border-b dark:border-gray-800 text-sm hover:bg-green-50 dark:hover:bg-bgDark transition-colors">
                             <td class="p-4 text-blue-600 font-bold">${o.affiliateName || t('مباشر')}</td>
-                            <td class="p-4">${o.customerName}<br><span class="text-xs text-gray-400" dir="ltr">${o.customerPhone}</span><br><span class="text-xs text-gray-400">${o.customerState}</span></td>
+                            <td class="p-4">${o.customerName}<br><span class="text-xs text-gray-400" dir="ltr">${o.customerPhone}</span><br><span class="text-xs text-gray-400">${o.customerState}${extraShippingInfo}${totalOrderPrice}</span></td>
                             <td class="p-4 font-bold text-gray-700 dark:text-gray-300">${o.productName}</td>
                             <td class="p-4 text-primaryDark font-black text-lg">${o.commission} دج</td>
                             <td class="p-4 text-center space-y-2">
@@ -1453,7 +1591,37 @@
                 });
                 document.getElementById('admin-withdrawals-list').innerHTML = html || `<tr><td colspan="5" class="text-center p-8 text-gray-500"><i class="fas fa-check-circle text-3xl mb-2 block opacity-50"></i>${t('لا توجد طلبات بعد')}</td></tr>`;
             });
+
+            // NEW: Fetch and populate current dynamic shipping settings JSON inside Admin Tab
+            db.collection('settings').doc('shipping').get().then(doc => {
+                const inputEl = document.getElementById('shipping-json-input');
+                if(doc.exists && doc.data().json) {
+                    inputEl.value = doc.data().json;
+                    try {
+                        currentShippingData = JSON.parse(doc.data().json);
+                    } catch(e) {
+                        console.error(e);
+                    }
+                } else {
+                    inputEl.value = JSON.stringify(defaultShippingData, null, 4);
+                }
+            });
         }
+
+        // NEW: Save Shipping Script / JSON Settings to Firestore
+        window.saveShippingSettings = async (e) => {
+            e.preventDefault();
+            const jsonText = document.getElementById('shipping-json-input').value;
+            try {
+                // Validate JSON syntax first
+                const parsed = JSON.parse(jsonText);
+                await db.collection('settings').doc('shipping').set({ json: jsonText });
+                currentShippingData = parsed;
+                Swal.fire('نجاح', 'تم حفظ وتحديث سكريبت أسعار الشحن بنجاح.', 'success');
+            } catch(err) {
+                Swal.fire('خطأ في الصياغة', 'الملف أو السكريبت المكتوب لا يتوافق مع شروط صياغة JSON البرمجية. يرجى التأكد من الأقواس والفواصل.', 'error');
+            }
+        };
 
         window.updateWithdrawStatus = async (reqId, uid, amount, newStatus, selectElement) => {
             if(newStatus === 'pending') return;
@@ -1490,6 +1658,7 @@
             }
         };
 
+        // NEW: Updated Product Submission to Compress and Upload Multiple High-Quality Images
         window.submitProduct = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('prod-submit-btn');
@@ -1500,40 +1669,52 @@
                 const price = document.getElementById('prod-price').value;
                 const desc = document.getElementById('prod-desc').value;
                 const fileInput = document.getElementById('prod-image');
-                let imgData = '';
                 
+                let imagesArray = [];
+
                 if (fileInput.files.length > 0) {
-                    imgData = await new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = e => {
-                            const img = new Image();
-                            img.onload = () => {
-                                const cvs = document.createElement('canvas');
-                                let w = img.width, h = img.height, max = 500; 
-                                if(w>h && w>max){ h*=max/w; w=max; } else if(h>max){ w*=max/h; h=max; }
-                                cvs.width=w; cvs.height=h;
-                                cvs.getContext('2d').drawImage(img,0,0,w,h);
-                                resolve(cvs.toDataURL('image/jpeg',0.75));
+                    for(let i=0; i < fileInput.files.length; i++) {
+                        const imgData = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onload = ev => {
+                                const img = new Image();
+                                img.onload = () => {
+                                    const cvs = document.createElement('canvas');
+                                    let w = img.width, h = img.height, max = 600; // Optimal High Quality constraint
+                                    if(w>h && w>max){ h*=max/w; w=max; } else if(h>max){ w*=max/h; h=max; }
+                                    cvs.width=w; cvs.height=h;
+                                    cvs.getContext('2d').drawImage(img,0,0,w,h);
+                                    resolve(cvs.toDataURL('image/jpeg',0.85)); // 0.85 compression ratio
+                                };
+                                img.onerror = () => resolve('');
+                                img.src = ev.target.result;
                             };
-                            img.onerror = () => resolve('');
-                            img.src = e.target.result;
-                        };
-                        reader.readAsDataURL(fileInput.files[0]);
-                    });
+                            reader.readAsDataURL(fileInput.files[i]);
+                        });
+                        if(imgData) imagesArray.push(imgData);
+                    }
                 }
                 
                 const data = { name, price: Number(price), description: desc, commission: FIXED_COMMISSION };
-                if(imgData) data.image = imgData;
                 
-                if (id) { await db.collection('products').doc(id).update(data); } 
-                else { 
-                    if(!imgData) data.image = 'https://via.placeholder.com/500';
+                if(imagesArray.length > 0) {
+                    data.images = imagesArray;
+                    data.image = imagesArray[0]; // set primary cover (maintains backwards compatibility)
+                }
+                
+                if (id) { 
+                    await db.collection('products').doc(id).update(data); 
+                } else { 
+                    if(imagesArray.length === 0) {
+                        data.images = ['https://via.placeholder.com/500'];
+                        data.image = 'https://via.placeholder.com/500';
+                    }
                     data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                     await db.collection('products').add(data); 
                 }
                 document.getElementById('admin-product-form').reset();
                 document.getElementById('prod-id').value = '';
-                Swal.fire('نجاح', 'تم الحفظ', 'success');
+                Swal.fire('نجاح', 'تم حفظ المنتج بنجاح', 'success');
             } catch(err) { Swal.fire('خطأ', err.message, 'error'); } 
             finally { btn.innerHTML = `${t('حفظ المنتج')} <i class="fas fa-save ml-2"></i>`; btn.disabled = false; }
         };
@@ -1577,6 +1758,17 @@
         
         document.addEventListener('DOMContentLoaded', () => {
             autoTranslate();
+
+            // Load global shipping configurations once at startup
+            db.collection('settings').doc('shipping').get().then(doc => {
+                if(doc.exists && doc.data().json) {
+                    try {
+                        currentShippingData = JSON.parse(doc.data().json);
+                    } catch(e) {
+                        console.error(e);
+                    }
+                }
+            });
 
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
             const observer = new IntersectionObserver((entries, observer) => {
