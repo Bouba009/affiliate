@@ -8,7 +8,7 @@
     <title>Tirourda Affiliate | المنصة الأقوى</title>
     
     <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Tailwind CSS -->
@@ -20,12 +20,17 @@
                 extend: {
                     fontFamily: { cairo: ['Cairo', 'sans-serif'] },
                     colors: {
-                        primary: '#4ade80',      // أخضر فاتح منعش
-                        primaryDark: '#16a34a',  // أخضر أغمق قليلاً للنصوص والأزرار عند التمرير
-                        bgLight: '#ffffff',      // أبيض ناصع للخلفية
+                        primary: '#10b981',      // أخضر زمردي راقٍ وعصري
+                        primaryDark: '#047857',  // أخضر عميق للأزرار والنصوص النشطة
+                        bgLight: '#f8fafc',      // رمادي فاتح مائل للأزرق ناعم ومريح للخلفيات
                         bgDark: '#0f172a',
                         cardLight: '#ffffff',
                         cardDark: '#1e293b'
+                    },
+                    boxShadow: {
+                        'premium': '0 10px 30px -10px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)',
+                        'premium-hover': '0 20px 40px -15px rgba(16, 185, 129, 0.12), 0 1px 3px rgba(0, 0, 0, 0.02)',
+                        'shopify': '0 2px 12px rgba(0,0,0,0.06)'
                     },
                     animation: {
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -44,178 +49,191 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
-        html, body { font-family: 'Cairo', sans-serif; overflow-x: hidden; width: 100%; min-height: 100%; margin: 0; padding: 0; background-color: #ffffff; }
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); }
-        .dark .glass { background: rgba(15, 23, 42, 0.9); }
-        .glass-card { background: rgba(255, 255, 255, 1); border: 1px solid rgba(74, 222, 128, 0.2); }
+        html, body { font-family: 'Cairo', sans-serif; overflow-x: hidden; width: 100%; min-height: 100%; margin: 0; padding: 0; background-color: #f8fafc; }
+        .dark body { background-color: #0f172a; }
+        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .dark .glass { background: rgba(15, 23, 42, 0.8); }
+        .glass-card { background: rgba(255, 255, 255, 1); border: 1px solid rgba(226, 232, 240, 0.8); }
         .dark .glass-card { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #4ade80; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         
         /* Layout Fixes */
-        .view { display: none !important; opacity: 0; transition: opacity 0.5s ease-in-out; width: 100%; min-height: 100vh; }
+        .view { display: none !important; opacity: 0; transition: opacity 0.4s ease-in-out; width: 100%; min-height: 100vh; }
         .view.active { display: block !important; opacity: 1; }
         .view.active.flex-view { display: flex !important; opacity: 1; }
         
-        .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(to left, #4ade80, #16a34a); }
-        .loader { border: 4px solid rgba(74, 222, 128, 0.2); border-left-color: #4ade80; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; }
+        .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(135deg, #10b981, #047857); }
+        .loader { border: 3px solid rgba(16, 185, 129, 0.2); border-left-color: #10b981; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; display: none; }
         
-        /* Smooth Modern Animations */
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(40px); }
+            0% { opacity: 0; transform: translateY(25px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-up { opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .animate-fade-up { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
         .delay-300 { animation-delay: 300ms; }
 
         @keyframes floatUpNum {
             0% { transform: translateY(0px) scale(0.9); opacity: 0; }
-            20% { opacity: 0.8; transform: scale(1); }
-            80% { opacity: 0.8; transform: translateY(-120px) scale(1.1); }
-            100% { transform: translateY(-160px) scale(1); opacity: 0; }
+            20% { opacity: 0.7; transform: scale(1); }
+            80% { opacity: 0.7; transform: translateY(-100px) scale(1.05); }
+            100% { transform: translateY(-140px) scale(1); opacity: 0; }
         }
-        .floating-num { position: absolute; color: #4ade80; font-weight: 900; opacity: 0; z-index: 0; animation: floatUpNum 5s ease-in-out infinite; pointer-events: none; text-shadow: 0 4px 15px rgba(74,222,128,0.4); }
-        .num-1 { left: 10%; top: 40%; animation-delay: 0s; font-size: 1.5rem; }
-        .num-2 { left: 45%; top: 30%; animation-delay: 1.5s; font-size: 2.5rem; }
-        .num-3 { left: 75%; top: 50%; animation-delay: 3s; font-size: 1.2rem; }
+        .floating-num { position: absolute; color: #10b981; font-weight: 800; opacity: 0; z-index: 0; animation: floatUpNum 6s ease-in-out infinite; pointer-events: none; }
+        .num-1 { left: 12%; top: 35%; animation-delay: 0s; font-size: 1.25rem; }
+        .num-2 { left: 50%; top: 25%; animation-delay: 2s; font-size: 2rem; }
+        .num-3 { left: 80%; top: 45%; animation-delay: 4s; font-size: 1.1rem; }
 
-        /* Trend Arrow Animation */
         @keyframes trendBounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.1); color: #16a34a; }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
         }
         .trend-arrow {
             display: inline-block;
-            animation: trendBounce 2s ease-in-out infinite;
-            color: #4ade80;
-            filter: drop-shadow(0 4px 6px rgba(74,222,128,0.4));
+            animation: trendBounce 2.5s ease-in-out infinite;
+            color: #10b981;
         }
 
-        /* Elegant Hover Cards */
-        .hover-card-elegant {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background-color: white;
+        /* Form Inputs Premium Style */
+        .shopify-input {
+            transition: all 0.2s ease-in-out;
+            background-color: #ffffff;
         }
-        .hover-card-elegant:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px -5px rgba(74, 222, 128, 0.2);
-            border-color: rgba(74, 222, 128, 0.4);
+        .dark .shopify-input {
+            background-color: #1e293b;
+        }
+        .shopify-input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
         }
     </style>
 </head>
-<body class="bg-bgLight dark:bg-bgDark text-gray-800 dark:text-gray-100 transition-colors duration-300 relative w-full h-full">
+<body class="bg-bgLight dark:bg-bgDark text-gray-700 dark:text-gray-200 transition-colors duration-300 relative w-full h-full">
 
     <!-- THEME TOGGLE -->
-    <button onclick="window.toggleTheme()" class="fixed bottom-6 left-6 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all text-xl border border-primary/20 dark:border-gray-800 opacity-90 hover:opacity-100 hover:scale-110 duration-300">
+    <button onclick="window.toggleTheme()" class="fixed bottom-6 left-6 z-50 bg-white dark:bg-cardDark p-3.5 rounded-full shadow-premium hover:shadow-premium-hover hover:scale-105 transition-all text-lg border border-slate-200/60 dark:border-slate-800 duration-300 flex items-center justify-center">
         <i id="theme-icon" class="fas fa-moon text-primaryDark dark:text-yellow-400"></i>
     </button>
     
     <!-- LANGUAGE TOGGLE -->
-    <button onclick="window.toggleLanguage()" class="fixed bottom-6 left-24 z-50 bg-white dark:bg-cardDark p-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all text-sm font-black border border-primary/20 dark:border-gray-800 opacity-90 hover:opacity-100 hover:scale-110 duration-300 text-primaryDark">
-        <span id="lang-text" class="tracking-widest">FR</span>
+    <button onclick="window.toggleLanguage()" class="fixed bottom-6 left-20 z-50 bg-white dark:bg-cardDark p-3.5 rounded-full shadow-premium hover:shadow-premium-hover hover:scale-105 transition-all text-xs font-bold border border-slate-200/60 dark:border-slate-800 duration-300 text-primaryDark flex items-center justify-center w-[46px] h-[46px]">
+        <span id="lang-text" class="tracking-wider">FR</span>
     </button>
 
     <!-- AUTH MODAL -->
-    <div id="auth-modal" class="fixed inset-0 bg-white/80 dark:bg-black/80 backdrop-blur-md z-[100] hidden items-center justify-center p-4 w-full h-full transition-opacity duration-300">
-        <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.2)] w-full max-w-md border border-primary/20 dark:border-gray-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="auth-modal-content">
-            <button onclick="window.closeAuthModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 hover:rotate-90 transition-all duration-300"><i class="fas fa-times text-2xl"></i></button>
+    <div id="auth-modal" class="fixed inset-0 bg-slate-900/40 dark:bg-black/70 backdrop-blur-sm z-[100] hidden items-center justify-center p-4 w-full h-full transition-opacity duration-300">
+        <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-2xl shadow-premium w-full max-w-md border border-slate-100 dark:border-slate-800 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="auth-modal-content">
+            <button onclick="window.closeAuthModal()" class="absolute top-5 left-5 text-gray-400 hover:text-red-500 hover:rotate-90 transition-all duration-300"><i class="fas fa-times text-xl"></i></button>
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-gradient-to-tr from-primary to-primaryDark text-white rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-lg hover:scale-105 transition-transform"><i class="fas fa-leaf"></i></div>
-                <h2 id="auth-title" class="text-2xl font-black">مرحباً بك مجدداً</h2>
-                <p id="auth-subtitle" class="text-gray-500 text-sm mt-1">سجل دخولك للوصول إلى لوحة التحكم</p>
+                <div class="w-12 h-12 bg-emerald-50 dark:bg-emerald-950/40 text-primary rounded-xl mx-auto flex items-center justify-center text-2xl mb-4"><i class="fas fa-leaf"></i></div>
+                <h2 id="auth-title" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">مرحباً بك مجدداً</h2>
+                <p id="auth-subtitle" class="text-gray-400 text-xs mt-1">سجل دخولك للوصول إلى لوحة التحكم</p>
             </div>
             <form id="auth-form" onsubmit="window.handleAuthSubmit(event)">
                 <div id="register-fields" class="hidden space-y-4 mb-4">
                     <div class="relative group">
-                        <i class="fas fa-user absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                        <input type="text" id="auth-name" placeholder="الاسم الكامل" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                        <i class="fas fa-user absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors text-sm"></i>
+                        <input type="text" id="auth-name" placeholder="الاسم الكامل" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl pr-11 pl-4 py-3 outline-none transition-all text-sm">
                     </div>
                     <div class="relative group">
-                        <i class="fas fa-phone absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                        <input type="tel" id="auth-phone" placeholder="رقم الهاتف (اختياري)" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-right" dir="ltr">
+                        <i class="fas fa-phone absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors text-sm"></i>
+                        <input type="tel" id="auth-phone" placeholder="رقم الهاتف (اختياري)" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl pr-11 pl-4 py-3 outline-none transition-all text-sm text-right" dir="ltr">
                     </div>
                 </div>
-                <div class="space-y-4 mb-6">
+                <div class="space-y-4 mb-5">
                     <div class="relative group">
-                        <i class="fas fa-envelope absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                        <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" required>
+                        <i class="fas fa-envelope absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors text-sm"></i>
+                        <input type="email" id="auth-email" placeholder="البريد الإلكتروني" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl pr-11 pl-4 py-3 outline-none transition-all text-sm" required>
                     </div>
                     <div class="relative group">
-                        <i class="fas fa-lock absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                        <input type="password" id="auth-password" placeholder="كلمة المرور" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" required>
+                        <i class="fas fa-lock absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors text-sm"></i>
+                        <input type="password" id="auth-password" placeholder="كلمة المرور" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl pr-11 pl-4 py-3 outline-none transition-all text-sm" required>
                     </div>
                 </div>
-                <button type="submit" id="auth-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-bold py-3.5 rounded-xl transition-all shadow-lg hover:shadow-primary/40 mb-4 flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                <button type="submit" id="auth-btn" class="w-full bg-primary hover:bg-primaryDark text-white font-medium py-3 rounded-xl transition-all shadow-sm hover:shadow-md mb-4 flex items-center justify-center gap-2">
                     <span id="auth-btn-text">تسجيل الدخول</span>
                     <div class="loader" id="auth-loader"></div>
                 </button>
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div><span class="text-sm text-gray-400">أو</span><div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
+                    <div class="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div><span class="text-xs text-gray-400">أو</span><div class="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
                 </div>
-                <button type="button" onclick="window.handleGoogleAuth()" id="google-auth-btn" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 hover:bg-green-50 dark:hover:bg-gray-800 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-3 mb-6 transform hover:-translate-y-1">
-                    <svg id="google-icon" class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                <button type="button" onclick="window.handleGoogleAuth()" id="google-auth-btn" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-3 mb-5 text-sm">
+                    <svg id="google-icon" class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                     <div class="loader hidden !border-gray-500 !border-l-gray-300" id="google-loader"></div>
-                    <span id="google-btn-text" class="text-gray-700 dark:text-gray-200">المتابعة باستخدام Google</span>
+                    <span id="google-btn-text" class="text-slate-700 dark:text-slate-200">المتابعة باستخدام Google</span>
                 </button>
             </form>
-            <div class="text-center text-sm">
-                <span class="text-gray-500" id="auth-switch-text">ليس لديك حساب؟</span> 
-                <button onclick="window.toggleAuthMode()" id="auth-toggle-btn" class="text-primaryDark font-bold hover:underline">إنشاء حساب جديد</button>
+            <div class="text-center text-xs">
+                <span class="text-gray-400" id="auth-switch-text">ليس لديك حساب؟</span> 
+                <button onclick="window.toggleAuthMode()" id="auth-toggle-btn" class="text-primaryDark font-bold hover:underline ml-1">إنشاء حساب جديد</button>
             </div>
         </div>
     </div>
 
-    <!-- PRODUCT LANDING PAGE VIEW -->
-    <div id="product-landing-view" class="view min-h-screen bg-bgLight dark:bg-bgDark w-full relative">
-        <header class="glass shadow-sm py-4 border-b border-primary/10 dark:border-gray-800 sticky top-0 z-50">
-            <div class="container mx-auto px-4 flex items-center justify-center gap-3 text-2xl font-black cursor-pointer" onclick="window.navigate('landing')">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-primaryDark flex items-center justify-center text-white shadow-lg"><i class="fas fa-leaf"></i></div>
+    <!-- PRODUCT LANDING PAGE VIEW (Shopify Style Showcase) -->
+    <div id="product-landing-view" class="view min-h-screen bg-slate-50 dark:bg-bgDark w-full relative">
+        <header class="glass shadow-sm py-4 border-b border-slate-100 dark:border-slate-800 sticky top-0 z-50">
+            <div class="container mx-auto px-4 flex items-center justify-center gap-2.5 text-xl font-bold cursor-pointer" onclick="window.navigate('landing')">
+                <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white"><i class="fas fa-leaf text-sm"></i></div>
                 Tirourda <span class="text-primary font-light">Store</span>
             </div>
         </header>
 
-        <div class="container mx-auto px-4 py-8 lg:py-16">
-            <div class="bg-white dark:bg-cardDark rounded-3xl shadow-2xl border border-primary/10 dark:border-gray-800 overflow-hidden flex flex-col lg:flex-row max-w-6xl mx-auto hover-card-elegant">
-                <!-- Image Slider Container (Dynamic, High Quality and Auto Playing) -->
-                <div class="lg:w-1/2 relative bg-white dark:bg-bgDark border-b lg:border-b-0 lg:border-l border-primary/10 dark:border-gray-800 min-h-[350px] lg:min-h-[500px]">
-                    <div class="relative w-full h-full overflow-hidden" id="lp-slider-wrapper">
+        <div class="container mx-auto px-4 py-6 md:py-12 max-w-6xl">
+            <!-- Shopify Style Double Column Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white dark:bg-cardDark rounded-2xl shadow-shopify border border-slate-100 dark:border-slate-800 overflow-hidden">
+                
+                <!-- Left: Advanced Product Media Slider (Shopify Style) -->
+                <div class="lg:col-span-7 relative bg-slate-50 dark:bg-slate-900 flex flex-col justify-between p-4 md:p-6 border-b lg:border-b-0 lg:border-l border-slate-100 dark:border-slate-800">
+                    <div class="relative w-full overflow-hidden rounded-xl bg-white dark:bg-cardDark h-[350px] md:h-[480px] shadow-sm flex items-center justify-center" id="lp-slider-wrapper">
                         <div id="lp-slider-container" class="flex transition-transform duration-500 ease-out w-full h-full">
                             <!-- Injected dynamically in Javascript -->
                         </div>
                         
-                        <!-- Slider Controls -->
-                        <button onclick="window.prevSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 text-primaryDark w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform z-20">
-                            <i class="fas fa-chevron-right text-lg"></i>
+                        <!-- Premium Minimalist Slider Navigation -->
+                        <button onclick="window.prevSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/95 dark:bg-slate-800/95 text-slate-800 dark:text-white w-10 h-10 rounded-full shadow-md flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-20">
+                            <i class="fas fa-chevron-right text-sm"></i>
                         </button>
-                        <button onclick="window.nextSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 text-primaryDark w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform z-20">
-                            <i class="fas fa-chevron-left text-lg"></i>
+                        <button onclick="window.nextSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/95 dark:bg-slate-800/95 text-slate-800 dark:text-white w-10 h-10 rounded-full shadow-md flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-20">
+                            <i class="fas fa-chevron-left text-sm"></i>
                         </button>
 
-                        <!-- Dots -->
-                        <div id="lp-slider-dots" class="absolute bottom-5 left-0 right-0 flex justify-center gap-2 z-20">
-                            <!-- Injected dynamically -->
+                        <!-- Float Highlights Badge -->
+                        <div class="absolute top-4 right-4 bg-emerald-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wide z-20 flex items-center gap-1.5">
+                            <i class="fas fa-shipping-fast"></i> توصيل سريع
                         </div>
                     </div>
-                    <div class="absolute top-4 right-4 bg-gradient-to-r from-primary to-primaryDark text-white font-black px-5 py-2.5 rounded-xl shadow-lg animate-pulse-slow z-20">
-                        توصيل سريع <i class="fas fa-shipping-fast ml-1"></i>
+
+                    <!-- Slide Pagination Indicator Dots -->
+                    <div id="lp-slider-dots" class="flex justify-center gap-2 mt-4 z-20">
+                        <!-- Injected dynamically -->
                     </div>
                 </div>
 
-                <div class="lg:w-1/2 p-6 lg:p-12 flex flex-col justify-center bg-white dark:bg-cardDark">
-                    <h1 id="lp-name" class="text-3xl lg:text-4xl font-black mb-4 text-gray-900 dark:text-white">جاري التحميل...</h1>
-                    <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-l from-primaryDark to-primary mb-6" id="lp-price">0 دج</div>
-                    <p id="lp-desc" class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed whitespace-pre-line text-sm lg:text-base"></p>
+                <!-- Right: Product Information & Purchase Checkout Form -->
+                <div class="lg:col-span-5 p-6 md:p-8 flex flex-col justify-start bg-white dark:bg-cardDark">
+                    <div class="border-b border-slate-100 dark:border-slate-800 pb-5 mb-5">
+                        <span class="text-emerald-500 text-xs font-bold uppercase tracking-wider mb-2 block"><i class="fas fa-check-circle"></i> منتج متوفر في المستودع</span>
+                        <h1 id="lp-name" class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mb-3">جاري التحميل...</h1>
+                        <div class="text-3xl font-black text-emerald-500" id="lp-price">0 دج</div>
+                    </div>
+
+                    <!-- Product Description -->
+                    <div class="mb-6">
+                        <p id="lp-desc" class="text-gray-500 dark:text-gray-400 leading-relaxed text-sm whitespace-pre-line"></p>
+                    </div>
                     
-                    <div class="bg-green-50/50 dark:bg-bgDark p-8 rounded-3xl border border-primary/20 dark:border-gray-800 relative shadow-inner">
-                        <h3 class="text-xl font-black mb-6 flex items-center gap-2"><i class="fas fa-shopping-bag text-primaryDark"></i> قدم طلبك الآن</h3>
+                    <!-- Dynamic Secure Checkout Form -->
+                    <div class="bg-slate-50 dark:bg-slate-900 p-5 md:p-6 rounded-xl border border-slate-150 dark:border-slate-800">
+                        <h3 class="text-base font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2"><i class="fas fa-shopping-bag text-primary"></i> معلومات المشتري والدفع</h3>
                         
-                        <form id="lp-order-form" onsubmit="window.submitLandingOrder(event)" class="space-y-5">
+                        <form id="lp-order-form" onsubmit="window.submitLandingOrder(event)" class="space-y-4">
                             <input type="hidden" id="lp-prod-id">
                             <input type="hidden" id="lp-ref-id">
                             <input type="hidden" id="lp-prod-name">
@@ -223,57 +241,57 @@
                             <input type="hidden" id="lp-shipping-cost-val" value="0">
                             
                             <div class="relative group">
-                                <i class="fas fa-user absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                                <input type="text" id="lp-customer-name" placeholder="الاسم الكامل" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all" required>
+                                <i class="fas fa-user absolute right-4 top-3.5 text-gray-400 group-focus-within:text-primary transition-colors text-sm"></i>
+                                <input type="text" id="lp-customer-name" placeholder="الاسم الكامل" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl pr-11 pl-4 py-3 outline-none text-sm transition-all shadow-sm" required>
                             </div>
                             <div class="relative group">
-                                <i class="fas fa-phone absolute right-4 top-4 text-gray-400 group-focus-within:text-primary transition-colors"></i>
-                                <input type="tel" id="lp-customer-phone" placeholder="رقم الهاتف" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl pr-12 pl-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-right font-bold shadow-sm transition-all" dir="ltr" required>
+                                <i class="fas fa-phone absolute right-4 top-3.5 text-gray-400 group-focus-within:text-primary transition-colors text-sm"></i>
+                                <input type="tel" id="lp-customer-phone" placeholder="رقم الهاتف" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl pr-11 pl-4 py-3 outline-none text-sm transition-all text-right shadow-sm" dir="ltr" required>
                             </div>
                             
-                            <!-- Dynamic Wilaya & Baladia Selection -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="relative group">
-                                    <select id="lp-customer-state-select" onchange="window.onStateChange()" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all" required>
+                            <!-- State & Baladia Form Grids -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div class="relative">
+                                    <select id="lp-customer-state-select" onchange="window.onStateChange()" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm font-medium shadow-sm transition-all cursor-pointer" required>
                                         <option value="">-- اختر الولاية --</option>
                                     </select>
                                 </div>
-                                <div class="relative group">
-                                    <select id="lp-customer-mun-select" onchange="window.updateTotalLandingPrice()" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all" disabled required>
+                                <div class="relative">
+                                    <select id="lp-customer-mun-select" onchange="window.updateTotalLandingPrice()" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm font-medium shadow-sm transition-all cursor-pointer" disabled required>
                                         <option value="">-- اختر البلدية --</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Shipping Method -->
-                            <div class="relative group">
-                                <select id="lp-shipping-type" onchange="window.updateTotalLandingPrice()" class="w-full bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold shadow-sm transition-all">
+                            <!-- Shipping Option -->
+                            <div class="relative">
+                                <select id="lp-shipping-type" onchange="window.updateTotalLandingPrice()" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm font-medium shadow-sm transition-all cursor-pointer">
                                     <option value="home">توصيل إلى المنزل</option>
                                     <option value="desk">توصيل إلى المكتب (Stop Desk)</option>
                                 </select>
                             </div>
 
                             <!-- Order Summary Details -->
-                            <div class="bg-white dark:bg-cardDark p-4 rounded-2xl border border-primary/20 space-y-2 text-sm font-bold">
-                                <div class="flex justify-between text-gray-500">
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 space-y-2 text-xs font-semibold shadow-sm">
+                                <div class="flex justify-between text-gray-400">
                                     <span>سعر المنتج:</span>
                                     <span id="lp-subtotal-display">0 دج</span>
                                 </div>
-                                <div class="flex justify-between text-gray-500">
+                                <div class="flex justify-between text-gray-400">
                                     <span>سعر الشحن:</span>
                                     <span id="lp-shipping-cost-display">0 دج</span>
                                 </div>
-                                <div class="h-px bg-gray-100 dark:bg-gray-700 my-2"></div>
-                                <div class="flex justify-between text-lg font-black text-primaryDark">
+                                <div class="h-px bg-slate-100 dark:bg-slate-700 my-1"></div>
+                                <div class="flex justify-between text-base font-bold text-slate-800 dark:text-white">
                                     <span>المجموع الإجمالي:</span>
-                                    <span id="lp-total-price-display">0 دج</span>
+                                    <span id="lp-total-price-display" class="text-primaryDark">0 دج</span>
                                 </div>
                             </div>
                             
-                            <button type="submit" id="lp-submit-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-black text-lg py-4 rounded-xl transition-all shadow-[0_10px_20px_rgba(74,222,128,0.4)] mt-4 flex items-center justify-center gap-3 transform hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(74,222,128,0.6)]">
-                                تأكيد الطلب <i class="fas fa-check-circle"></i>
+                            <button type="submit" id="lp-submit-btn" class="w-full bg-primary hover:bg-primaryDark text-white font-bold text-base py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg mt-2 flex items-center justify-center gap-2">
+                                تأكيد الطلب الآن <i class="fas fa-check-circle"></i>
                             </button>
-                            <p class="text-center text-xs text-primaryDark mt-4 font-bold"><i class="fas fa-shield-alt text-primary"></i> الدفع عند الاستلام - معلوماتك محمية</p>
+                            <p class="text-center text-[10px] text-gray-400 mt-2 font-medium"><i class="fas fa-shield-alt text-primary"></i> الدفع عند الاستلام - معلوماتك مشفرة ومحمية</p>
                         </form>
                     </div>
                 </div>
@@ -282,17 +300,17 @@
     </div>
 
     <!-- 1. LANDING PAGE VIEW -->
-    <div id="landing-view" class="view active relative w-full h-full bg-white dark:bg-bgDark">
+    <div id="landing-view" class="view active relative w-full h-full bg-slate-50 dark:bg-bgDark">
 
-        <header class="fixed top-0 w-full glass z-40 transition-all border-b border-primary/10 dark:border-gray-800/50">
+        <header class="fixed top-0 w-full glass z-40 transition-all border-b border-slate-150 dark:border-slate-800">
             <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center w-full">
-                <div class="flex items-center gap-3 text-xl font-black cursor-pointer hover:scale-105 transition-transform duration-300" onclick="window.scrollTo(0,0)">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-primaryDark flex items-center justify-center text-white shadow-[0_5px_15px_rgba(74,222,128,0.5)]"><i class="fas fa-leaf"></i></div>
+                <div class="flex items-center gap-2.5 text-lg font-bold cursor-pointer hover:scale-105 transition-transform duration-300" onclick="window.scrollTo(0,0)">
+                    <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white"><i class="fas fa-leaf text-sm"></i></div>
                     Tirourda <span class="text-primary font-light">Affiliate</span>
                 </div>
-                <div class="flex gap-3" id="nav-auth-buttons">
-                    <button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primaryDark font-bold px-3 text-sm md:text-base transition-colors">دخول</button>
-                    <button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white px-5 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(74,222,128,0.4)] hover:shadow-[0_8px_20px_rgba(74,222,128,0.6)] font-bold text-sm md:text-base transition-all transform hover:-translate-y-0.5">إنشاء حساب</button>
+                <div class="flex gap-2.5" id="nav-auth-buttons">
+                    <button onclick="window.openAuthModal(false)" class="text-slate-600 dark:text-gray-300 hover:text-primaryDark font-semibold px-3 text-sm transition-colors">دخول</button>
+                    <button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-sm">إنشاء حساب</button>
                 </div>
             </div>
         </header>
@@ -301,12 +319,12 @@
         <section class="pt-28 pb-16 relative min-h-[90vh] flex flex-col justify-center items-center overflow-hidden bg-white dark:bg-bgDark">
             
             <div class="absolute inset-0 overflow-hidden pointer-events-none w-full h-full">
-                <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                 <div class="absolute bottom-0 left-0 w-96 h-96 bg-primaryDark/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3"></div>
                 
-                <svg class="absolute top-1/4 left-0 w-full h-[60vh] opacity-20 dark:opacity-5" preserveAspectRatio="none" viewBox="0 0 1440 320">
+                <svg class="absolute top-1/4 left-0 w-full h-[60vh] opacity-10 dark:opacity-5" preserveAspectRatio="none" viewBox="0 0 1440 320">
                     <path class="animate-pulse-slow" fill="url(#gradientChart)" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,229,1152,197.3C1248,165,1344,139,1392,128L1440,117.3L1440,320L1392,320Z"></path>
-                    <defs><linearGradient id="gradientChart" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#4ade80" stop-opacity="1" /><stop offset="100%" stop-color="#ffffff" stop-opacity="0" /></linearGradient></defs>
+                    <defs><linearGradient id="gradientChart" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" stop-opacity="1" /><stop offset="100%" stop-color="#ffffff" stop-opacity="0" /></linearGradient></defs>
                 </svg>
                 <div class="floating-num num-1">+500 دج</div><div class="floating-num num-2">+1,500 دج</div><div class="floating-num num-3">+500 دج</div>
             </div>
@@ -314,195 +332,192 @@
             <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
                 
                 <div class="w-full flex justify-center lg:hidden order-1 animate-fade-up">
-                    <div class="relative w-full max-w-sm">
-                        <div class="absolute inset-0 bg-primary/20 rounded-3xl transform rotate-6 scale-105"></div>
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJbkFNdrIyGwoDIQ3uaEFhxzMrnwfoW723llQtGoufMdqC8npfEjnaRo5tddA6MdOzeO4TiyEbyS8zwoJ2lfvSDcfqy7zw1xOSsdd9l_QhP5F-m0qOfp-fS1hHm3i-73YbWlJIhyXR7034JHH3PV6yNj-DPzVTHGFDZK26IvJKf8C9Csfi_3no1oKQn88/s1220/1000017792.jpg" alt="Natural Products" class="w-full rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.2)] border-4 border-white dark:border-cardDark relative z-10 object-cover aspect-[4/5]">
-                        <div class="absolute -bottom-5 -right-5 bg-white dark:bg-cardDark p-3 rounded-2xl shadow-xl z-20 flex items-center gap-2 border border-primary/20 text-primaryDark font-black">
+                    <div class="relative w-full max-w-xs">
+                        <div class="absolute inset-0 bg-primary/10 rounded-2xl transform rotate-3 scale-105"></div>
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJbkFNdrIyGwoDIQ3uaEFhxzMrnwfoW723llQtGoufMdqC8npfEjnaRo5tddA6MdOzeO4TiyEbyS8zwoJ2lfvSDcfqy7zw1xOSsdd9l_QhP5F-m0qOfp-fS1hHm3i-73YbWlJIhyXR7034JHH3PV6yNj-DPzVTHGFDZK26IvJKf8C9Csfi_3no1oKQn88/s1220/1000017792.jpg" alt="Natural Products" class="w-full rounded-2xl shadow-shopify border-4 border-white dark:border-cardDark relative z-10 object-cover aspect-[4/5]">
+                        <div class="absolute -bottom-3 -right-3 bg-white dark:bg-cardDark px-3 py-1.5 rounded-lg shadow-md z-20 flex items-center gap-1.5 border border-slate-100 text-xs text-primaryDark font-bold">
                             <i class="fas fa-check-circle"></i> منتجات طبيعية
                         </div>
                     </div>
                 </div>
 
                 <div class="text-center lg:text-right order-2 lg:order-1 z-10">
-                    <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6 animate-fade-up delay-100 text-gray-900 dark:text-white">اربح المال مع <br> <span class="gradient-text">Tirourda Affiliate</span> <i class="fas fa-arrow-trend-up trend-arrow mr-2 text-4xl md:text-6xl text-primary drop-shadow-md align-middle"></i></h1>
-                    <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto lg:mx-0 animate-fade-up delay-200 leading-relaxed font-semibold">شارك منتجاتنا المتميزة واحصل على <span class="font-bold text-primaryDark bg-green-50 px-3 py-1 rounded-lg border border-primary/20 inline-block mt-1 md:mt-0">500 دج عمولة ثابتة</span> على كل طلبية ناجحة.</p>
-                    <div id="hero-cta" class="animate-fade-up delay-300"><button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-[0_10px_25px_rgba(74,222,128,0.5)] hover:shadow-[0_15px_35px_rgba(74,222,128,0.7)] transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-1">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button></div>
+                    <h1 class="text-4xl md:text-6xl font-black leading-tight mb-5 animate-fade-up delay-100 text-slate-900 dark:text-white">اربح المال مع <br> <span class="gradient-text">Tirourda Affiliate</span> <i class="fas fa-arrow-trend-up trend-arrow mr-1 text-3xl md:text-5xl align-middle"></i></h1>
+                    <p class="text-base md:text-lg text-gray-500 dark:text-gray-300 mb-8 max-w-xl mx-auto lg:mx-0 animate-fade-up delay-200 leading-relaxed font-medium">شارك منتجاتنا المتميزة واحصل على <span class="font-bold text-primaryDark bg-emerald-50 dark:bg-emerald-950/20 px-2 py-0.5 rounded border border-emerald-100 dark:border-emerald-900 inline-block">500 دج عمولة ثابتة</span> على كل طلبية ناجحة.</p>
+                    <div id="hero-cta" class="animate-fade-up delay-300"><button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white text-base px-8 py-3.5 rounded-xl shadow-md transition-all font-semibold flex items-center justify-center gap-3 w-full sm:w-auto mx-auto lg:mx-0">ابدأ الآن مجانا <i class="fas fa-arrow-left"></i></button></div>
                 </div>
                 
                 <div class="relative z-10 hidden lg:flex order-2 justify-center w-full animate-fade-up delay-200">
-                     <div class="relative w-full max-w-md ml-auto">
-                        <div class="absolute inset-0 bg-primary/20 rounded-3xl transform -rotate-3 scale-105"></div>
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJbkFNdrIyGwoDIQ3uaEFhxzMrnwfoW723llQtGoufMdqC8npfEjnaRo5tddA6MdOzeO4TiyEbyS8zwoJ2lfvSDcfqy7zw1xOSsdd9l_QhP5F-m0qOfp-fS1hHm3i-73YbWlJIhyXR7034JHH3PV6yNj-DPzVTHGFDZK26IvJKf8C9Csfi_3no1oKQn88/s1220/1000017792.jpg" alt="Natural Products" class="w-full h-[600px] rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.2)] border-8 border-white dark:border-cardDark relative z-10 object-cover">
-                        <div class="absolute top-10 -right-10 bg-white/95 dark:bg-cardDark/95 backdrop-blur-xl p-5 rounded-2xl shadow-2xl z-20 border border-primary/20 transform hover:scale-105 transition-transform">
-                             <div class="text-sm text-gray-500 font-bold mb-1">أرباح اليوم</div>
-                             <div class="text-2xl font-black text-primaryDark">+ 4,500 دج</div>
+                     <div class="relative w-full max-w-sm ml-auto">
+                        <div class="absolute inset-0 bg-primary/10 rounded-2xl transform -rotate-2 scale-105"></div>
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJbkFNdrIyGwoDIQ3uaEFhxzMrnwfoW723llQtGoufMdqC8npfEjnaRo5tddA6MdOzeO4TiyEbyS8zwoJ2lfvSDcfqy7zw1xOSsdd9l_QhP5F-m0qOfp-fS1hHm3i-73YbWlJIhyXR7034JHH3PV6yNj-DPzVTHGFDZK26IvJKf8C9Csfi_3no1oKQn88/s1220/1000017792.jpg" alt="Natural Products" class="w-full h-[520px] rounded-2xl shadow-shopify border-4 border-white dark:border-cardDark relative z-10 object-cover">
+                        <div class="absolute top-10 -right-8 bg-white/95 dark:bg-cardDark/95 backdrop-blur-md p-4 rounded-xl shadow-lg z-20 border border-slate-100 dark:border-slate-800">
+                             <div class="text-[10px] text-gray-400 font-bold mb-0.5">أرباح اليوم</div>
+                             <div class="text-xl font-black text-primaryDark">+ 4,500 دج</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-12 border-y border-primary/10 dark:border-gray-800 bg-white dark:bg-cardDark/50 backdrop-blur-md reveal-on-scroll z-10 relative">
+        <section class="py-12 border-y border-slate-100 dark:border-slate-800 bg-white dark:bg-cardDark/40 backdrop-blur-md reveal-on-scroll z-10 relative">
             <div class="container mx-auto px-6">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                    <div class="hover:scale-110 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">150<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">مسوق نشط</p></div>
-                    <div class="hover:scale-110 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">500K<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">دج مدفوعة</p></div>
-                    <div class="hover:scale-110 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">1,200<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">طلب ناجح</p></div>
-                    <div class="hover:scale-110 transition-transform duration-300"><h3 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-primary mb-2">45<span class="text-gray-800 dark:text-gray-100">+</span></h3><p class="text-gray-500 font-bold text-sm uppercase tracking-wide">منتج مميز</p></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div><h3 class="text-2xl md:text-4xl font-black text-slate-800 dark:text-white mb-1">150+</h3><p class="text-gray-400 font-bold text-xs uppercase tracking-wide">مسوق نشط</p></div>
+                    <div><h3 class="text-2xl md:text-4xl font-black text-slate-800 dark:text-white mb-1">500K+</h3><p class="text-gray-400 font-bold text-xs uppercase tracking-wide">دج مدفوعة</p></div>
+                    <div><h3 class="text-2xl md:text-4xl font-black text-slate-800 dark:text-white mb-1">1,200+</h3><p class="text-gray-400 font-bold text-xs uppercase tracking-wide">طلب ناجح</p></div>
+                    <div><h3 class="text-2xl md:text-4xl font-black text-slate-800 dark:text-white mb-1">45+</h3><p class="text-gray-400 font-bold text-xs uppercase tracking-wide">منتج مميز</p></div>
                 </div>
             </div>
         </section>
 
-        <section class="py-20 bg-green-50/30 dark:bg-bgDark/50 relative overflow-hidden reveal-on-scroll">
+        <section class="py-16 bg-slate-50 dark:bg-bgDark/50 relative overflow-hidden reveal-on-scroll">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-16"><h2 class="text-4xl font-black mb-4 text-gray-900 dark:text-white">كيف تبدأ <span class="gradient-text">الربح؟</span></h2><p class="text-gray-500 max-w-2xl mx-auto text-lg">خطوات بسيطة ومضمونة لتحقيق أولى أرباحك معنا</p></div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative text-center">
-                    <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 relative z-10 hover-card-elegant group">
-                        <div class="w-20 h-20 mx-auto bg-green-50 dark:bg-gray-800 text-primaryDark group-hover:text-white group-hover:bg-primary transition-all duration-500 flex items-center justify-center rounded-2xl text-3xl font-black mb-6 shadow-sm"><i class="fas fa-user-plus"></i></div><h3 class="font-black text-xl mb-3 text-gray-800 dark:text-white">1. إنشاء حساب</h3><p class="text-gray-500 text-sm leading-relaxed">سجل حسابك كمسوق مجاناً في ثوانٍ وادخل مباشرة إلى لوحة التحكم الخاصة بك.</p>
+                <div class="text-center mb-12"><h2 class="text-2xl md:text-3xl font-bold mb-2 text-slate-900 dark:text-white">كيف تبدأ <span class="gradient-text">الربح؟</span></h2><p class="text-gray-450 max-w-md mx-auto text-sm">خطوات واضحة وموثوقة لبدء رحلة تسويقك بنجاح</p></div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative text-center">
+                    <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 relative z-10 group hover:shadow-md transition-shadow">
+                        <div class="w-14 h-14 mx-auto bg-slate-50 dark:bg-slate-800 text-primary group-hover:text-white group-hover:bg-primary transition-all duration-300 flex items-center justify-center rounded-xl text-xl mb-4 shadow-sm"><i class="fas fa-user-plus"></i></div><h3 class="font-bold text-base mb-2 text-slate-800 dark:text-white">1. إنشاء حساب</h3><p class="text-gray-400 text-xs leading-relaxed">سجل حسابك كمسوق مجاناً في ثوانٍ وادخل مباشرة إلى لوحة التحكم الخاصة بك.</p>
                     </div>
-                    <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 relative z-10 hover-card-elegant group">
-                        <div class="w-20 h-20 mx-auto bg-green-50 dark:bg-gray-800 text-primaryDark group-hover:text-white group-hover:bg-primary transition-all duration-500 flex items-center justify-center rounded-2xl text-3xl font-black mb-6 shadow-sm"><i class="fas fa-bullhorn"></i></div><h3 class="font-black text-xl mb-3 text-gray-800 dark:text-white">2. الترويج للمنتجات</h3><p class="text-gray-500 text-sm leading-relaxed">انسخ رابطك الخاص وشاركه. الرابط يوجه لصفحة هبوط احترافية تزيد من مبيعاتك.</p>
+                    <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 relative z-10 group hover:shadow-md transition-shadow">
+                        <div class="w-14 h-14 mx-auto bg-slate-50 dark:bg-slate-800 text-primary group-hover:text-white group-hover:bg-primary transition-all duration-300 flex items-center justify-center rounded-xl text-xl mb-4 shadow-sm"><i class="fas fa-bullhorn"></i></div><h3 class="font-bold text-base mb-2 text-slate-800 dark:text-white">2. الترويج للمنتجات</h3><p class="text-gray-400 text-xs leading-relaxed">انسخ رابطك الخاص وشاركه. الرابط يوجه لصفحة هبوط احترافية تزيد من مبيعاتك.</p>
                     </div>
-                    <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 relative z-10 hover-card-elegant group">
-                        <div class="w-20 h-20 mx-auto bg-green-50 dark:bg-gray-800 text-primaryDark group-hover:text-white group-hover:bg-primary transition-all duration-500 flex items-center justify-center rounded-2xl text-3xl font-black mb-6 shadow-sm"><i class="fas fa-chart-line"></i></div><h3 class="font-black text-xl mb-3 text-gray-800 dark:text-white">3. تتبع الإحصائيات</h3><p class="text-gray-500 text-sm leading-relaxed">ستظهر لك الإحصائيات الدقيقة لكل نقرة على روابطك والطلبات المسجلة بوضوح تام.</p>
+                    <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 relative z-10 group hover:shadow-md transition-shadow">
+                        <div class="w-14 h-14 mx-auto bg-slate-50 dark:bg-slate-800 text-primary group-hover:text-white group-hover:bg-primary transition-all duration-300 flex items-center justify-center rounded-xl text-xl mb-4 shadow-sm"><i class="fas fa-chart-line"></i></div><h3 class="font-bold text-base mb-2 text-slate-800 dark:text-white">3. تتبع الإحصائيات</h3><p class="text-gray-400 text-xs leading-relaxed">ستظهر لك الإحصائيات الدقيقة لكل نقرة على روابطك والطلبات المسجلة بوضوح تام.</p>
                     </div>
-                    <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 relative z-10 hover-card-elegant group">
-                        <div class="w-20 h-20 mx-auto bg-green-50 dark:bg-gray-800 text-primaryDark group-hover:text-white group-hover:bg-primary transition-all duration-500 flex items-center justify-center rounded-2xl text-3xl font-black mb-6 shadow-sm"><i class="fas fa-money-bill-wave"></i></div><h3 class="font-black text-xl mb-3 text-gray-800 dark:text-white">4. استلام الأرباح</h3><p class="text-gray-500 text-sm leading-relaxed">بمجرد استلام الزبون للطلبية، يتم احتساب الأموال فوراً في رصيدك لتسحبها مباشرة.</p>
+                    <div class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 relative z-10 group hover:shadow-md transition-shadow">
+                        <div class="w-14 h-14 mx-auto bg-slate-50 dark:bg-slate-800 text-primary group-hover:text-white group-hover:bg-primary transition-all duration-300 flex items-center justify-center rounded-xl text-xl mb-4 shadow-sm"><i class="fas fa-money-bill-wave"></i></div><h3 class="font-bold text-base mb-2 text-slate-800 dark:text-white">4. استلام الأرباح</h3><p class="text-gray-400 text-xs leading-relaxed">بمجرد استلام الزبون للطلبية، يتم احتساب الأموال فوراً في رصيدك لتسحبها مباشرة.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-20 bg-white dark:bg-cardDark reveal-on-scroll">
+        <section class="py-16 bg-white dark:bg-cardDark reveal-on-scroll">
             <div class="container mx-auto px-6 text-center">
-                <h2 class="text-4xl font-black mb-4 text-gray-900 dark:text-white">لماذا تختار <span class="gradient-text">Tirourda</span>؟</h2>
-                <p class="text-gray-500 mb-16 max-w-2xl mx-auto text-lg">بيئة عمل احترافية تضمن نجاحك وتحقيق أعلى الأرباح بشفافية تامة.</p>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-right max-w-6xl mx-auto">
-                    <div class="bg-white dark:bg-bgDark p-10 rounded-3xl border border-primary/20 dark:border-gray-800 hover-card-elegant relative overflow-hidden shadow-sm">
-                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center rounded-2xl text-2xl mb-8 shadow-[0_5px_15px_rgba(74,222,128,0.4)]"><i class="fas fa-percent"></i></div><h3 class="text-2xl font-black mb-4 text-gray-800 dark:text-white">عمولة ثابتة ومجزية</h3><p class="text-gray-500 leading-relaxed">نقدم 500 دج عمولة ثابتة على كل طلبية ناجحة لتكافئ جهودك بشكل عادل ومضمون.</p>
+                <h2 class="text-2xl md:text-3xl font-bold mb-2 text-slate-900 dark:text-white">لماذا تختار <span class="gradient-text">Tirourda</span>؟</h2>
+                <p class="text-gray-400 mb-12 max-w-md mx-auto text-sm">بيئة عمل احترافية تضمن نجاحك وتحقيق أعلى الأرباح بشفافية تامة.</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-right max-w-5xl mx-auto">
+                    <div class="bg-slate-50 dark:bg-bgDark p-8 rounded-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden shadow-sm">
+                        <div class="w-12 h-12 bg-primary/15 text-primary flex items-center justify-center rounded-xl text-xl mb-6"><i class="fas fa-percent"></i></div><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-white">عمولة ثابتة ومجزية</h3><p class="text-gray-400 text-xs leading-relaxed">نقدم 500 دج عمولة ثابتة على كل طلبية ناجحة لتكافئ جهودك بشكل عادل ومضمون.</p>
                     </div>
-                    <div class="bg-white dark:bg-bgDark p-10 rounded-3xl border border-primary/20 dark:border-gray-800 hover-card-elegant relative overflow-hidden shadow-sm">
-                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center rounded-2xl text-2xl mb-8 shadow-[0_5px_15px_rgba(74,222,128,0.4)]"><i class="fas fa-bolt"></i></div><h3 class="text-2xl font-black mb-4 text-gray-800 dark:text-white">سحب سريع ومضمون</h3><p class="text-gray-500 leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي CCP أو كرصيد هاتف (Flexy) بكل سهولة.</p>
+                    <div class="bg-slate-50 dark:bg-bgDark p-8 rounded-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden shadow-sm">
+                        <div class="w-12 h-12 bg-primary/15 text-primary flex items-center justify-center rounded-xl text-xl mb-6"><i class="fas fa-bolt"></i></div><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-white">سحب سريع ومضمون</h3><p class="text-gray-400 text-xs leading-relaxed">اسحب أرباحك فوراً نحو حسابك البريدي CCP أو كرصيد هاتف (Flexy) بكل سهولة.</p>
                     </div>
-                    <div class="bg-white dark:bg-bgDark p-10 rounded-3xl border border-primary/20 dark:border-gray-800 hover-card-elegant relative overflow-hidden md:col-span-2 lg:col-span-1 shadow-sm">
-                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center rounded-2xl text-2xl mb-8 shadow-[0_5px_15px_rgba(74,222,128,0.4)]"><i class="fas fa-link"></i></div><h3 class="text-2xl font-black mb-4 text-gray-800 dark:text-white">رابط خاص لكل منتج</h3><p class="text-gray-500 leading-relaxed">تحصل على رابط فريد يوجه زبائنك لصفحة شراء محترفة تزيد من نسبة مبيعاتك.</p>
+                    <div class="bg-slate-50 dark:bg-bgDark p-8 rounded-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden md:col-span-2 lg:col-span-1 shadow-sm">
+                        <div class="w-12 h-12 bg-primary/15 text-primary flex items-center justify-center rounded-xl text-xl mb-6"><i class="fas fa-link"></i></div><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-white">رابط خاص لكل منتج</h3><p class="text-gray-400 text-xs leading-relaxed">تحصل على رابط فريد يوجه زبائنك لصفحة شراء محترفة تزيد من نسبة مبيعاتك.</p>
                     </div>
                 </div>
             </div>
         </section>
         
-        <section class="py-20 bg-green-50/20 dark:bg-bgDark text-center reveal-on-scroll">
-            <h2 class="text-3xl font-black mb-12 text-gray-900 dark:text-white">طرق سحب <span class="gradient-text">متعددة ومحلية</span></h2>
-            <div class="flex flex-col sm:flex-row justify-center gap-8 max-w-4xl mx-auto px-6">
-                <div class="flex-1 bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/20 dark:border-gray-800 flex items-center justify-center gap-6 hover-card-elegant">
-                    <span class="font-black text-2xl text-gray-800 dark:text-white">CCP / BaridiMob</span><img src="https://ebourse.dz/wp-content/uploads/2017/12/AlgeriePoste.svg_.png" alt="Algérie Poste" class="h-12 object-contain bg-white rounded-xl p-2 shadow-sm border border-gray-100">
+        <section class="py-16 bg-slate-50 dark:bg-bgDark text-center reveal-on-scroll">
+            <h2 class="text-2xl font-bold mb-10 text-slate-900 dark:text-white">طرق سحب <span class="gradient-text">متعددة ومحلية</span></h2>
+            <div class="flex flex-col sm:flex-row justify-center gap-6 max-w-3xl mx-auto px-6">
+                <div class="flex-1 bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-center justify-center gap-4 hover:shadow-md transition-shadow">
+                    <span class="font-bold text-lg text-slate-800 dark:text-white">CCP / BaridiMob</span><img src="https://ebourse.dz/wp-content/uploads/2017/12/AlgeriePoste.svg_.png" alt="Algérie Poste" class="h-10 object-contain bg-white rounded-lg p-1.5 border border-slate-100">
                 </div>
-                <div class="flex-1 bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/20 dark:border-gray-800 flex flex-col items-center justify-center gap-5 hover-card-elegant">
-                    <div class="flex gap-5 items-center justify-center">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFM2lbUhHLa_c7IrFn2oMdC8j1zXX7xZ4tkZPQI1Q7YqRk2i7rgNDDPjQV&s=10" alt="Ooredoo" class="h-10 object-contain rounded-lg shadow-sm border border-gray-100">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Djezzy_Logo_2015.svg" alt="Djezzy" class="h-10 object-contain shadow-sm bg-white rounded-lg p-1 border border-gray-100">
-                        <div class="bg-green-500 px-3 py-1.5 rounded-xl shadow-sm flex items-center justify-center"><img src="https://mobilis.dz/logowhite.png" alt="Mobilis" class="h-6 object-contain"></div>
+                <div class="flex-1 bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center gap-3 hover:shadow-md transition-shadow">
+                    <div class="flex gap-4 items-center justify-center">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFM2lbUhHLa_c7IrFn2oMdC8j1zXX7xZ4tkZPQI1Q7YqRk2i7rgNDDPjQV&s=10" alt="Ooredoo" class="h-8 object-contain rounded border border-slate-100">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Djezzy_Logo_2015.svg" alt="Djezzy" class="h-8 object-contain bg-white rounded p-0.5 border border-slate-100">
+                        <div class="bg-green-500 p-1.5 rounded-lg shadow-sm flex items-center justify-center"><img src="https://mobilis.dz/logowhite.png" alt="Mobilis" class="h-4 object-contain"></div>
                     </div>
-                    <span class="font-bold text-gray-500 tracking-wider">Flexy (رصيد هاتف)</span>
+                    <span class="text-xs font-semibold text-gray-400">Flexy (رصيد هاتف)</span>
                 </div>
             </div>
         </section>
     </div>
 
     <!-- 2. USER DASHBOARD VIEW -->
-    <div id="user-dashboard-view" class="view flex-view min-h-screen bg-bgLight dark:bg-bgDark relative overflow-hidden w-full h-full">
-        <div id="mobile-sidebar-overlay" onclick="window.toggleUserSidebar()" class="fixed inset-0 bg-white/50 dark:bg-black/60 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
-        <aside id="user-sidebar" class="w-64 bg-white dark:bg-cardDark border-l border-primary/20 dark:border-gray-800 fixed top-0 h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0 shadow-2xl md:shadow-none">
-            <div class="p-6 border-b border-primary/10 dark:border-gray-800 flex justify-between items-center text-lg font-black text-gray-800 dark:text-white">
-                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-primaryDark flex items-center justify-center text-white"><i class="fas fa-leaf"></i></div> لوحة المسوق</div><button onclick="window.toggleUserSidebar()" class="md:hidden text-gray-400 hover:text-primary"><i class="fas fa-times"></i></button>
+    <div id="user-dashboard-view" class="view flex-view min-h-screen bg-slate-50 dark:bg-bgDark relative overflow-hidden w-full h-full">
+        <div id="mobile-sidebar-overlay" onclick="window.toggleUserSidebar()" class="fixed inset-0 bg-slate-900/20 dark:bg-black/40 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
+        <aside id="user-sidebar" class="w-60 bg-white dark:bg-cardDark border-l border-slate-150 dark:border-slate-800 fixed top-0 h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0 shadow-lg md:shadow-none">
+            <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center text-base font-bold text-slate-800 dark:text-white">
+                <div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-white"><i class="fas fa-leaf text-xs"></i></div> لوحة المسوق</div><button onclick="window.toggleUserSidebar()" class="md:hidden text-gray-400 hover:text-primary"><i class="fas fa-times"></i></button>
             </div>
-            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <a href="#" onclick="window.switchUserTab('home', event)" data-tab="home" class="dash-link flex items-center gap-3 bg-green-50 dark:bg-primary/10 text-primaryDark px-4 py-3.5 rounded-xl font-bold transition-all border-r-4 border-primary"><i class="fas fa-tachometer-alt w-5"></i> الرئيسية</a>
-                <a href="#" onclick="window.switchUserTab('products', event)" data-tab="products" class="dash-link flex items-center gap-3 hover:bg-green-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3.5 rounded-xl font-bold transition-all border-r-4 border-transparent hover:border-primary/50"><i class="fas fa-box-open w-5"></i> المنتجات وروابط الترويج</a>
-                <a href="#" onclick="window.switchUserTab('withdraw', event)" data-tab="withdraw" class="dash-link flex items-center gap-3 hover:bg-green-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3.5 rounded-xl font-bold transition-all border-r-4 border-transparent hover:border-primary/50"><i class="fas fa-hand-holding-usd w-5"></i> سحب الأرباح</a>
-                <a href="#" onclick="window.switchUserTab('support', event)" data-tab="support" class="dash-link flex items-center gap-3 hover:bg-green-50 dark:hover:bg-bgDark text-gray-600 dark:text-gray-300 px-4 py-3.5 rounded-xl font-bold transition-all border-r-4 border-transparent hover:border-primary/50 mt-8 border-t border-primary/10 dark:border-gray-700 pt-6"><i class="fas fa-headset w-5"></i> الدعم الفني</a>
+            <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+                <a href="#" onclick="window.switchUserTab('home', event)" data-tab="home" class="dash-link flex items-center gap-3 bg-emerald-50 dark:bg-emerald-950/20 text-primaryDark px-4 py-3 rounded-xl text-sm font-semibold transition-all border-r-4 border-primary"><i class="fas fa-tachometer-alt w-5"></i> الرئيسية</a>
+                <a href="#" onclick="window.switchUserTab('products', event)" data-tab="products" class="dash-link flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-900/40 text-gray-400 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-r-4 border-transparent hover:border-primary/50"><i class="fas fa-box-open w-5"></i> المنتجات وروابط الترويج</a>
+                <a href="#" onclick="window.switchUserTab('withdraw', event)" data-tab="withdraw" class="dash-link flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-900/40 text-gray-400 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-r-4 border-transparent hover:border-primary/50"><i class="fas fa-hand-holding-usd w-5"></i> سحب الأرباح</a>
+                <a href="#" onclick="window.switchUserTab('support', event)" data-tab="support" class="dash-link flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-900/40 text-gray-400 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-r-4 border-transparent hover:border-primary/50 mt-4 border-t border-slate-100 dark:border-slate-800 pt-4"><i class="fas fa-headset w-5"></i> الدعم الفني</a>
             </nav>
-            <div class="p-4 border-t border-primary/10 dark:border-gray-800"><button onclick="window.logoutUser()" class="w-full flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-500 hover:text-white py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button></div>
+            <div class="p-3 border-t border-slate-100 dark:border-slate-800"><button onclick="window.logoutUser()" class="w-full flex items-center justify-center gap-2 bg-red-50 dark:bg-red-950/10 text-red-500 hover:bg-red-500 hover:text-white py-3 rounded-xl text-sm font-semibold transition-all"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button></div>
         </aside>
 
-        <main class="flex-1 md:pr-64 p-4 md:p-8 pt-6 w-full min-h-screen">
-            <header class="bg-white dark:bg-cardDark backdrop-blur-md rounded-2xl shadow-sm border border-primary/20 dark:border-gray-800 p-4 mb-8 flex justify-between items-center relative z-10 w-full hover-card-elegant">
-                <div class="flex items-center gap-4">
-                    <button onclick="window.toggleUserSidebar()" class="md:hidden w-12 h-12 rounded-xl bg-green-50 dark:bg-bgDark text-primaryDark flex justify-center items-center shadow-sm border border-primary/20"><i class="fas fa-bars"></i></button>
-                    <div><h1 class="font-black text-lg md:text-xl text-gray-800 dark:text-white" id="dash-name">المسوق</h1><p class="text-xs text-gray-500" id="dash-email">email@test.com</p></div>
+        <main class="flex-1 md:pr-60 p-4 md:p-6 pt-5 w-full min-h-screen">
+            <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm border border-slate-150 dark:border-slate-800 p-4 mb-6 flex justify-between items-center relative z-10 w-full">
+                <div class="flex items-center gap-3">
+                    <button onclick="window.toggleUserSidebar()" class="md:hidden w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 text-primaryDark flex justify-center items-center shadow-sm border border-slate-200"><i class="fas fa-bars text-sm"></i></button>
+                    <div><h1 class="font-bold text-base text-slate-800 dark:text-white" id="dash-name">المسوق</h1><p class="text-[10px] text-gray-400" id="dash-email">email@test.com</p></div>
                 </div>
-                <div class="bg-green-50 dark:bg-primary/20 px-5 py-3 rounded-xl border border-primary/30 font-black flex gap-2 items-center shadow-inner"><span id="user-balance" class="text-primaryDark text-xl md:text-2xl">0</span> <span class="text-sm text-primary mt-1 font-bold">دج</span></div>
+                <div class="bg-emerald-50 dark:bg-emerald-950/20 px-4 py-2 rounded-xl border border-emerald-100 font-bold flex gap-1.5 items-center"><span id="user-balance" class="text-primaryDark text-xl">0</span> <span class="text-xs text-primary mt-1 font-bold">دج</span></div>
             </header>
 
             <div id="tab-home" class="tab-content block animate-fade-in w-full">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-yellow-400/20"><i class="fas fa-hourglass-half"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">معلق</div><div class="text-2xl md:text-3xl font-black text-yellow-500" id="user-pending">0</div></div>
-                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-primary/20"><i class="fas fa-wallet"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">إجمالي الأرباح</div><div class="text-2xl md:text-3xl font-black text-primaryDark" id="user-total">0</div></div>
-                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-primary/10 dark:text-white/5"><i class="fas fa-shopping-cart"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">مبيعات ناجحة</div><div class="text-2xl md:text-3xl font-black text-gray-800 dark:text-white" id="user-orders-count">0</div></div>
-                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 hover-card-elegant relative overflow-hidden"><div class="absolute -left-4 -bottom-4 text-6xl text-blue-400/20"><i class="fas fa-mouse-pointer"></i></div><div class="text-gray-500 text-xs md:text-sm font-bold mb-2">نقرات الروابط</div><div class="text-2xl md:text-3xl font-black text-blue-500" id="user-clicks">0</div></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800"><div class="text-gray-400 text-xs font-semibold mb-1">معلق</div><div class="text-xl md:text-2xl font-black text-yellow-500" id="user-pending">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800"><div class="text-gray-400 text-xs font-semibold mb-1">إجمالي الأرباح</div><div class="text-xl md:text-2xl font-black text-primaryDark" id="user-total">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800"><div class="text-gray-400 text-xs font-semibold mb-1">مبيعات ناجحة</div><div class="text-xl md:text-2xl font-black text-slate-800 dark:text-white" id="user-orders-count">0</div></div>
+                    <div class="bg-white dark:bg-cardDark p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800"><div class="text-gray-400 text-xs font-semibold mb-1">نقرات الروابط</div><div class="text-xl md:text-2xl font-black text-blue-500" id="user-clicks">0</div></div>
                 </div>
-                <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 max-h-[500px] overflow-y-auto custom-scrollbar">
-                    <h3 class="font-black text-lg mb-6 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-8 h-8 rounded-lg bg-primary/20 text-primaryDark flex items-center justify-center"><i class="fas fa-list"></i></div> الطلبات الأخيرة من روابطك</h3>
+                <div class="bg-white dark:bg-cardDark p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 max-h-[480px] overflow-y-auto custom-scrollbar">
+                    <h3 class="font-bold text-base mb-4 flex items-center gap-2 text-slate-800 dark:text-white"><div class="w-6 h-6 rounded bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-list text-xs"></i></div> الطلبات الأخيرة من روابطك</h3>
                     <div class="space-y-3" id="user-orders-list">جاري التحميل...</div>
                 </div>
             </div>
 
             <div id="tab-products" class="tab-content hidden animate-fade-in w-full">
-                <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 mb-8">
-                    <h3 class="font-black text-xl mb-4 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/20 text-primaryDark flex items-center justify-center"><i class="fas fa-link"></i></div> روابط الترويج (Landing Pages)</h3>
-                    <p class="text-gray-500 text-sm md:text-base mb-8 max-w-3xl leading-relaxed">انسخ الرابط الخاص بكل منتج وشاركه. الرابط يوجه الزبون لصفحة هبوط احترافية تتضمن استمارة الشراء، وسيتم احتساب العمولة تلقائياً في حسابك فور التوصيل.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" id="affiliate-products-list">جاري التحميل...</div>
+                <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 mb-6">
+                    <h3 class="font-bold text-lg mb-2 flex items-center gap-2.5 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-link text-sm"></i></div> روابط الترويج (Landing Pages)</h3>
+                    <p class="text-gray-400 text-xs mb-6 leading-relaxed">انسخ الرابط الخاص بكل منتج وشاركه. الرابط يوجه الزبون لصفحة هبوط احترافية تتضمن استمارة الشراء، وسيتم احتساب العمولة تلقائياً في حسابك فور التوصيل.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="affiliate-products-list">جاري التحميل...</div>
                 </div>
             </div>
 
             <div id="tab-withdraw" class="tab-content hidden animate-fade-in w-full">
-                <div class="grid lg:grid-cols-2 gap-8 items-start">
-                    <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800">
-                        <h3 class="font-black text-xl mb-6 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/20 text-primaryDark flex items-center justify-center"><i class="fas fa-money-check"></i></div> طلب سحب جديد</h3>
-                        <div class="bg-green-50 dark:bg-primary/10 border border-primary/30 rounded-2xl p-5 mb-6 flex justify-between items-center font-black text-primaryDark shadow-inner">
-                            <span class="text-gray-600 dark:text-gray-300">متاح للسحب:</span> <span id="withdraw-available-balance" class="text-2xl text-primaryDark">0 دج</span>
+                <div class="grid lg:grid-cols-2 gap-6 items-start">
+                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2.5 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-money-check text-sm"></i></div> طلب سحب جديد</h3>
+                        <div class="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 rounded-xl p-4 mb-4 flex justify-between items-center font-bold text-primaryDark">
+                            <span class="text-gray-500 dark:text-gray-300 text-sm">متاح للسحب:</span> <span id="withdraw-available-balance" class="text-xl">0 دج</span>
                         </div>
-                        <form onsubmit="window.handleWithdrawRequest(event)" class="space-y-5">
-                            <div class="relative group">
-                                <input type="number" id="withdraw-amount" min="500" placeholder="المبلغ (الأدنى 500)" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" required>
+                        <form onsubmit="window.handleWithdrawRequest(event)" class="space-y-4">
+                            <div>
+                                <input type="number" id="withdraw-amount" min="500" placeholder="المبلغ (الأدنى 500)" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm transition-all shadow-sm font-semibold" required>
                             </div>
-                            <div class="relative group">
-                                <select id="withdraw-method" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer shadow-sm">
+                            <div class="relative">
+                                <select id="withdraw-method" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm font-semibold transition-all cursor-pointer shadow-sm appearance-none">
                                     <option value="ccp">CCP / BaridiMob (حساب بريدي)</option>
                                     <option value="flexy">Flexy (رصيد هاتف)</option>
                                 </select>
-                                <i class="fas fa-chevron-down absolute left-4 top-4 text-primary pointer-events-none"></i>
+                                <i class="fas fa-chevron-down absolute left-4 top-3.5 text-primary pointer-events-none text-sm"></i>
                             </div>
-                            <div class="relative group">
-                                <input type="text" id="withdraw-account" placeholder="رقم الحساب أو رقم الهاتف المربوط" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" dir="ltr" required>
+                            <div>
+                                <input type="text" id="withdraw-account" placeholder="رقم الحساب أو رقم الهاتف المربوط" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm transition-all shadow-sm font-semibold" dir="ltr" required>
                             </div>
-                            <button type="submit" id="withdraw-submit-btn" class="w-full bg-gradient-to-r from-primary to-primaryDark text-white font-black text-lg py-4 rounded-xl shadow-[0_10px_20px_rgba(74,222,128,0.4)] hover:shadow-[0_15px_30px_rgba(74,222,128,0.6)] transition-all transform hover:-translate-y-1">تأكيد السحب <i class="fas fa-paper-plane ml-2"></i></button>
+                            <button type="submit" id="withdraw-submit-btn" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3 rounded-xl shadow-md transition-all">تأكيد السحب <i class="fas fa-paper-plane ml-1"></i></button>
                         </form>
                     </div>
 
-                    <div class="bg-white dark:bg-cardDark p-6 md:p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800">
-                        <h3 class="font-black text-xl mb-6 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 flex items-center justify-center"><i class="fas fa-history"></i></div> أرشيف السحوبات</h3>
-                        <div id="user-withdraw-history" class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                            <div class="text-center py-10 text-gray-400 text-sm">جاري التحميل...</div>
+                    <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2.5 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-slate-100 dark:bg-slate-800 text-gray-500 flex items-center justify-center"><i class="fas fa-history text-sm"></i></div> أرشيف السحوبات</h3>
+                        <div id="user-withdraw-history" class="space-y-3 max-h-[380px] overflow-y-auto pr-1 custom-scrollbar">
+                            <div class="text-center py-8 text-gray-400 text-xs">جاري التحميل...</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="tab-support" class="tab-content hidden animate-fade-in w-full">
-                <div class="bg-white dark:bg-cardDark p-6 md:p-10 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 max-w-2xl mx-auto">
-                    <h3 class="font-black text-2xl mb-8 text-center flex items-center justify-center gap-3 text-gray-800 dark:text-white"><div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primaryDark text-white flex items-center justify-center shadow-[0_10px_20px_rgba(74,222,128,0.4)]"><i class="fas fa-headset"></i></div> اتصل بالدعم</h3>
-                    <form onsubmit="window.submitSupportTicket(event)" class="space-y-5">
-                        <input type="text" id="support-name" placeholder="الاسم الكامل" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-bold shadow-sm" required>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <input type="tel" id="support-phone" placeholder="الهاتف" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-bold text-right shadow-sm" dir="ltr" required>
-                            <input type="email" id="support-email" placeholder="الإيميل" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-bold shadow-sm" required>
+                <div class="bg-white dark:bg-cardDark p-5 md:p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 max-w-xl mx-auto">
+                    <h3 class="font-bold text-xl mb-6 text-center flex items-center justify-center gap-2 text-slate-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-headset"></i></div> اتصل بالدعم</h3>
+                    <form onsubmit="window.submitSupportTicket(event)" class="space-y-4">
+                        <input type="text" id="support-name" placeholder="الاسم الكامل" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm transition-all font-semibold" required>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="tel" id="support-phone" placeholder="الهاتف" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm transition-all text-right font-semibold" dir="ltr" required>
+                            <input type="email" id="support-email" placeholder="الإيميل" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm transition-all font-semibold" required>
                         </div>
-                        <textarea id="support-desc" placeholder="وصف المشكلة بتفصيل..." rows="5" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none font-bold shadow-sm" required></textarea>
-                        <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 dark:text-gray-900 text-white font-black text-lg py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-1">إرسال الطلب <i class="fas fa-paper-plane ml-2"></i></button>
+                        <textarea id="support-desc" placeholder="وصف المشكلة بتفصيل..." rows="4" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-sm transition-all resize-none font-semibold" required></textarea>
+                        <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 dark:text-slate-900 text-white font-bold py-3.5 rounded-xl transition-all">إرسال الطلب <i class="fas fa-paper-plane ml-1"></i></button>
                     </form>
                 </div>
             </div>
@@ -510,88 +525,87 @@
     </div>
 
     <!-- 3. ADMIN LOGIN VIEW -->
-    <div id="admin-login-view" class="view flex-view items-center justify-center min-h-screen bg-white dark:bg-bgDark relative p-4">
-        <div class="bg-white dark:bg-cardDark p-10 rounded-3xl shadow-[0_20px_50px_rgba(74,222,128,0.2)] border border-primary/20 dark:border-gray-800 w-full max-w-md text-center transform hover:scale-105 transition-transform duration-500">
-            <div class="w-20 h-20 bg-gradient-to-br from-primary to-primaryDark text-white rounded-3xl mx-auto flex items-center justify-center text-4xl mb-8 shadow-xl"><i class="fas fa-shield-alt"></i></div>
-            <h2 class="text-3xl font-black mb-8 text-gray-800 dark:text-white">الإدارة</h2>
+    <div id="admin-login-view" class="view flex-view items-center justify-center min-h-screen bg-slate-50 dark:bg-bgDark relative p-4">
+        <div class="bg-white dark:bg-cardDark p-8 rounded-2xl shadow-shopify border border-slate-100 dark:border-slate-800 w-full max-w-sm text-center">
+            <div class="w-16 h-16 bg-primary/10 text-primary rounded-2xl mx-auto flex items-center justify-center text-3xl mb-6"><i class="fas fa-shield-alt"></i></div>
+            <h2 class="text-2xl font-bold mb-6 text-slate-800 dark:text-white">الإدارة</h2>
             <form onsubmit="window.handleAdminLogin(event)">
-                <input type="password" id="admin-password" placeholder="كلمة المرور" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-4 text-center font-bold tracking-widest mb-6 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-xl shadow-sm" dir="ltr" required>
-                <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 font-black text-lg py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all">دخول آمن <i class="fas fa-lock ml-2"></i></button>
+                <input type="password" id="admin-password" placeholder="كلمة المرور" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-center font-bold mb-4 outline-none transition-all text-lg tracking-widest shadow-sm" dir="ltr" required>
+                <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold py-3 rounded-xl shadow-md transition-all">دخول آمن <i class="fas fa-lock ml-1"></i></button>
             </form>
-            <button type="button" onclick="window.navigate('landing')" class="mt-8 text-sm font-bold text-gray-500 hover:text-primary transition-colors">العودة للرئيسية <i class="fas fa-arrow-left ml-1 text-xs"></i></button>
+            <button type="button" onclick="window.navigate('landing')" class="mt-6 text-xs font-bold text-gray-400 hover:text-primary transition-colors">العودة للرئيسية <i class="fas fa-arrow-left ml-1 text-[10px]"></i></button>
         </div>
     </div>
 
     <!-- 4. ADMIN DASHBOARD VIEW -->
-    <div id="admin-dashboard-view" class="view flex-view min-h-screen bg-bgLight dark:bg-bgDark relative overflow-hidden w-full h-full">
-        <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 bg-white/50 dark:bg-black/60 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
-        <aside id="admin-sidebar" class="w-64 bg-gray-900 text-white fixed top-0 h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0 shadow-2xl border-l border-gray-800">
-            <div class="p-6 border-b border-gray-800 flex justify-between items-center text-xl font-black">
-                <div class="flex items-center gap-3"><i class="fas fa-cogs text-primary"></i> الإدارة</div><button onclick="window.toggleAdminSidebar()" class="md:hidden text-gray-400 hover:text-primary"><i class="fas fa-times"></i></button>
+    <div id="admin-dashboard-view" class="view flex-view min-h-screen bg-slate-50 dark:bg-bgDark relative overflow-hidden w-full h-full">
+        <div id="mobile-admin-overlay" onclick="window.toggleAdminSidebar()" class="fixed inset-0 bg-slate-900/20 dark:bg-black/40 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
+        <aside id="admin-sidebar" class="w-60 bg-slate-900 text-white fixed top-0 h-full flex flex-col z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 right-0 shadow-lg border-l border-slate-800">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center text-lg font-bold">
+                <div class="flex items-center gap-2.5"><i class="fas fa-cogs text-primary"></i> الإدارة</div><button onclick="window.toggleAdminSidebar()" class="md:hidden text-gray-400 hover:text-primary"><i class="fas fa-times"></i></button>
             </div>
-            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <a href="#" onclick="window.switchAdminTab('home', event)" data-tab="home" class="admin-dash-link flex items-center gap-3 bg-primary/20 text-primary border-r-4 border-primary px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-tasks w-5"></i> الطلبات</a>
-                <a href="#" onclick="window.switchAdminTab('products', event)" data-tab="products" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 border-r-4 border-transparent px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-box w-5"></i> المنتجات</a>
-                <a href="#" onclick="window.switchAdminTab('users', event)" data-tab="users" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 border-r-4 border-transparent px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-users w-5"></i> المسوقين</a>
-                <a href="#" onclick="window.switchAdminTab('support', event)" data-tab="support" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 border-r-4 border-transparent px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-flag w-5"></i> الإبلاغات</a>
-                <a href="#" onclick="window.switchAdminTab('withdrawals', event)" data-tab="withdrawals" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 border-r-4 border-transparent px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-hand-holding-usd w-5"></i> طلبات السحب</a>
-                <!-- NEW: Admin Shipping Rates Editor tab -->
-                <a href="#" onclick="window.switchAdminTab('shipping', event)" data-tab="shipping" class="admin-dash-link flex items-center gap-3 hover:bg-gray-800 text-gray-300 border-r-4 border-transparent px-4 py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-truck w-5"></i> إعدادات الشحن</a>
+            <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+                <a href="#" onclick="window.switchAdminTab('home', event)" data-tab="home" class="admin-dash-link flex items-center gap-3 bg-primary/20 text-primary border-r-4 border-primary px-4 py-3 rounded-xl text-sm font-semibold transition-all"><i class="fas fa-tasks w-5"></i> الطلبات</a>
+                <a href="#" onclick="window.switchAdminTab('products', event)" data-tab="products" class="admin-dash-link flex items-center gap-3 hover:bg-slate-800 text-slate-300 border-r-4 border-transparent px-4 py-3 rounded-xl text-sm font-semibold transition-all"><i class="fas fa-box w-5"></i> المنتجات</a>
+                <a href="#" onclick="window.switchAdminTab('users', event)" data-tab="users" class="admin-dash-link flex items-center gap-3 hover:bg-slate-800 text-slate-300 border-r-4 border-transparent px-4 py-3 rounded-xl text-sm font-semibold transition-all"><i class="fas fa-users w-5"></i> المسوقين</a>
+                <a href="#" onclick="window.switchAdminTab('support', event)" data-tab="support" class="admin-dash-link flex items-center gap-3 hover:bg-slate-800 text-slate-300 border-r-4 border-transparent px-4 py-3 rounded-xl text-sm font-semibold transition-all"><i class="fas fa-flag w-5"></i> الإبلاغات</a>
+                <a href="#" onclick="window.switchAdminTab('withdrawals', event)" data-tab="withdrawals" class="admin-dash-link flex items-center gap-3 hover:bg-slate-800 text-slate-300 border-r-4 border-transparent px-4 py-3 rounded-xl text-sm font-semibold transition-all"><i class="fas fa-hand-holding-usd w-5"></i> طلبات السحب</a>
+                <a href="#" onclick="window.switchAdminTab('shipping', event)" data-tab="shipping" class="admin-dash-link flex items-center gap-3 hover:bg-slate-800 text-slate-300 border-r-4 border-transparent px-4 py-3 rounded-xl text-sm font-semibold transition-all"><i class="fas fa-truck w-5"></i> إعدادات الشحن</a>
             </nav>
-            <div class="p-4 border-t border-gray-800"><button onclick="window.logoutAdmin()" class="w-full flex items-center justify-center gap-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white py-3.5 rounded-xl font-bold transition-all"><i class="fas fa-sign-out-alt"></i> إغلاق</button></div>
+            <div class="p-3 border-t border-slate-800"><button onclick="window.logoutAdmin()" class="w-full flex items-center justify-center gap-2 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white py-3 rounded-xl text-sm font-bold transition-all"><i class="fas fa-sign-out-alt"></i> إغلاق</button></div>
         </aside>
 
-        <main class="flex-1 md:pr-64 p-4 md:p-8 pt-6 w-full min-h-screen">
-            <header class="bg-white dark:bg-cardDark backdrop-blur-md rounded-3xl shadow-sm border border-primary/20 dark:border-gray-800 p-5 mb-8 flex justify-between items-center hover-card-elegant">
-                <div class="flex items-center gap-4"><button onclick="window.toggleAdminSidebar()" class="md:hidden w-12 h-12 rounded-xl bg-green-50 dark:bg-bgDark text-primary border border-primary/20 shadow-sm"><i class="fas fa-bars"></i></button><h1 class="text-xl font-black text-primaryDark flex items-center gap-2"><i class="fas fa-shield-alt"></i> لوحة الإدارة العليا</h1></div>
+        <main class="flex-1 md:pr-60 p-4 md:p-6 pt-5 w-full min-h-screen">
+            <header class="bg-white dark:bg-cardDark rounded-2xl shadow-sm border border-slate-150 dark:border-slate-800 p-4 mb-6 flex justify-between items-center">
+                <div class="flex items-center gap-3"><button onclick="window.toggleAdminSidebar()" class="md:hidden w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 text-primary border border-slate-200 shadow-sm"><i class="fas fa-bars"></i></button><h1 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2"><i class="fas fa-shield-alt text-primary"></i> لوحة الإدارة العليا</h1></div>
             </header>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
-                <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 border-b-4 border-b-primary hover-card-elegant"><div class="text-xs md:text-sm font-bold text-gray-500 mb-2 uppercase tracking-wide">العمولات المدفوعة</div><div class="text-2xl font-black text-primaryDark" id="admin-total-paid">0 دج</div></div>
-                <div onclick="window.switchAdminTab('home')" class="cursor-pointer bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 border-b-4 border-b-yellow-500 hover:bg-green-50 dark:hover:bg-bgDark hover-card-elegant transition-colors"><div class="text-xs md:text-sm font-bold text-gray-500 mb-2 uppercase tracking-wide">طلبات معلقة</div><div class="text-2xl font-black text-yellow-500" id="admin-pending-count">0</div></div>
-                <div onclick="window.switchAdminTab('products')" class="cursor-pointer bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 border-b-4 border-b-blue-500 hover:bg-green-50 dark:hover:bg-bgDark hover-card-elegant transition-colors"><div class="text-xs md:text-sm font-bold text-gray-500 mb-2 uppercase tracking-wide">المنتجات</div><div class="text-2xl font-black text-blue-500" id="admin-products-count">0</div></div>
-                <div onclick="window.switchAdminTab('users')" class="cursor-pointer bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 border-b-4 border-b-purple-500 hover:bg-green-50 dark:hover:bg-bgDark hover-card-elegant transition-colors"><div class="text-xs md:text-sm font-bold text-gray-500 mb-2 uppercase tracking-wide">المسوقين</div><div class="text-2xl font-black text-purple-500" id="admin-users-count">0</div></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white dark:bg-cardDark p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 border-b-4 border-b-primary"><div class="text-xs font-bold text-gray-400 mb-1 uppercase tracking-wide">العمولات المدفوعة</div><div class="text-xl md:text-2xl font-black text-primaryDark" id="admin-total-paid">0 دج</div></div>
+                <div onclick="window.switchAdminTab('home')" class="cursor-pointer bg-white dark:bg-cardDark p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 border-b-4 border-b-yellow-500 transition-colors"><div class="text-xs font-bold text-gray-400 mb-1 uppercase tracking-wide">طلبات معلقة</div><div class="text-xl md:text-2xl font-black text-yellow-500" id="admin-pending-count">0</div></div>
+                <div onclick="window.switchAdminTab('products')" class="cursor-pointer bg-white dark:bg-cardDark p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 border-b-4 border-b-blue-500 transition-colors"><div class="text-xs font-bold text-gray-400 mb-1 uppercase tracking-wide">المنتجات</div><div class="text-xl md:text-2xl font-black text-blue-500" id="admin-products-count">0</div></div>
+                <div onclick="window.switchAdminTab('users')" class="cursor-pointer bg-white dark:bg-cardDark p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 border-b-4 border-b-purple-500 transition-colors"><div class="text-xs font-bold text-gray-400 mb-1 uppercase tracking-wide">المسوقين</div><div class="text-xl md:text-2xl font-black text-purple-500" id="admin-users-count">0</div></div>
             </div>
 
-            <div class="flex gap-3 mb-8 overflow-x-auto pb-4 scrollbar-hide">
-                <button onclick="window.switchAdminTab('products')" class="whitespace-nowrap bg-gray-800 hover:bg-gray-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-plus mr-1"></i> إضافة منتج</button>
-                <button onclick="window.switchAdminTab('users')" class="whitespace-nowrap bg-primaryDark hover:bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-users mr-1"></i> إدارة المسوقين</button>
-                <button onclick="window.switchAdminTab('withdrawals')" class="whitespace-nowrap bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-hand-holding-usd mr-1"></i> طلبات السحب</button>
-                <button onclick="window.switchAdminTab('shipping')" class="whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transform hover:-translate-y-1 transition-all shadow-md"><i class="fas fa-truck mr-1"></i> أسعار الشحن</button>
+            <div class="flex gap-2.5 mb-6 overflow-x-auto pb-3 scrollbar-hide">
+                <button onclick="window.switchAdminTab('products')" class="whitespace-nowrap bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm"><i class="fas fa-plus mr-1"></i> إضافة منتج</button>
+                <button onclick="window.switchAdminTab('users')" class="whitespace-nowrap bg-primaryDark hover:bg-primary text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm"><i class="fas fa-users mr-1"></i> إدارة المسوقين</button>
+                <button onclick="window.switchAdminTab('withdrawals')" class="whitespace-nowrap bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm"><i class="fas fa-hand-holding-usd mr-1"></i> طلبات السحب</button>
+                <button onclick="window.switchAdminTab('shipping')" class="whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm"><i class="fas fa-truck mr-1"></i> أسعار الشحن</button>
             </div>
 
             <div id="admin-tab-home" class="admin-tab-content block w-full animate-fade-in">
-                <div class="bg-white dark:bg-cardDark p-6 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 overflow-x-auto w-full">
-                    <h3 class="font-black text-xl mb-6 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center"><i class="fas fa-tasks"></i></div> مراجعة الطلبات</h3>
-                    <table class="w-full text-sm text-right min-w-[800px]">
-                        <thead class="bg-green-50 dark:bg-bgDark text-gray-500 font-black tracking-wide uppercase"><tr><th class="p-4 rounded-r-xl">المسوق</th><th class="p-4">الزبون</th><th class="p-4">المنتج</th><th class="p-4">العمولة</th><th class="p-4 text-center rounded-l-xl">إجراء</th></tr></thead>
-                        <tbody id="admin-orders-list"><tr><td colspan="5" class="text-center py-8 text-gray-400">جاري التحميل...</td></tr></tbody>
+                <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-x-auto w-full">
+                    <h3 class="font-bold text-base mb-4 flex items-center gap-2 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-yellow-100 text-yellow-600 flex items-center justify-center"><i class="fas fa-tasks"></i></div> مراجعة الطلبات</h3>
+                    <table class="w-full text-xs text-right min-w-[720px]">
+                        <thead class="bg-slate-50 dark:bg-slate-900 text-gray-400 font-bold uppercase"><tr><th class="p-3 rounded-r-lg">المسوق</th><th class="p-3">الزبون</th><th class="p-3">المنتج</th><th class="p-3">العمولة</th><th class="p-3 text-center rounded-l-lg">إجراء</th></tr></thead>
+                        <tbody id="admin-orders-list"><tr><td colspan="5" class="text-center py-6 text-gray-400">جاري التحميل...</td></tr></tbody>
                     </table>
                 </div>
             </div>
 
             <div id="admin-tab-products" class="admin-tab-content hidden w-full animate-fade-in">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-1">
-                        <form onsubmit="window.submitProduct(event)" id="admin-product-form" class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 space-y-5 sticky top-8">
-                            <h3 class="font-black text-xl flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/20 text-primaryDark flex items-center justify-center"><i class="fas fa-plus"></i></div> منتج جديد</h3>
+                        <form onsubmit="window.submitProduct(event)" id="admin-product-form" class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-150 dark:border-slate-800 space-y-4 sticky top-6">
+                            <h3 class="font-bold text-base flex items-center gap-2 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-plus"></i></div> منتج جديد</h3>
                             <input type="hidden" id="prod-id">
-                            <input type="text" id="prod-name" placeholder="اسم المنتج" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary transition-all shadow-sm" required>
-                            <input type="number" id="prod-price" placeholder="السعر (دج)" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary transition-all shadow-sm" required>
-                            <textarea id="prod-desc" placeholder="الوصف" rows="5" class="w-full bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 font-bold outline-none focus:border-primary transition-all resize-none shadow-sm"></textarea>
+                            <input type="text" id="prod-name" placeholder="اسم المنتج" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-semibold outline-none text-sm transition-all shadow-sm" required>
+                            <input type="number" id="prod-price" placeholder="السعر (دج)" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-semibold outline-none text-sm transition-all shadow-sm" required>
+                            <textarea id="prod-desc" placeholder="الوصف" rows="4" class="w-full shopify-input border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-semibold outline-none text-sm transition-all resize-none shadow-sm"></textarea>
                             
-                            <!-- Updated Image Upload supporting multiple elegant high-quality images -->
-                            <div class="bg-green-50 dark:bg-bgDark border border-dashed border-primary/40 dark:border-gray-600 rounded-xl p-4 text-center relative hover:border-primary transition-colors group cursor-pointer">
-                                <label class="block text-sm font-bold text-gray-500 group-hover:text-primaryDark transition-colors cursor-pointer"><i class="fas fa-cloud-upload-alt text-2xl mb-2 block"></i> صور المنتج (يمكنك اختيار عدة صور)</label>
+                            <!-- Premium Multi-Image Input -->
+                            <div class="bg-slate-50 dark:bg-slate-900 border border-dashed border-emerald-300 dark:border-slate-600 rounded-xl p-4 text-center relative group cursor-pointer">
+                                <label class="block text-xs font-bold text-gray-400 cursor-pointer"><i class="fas fa-cloud-upload-alt text-xl mb-1 block text-primary"></i> صور المنتج (يمكن اختيار عدة صور)</label>
                                 <input type="file" id="prod-image" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
-                            <button type="submit" id="prod-submit-btn" class="bg-gradient-to-r from-primary to-primaryDark text-white w-full py-4 rounded-xl font-black text-lg shadow-[0_10px_20px_rgba(74,222,128,0.4)] transform hover:-translate-y-1 transition-all">حفظ المنتج <i class="fas fa-save ml-2"></i></button>
+                            <button type="submit" id="prod-submit-btn" class="bg-primary hover:bg-primaryDark text-white w-full py-3 rounded-xl font-bold text-sm shadow-sm transition-all">حفظ المنتج <i class="fas fa-save ml-1"></i></button>
                         </form>
                     </div>
-                    <div class="lg:col-span-2 bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 overflow-x-auto w-full">
-                        <h3 class="font-black text-xl mb-6 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-box"></i></div> المنتجات المتاحة</h3>
-                        <table class="w-full text-sm text-right min-w-[500px]">
-                            <thead class="bg-green-50 dark:bg-bgDark text-gray-500 font-black tracking-wide uppercase"><tr><th class="p-4 rounded-r-xl">صورة</th><th class="p-4">اسم</th><th class="p-4">سعر</th><th class="p-4 text-center rounded-l-xl">إجراء</th></tr></thead>
+                    <div class="lg:col-span-2 bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-150 dark:border-slate-800 overflow-x-auto w-full">
+                        <h3 class="font-bold text-base mb-4 flex items-center gap-2 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-box text-sm"></i></div> المنتجات المتاحة</h3>
+                        <table class="w-full text-xs text-right min-w-[480px]">
+                            <thead class="bg-slate-50 dark:bg-slate-900 text-gray-400 font-bold uppercase"><tr><th class="p-3 rounded-r-lg">صورة</th><th class="p-3">اسم</th><th class="p-3">سعر</th><th class="p-3 text-center rounded-l-lg">إجراء</th></tr></thead>
                             <tbody id="admin-products-table-body"></tbody>
                         </table>
                     </div>
@@ -599,50 +613,49 @@
             </div>
 
             <div id="admin-tab-users" class="admin-tab-content hidden w-full animate-fade-in">
-                <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 overflow-x-auto w-full">
-                    <h3 class="font-black text-xl mb-6 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-users"></i></div> إدارة المسوقين</h3>
-                    <table class="w-full text-sm text-right min-w-[700px]">
-                        <thead class="bg-green-50 dark:bg-bgDark text-gray-500 font-black tracking-wide uppercase"><tr><th class="p-4 rounded-r-xl">المسوق</th><th class="p-4">الإيميل</th><th class="p-4">الرصيد</th><th class="p-4">الحالة</th><th class="p-4 text-center rounded-l-xl">إجراء</th></tr></thead>
+                <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-150 dark:border-slate-800 overflow-x-auto w-full">
+                    <h3 class="font-bold text-base mb-4 flex items-center gap-2 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-users text-sm"></i></div> إدارة المسوقين</h3>
+                    <table class="w-full text-xs text-right min-w-[640px]">
+                        <thead class="bg-slate-50 dark:bg-slate-900 text-gray-400 font-bold uppercase"><tr><th class="p-3 rounded-r-lg">المسوق</th><th class="p-3">الإيميل</th><th class="p-3">الرصيد</th><th class="p-3">الحالة</th><th class="p-3 text-center rounded-l-lg">إجراء</th></tr></thead>
                         <tbody id="admin-users-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
             <div id="admin-tab-support" class="admin-tab-content hidden w-full animate-fade-in">
-                <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800">
-                    <h3 class="font-black text-xl mb-6 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center"><i class="fas fa-flag"></i></div> الإبلاغات الفنية</h3>
-                    <div id="admin-support-list" class="space-y-4 grid md:grid-cols-2 gap-6">جاري التحميل...</div>
+                <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-150 dark:border-slate-800">
+                    <h3 class="font-bold text-base mb-4 flex items-center gap-2 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-red-100 text-red-600 flex items-center justify-center"><i class="fas fa-flag text-sm"></i></div> الإبلاغات الفنية</h3>
+                    <div id="admin-support-list" class="space-y-4 grid md:grid-cols-2 gap-4">جاري التحميل...</div>
                 </div>
             </div>
 
             <div id="admin-tab-withdrawals" class="admin-tab-content hidden w-full animate-fade-in">
-                <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800 overflow-x-auto w-full">
-                    <h3 class="font-black text-xl mb-6 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/20 text-primaryDark flex items-center justify-center"><i class="fas fa-hand-holding-usd"></i></div> مراجعة طلبات السحب</h3>
-                    <table class="w-full text-sm text-right min-w-[900px]">
-                        <thead class="bg-green-50 dark:bg-bgDark text-gray-500 font-black tracking-wide uppercase">
+                <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-150 dark:border-slate-800 overflow-x-auto w-full">
+                    <h3 class="font-bold text-base mb-4 flex items-center gap-2 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-primary/20 text-primaryDark flex items-center justify-center"><i class="fas fa-hand-holding-usd text-sm"></i></div> مراجعة طلبات السحب</h3>
+                    <table class="w-full text-xs text-right min-w-[800px]">
+                        <thead class="bg-slate-50 dark:bg-slate-900 text-gray-400 font-bold uppercase">
                             <tr>
-                                <th class="p-4 rounded-r-xl">المسوق (تواصل)</th>
-                                <th class="p-4">المبلغ المطلوب</th>
-                                <th class="p-4">طريقة الدفع</th>
-                                <th class="p-4">رقم الحساب / الهاتف</th>
-                                <th class="p-4 text-center rounded-l-xl">تحديث الحالة</th>
+                                <th class="p-3 rounded-r-lg">المسوق (تواصل)</th>
+                                <th class="p-3">المبلغ المطلوب</th>
+                                <th class="p-3">طريقة الدفع</th>
+                                <th class="p-3">رقم الحساب / الهاتف</th>
+                                <th class="p-3 text-center rounded-l-lg">تحديث الحالة</th>
                             </tr>
                         </thead>
                         <tbody id="admin-withdrawals-list">
-                            <tr><td colspan="5" class="text-center py-8 text-gray-400">جاري التحميل...</td></tr>
+                            <tr><td colspan="5" class="text-center py-6 text-gray-400">جاري التحميل...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- NEW: Admin Shipping Rates Editor Tab Container -->
             <div id="admin-tab-shipping" class="admin-tab-content hidden w-full animate-fade-in">
-                <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-sm border border-primary/10 dark:border-gray-800">
-                    <h3 class="font-black text-xl mb-4 flex items-center gap-3 text-gray-800 dark:text-white"><div class="w-10 h-10 rounded-xl bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-truck"></i></div> إعدادات أسعار الشحن للولايات والبلديات</h3>
-                    <p class="text-gray-500 text-sm mb-6">يمكنك تعديل سكريبت أو ملف الـ JSON أدناه لتغيير أسعار التوصيل للمنزل وللمكتب والبلديات لكل ولاية. سيتم حفظ البيانات في السحابة وتطبيقها تلقائياً على كل صفحات الهبوط.</p>
+                <div class="bg-white dark:bg-cardDark p-5 md:p-6 rounded-2xl shadow-sm border border-slate-150 dark:border-slate-800">
+                    <h3 class="font-bold text-base mb-2 flex items-center gap-2.5 text-slate-800 dark:text-white"><div class="w-8 h-8 rounded bg-primary/10 text-primaryDark flex items-center justify-center"><i class="fas fa-truck text-sm"></i></div> إعدادات أسعار الشحن للولايات والبلديات</h3>
+                    <p class="text-gray-450 text-xs mb-4">يمكنك تعديل سكريبت أو ملف الـ JSON أدناه لتغيير أسعار التوصيل للمنزل وللمكتب والبلديات لكل ولاية. سيتم حفظ البيانات وتطبيقها تلقائياً على كل صفحات الهبوط.</p>
                     <form onsubmit="window.saveShippingSettings(event)">
-                        <textarea id="shipping-json-input" rows="15" class="w-full font-mono text-sm bg-gray-50 dark:bg-bgDark border border-gray-200 dark:border-gray-700 rounded-xl p-4 outline-none focus:border-primary transition-all mb-6 text-left" dir="ltr" required></textarea>
-                        <button type="submit" class="bg-gradient-to-r from-primary to-primaryDark text-white px-8 py-3.5 rounded-xl font-black shadow-lg hover:shadow-primary/40 transform hover:-translate-y-0.5 transition-all">حفظ إعدادات الشحن <i class="fas fa-save ml-2"></i></button>
+                        <textarea id="shipping-json-input" rows="12" class="w-full font-mono text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 outline-none focus:border-primary transition-all mb-4 text-left" dir="ltr" required></textarea>
+                        <button type="submit" class="bg-primary hover:bg-primaryDark text-white px-6 py-2.5 rounded-xl font-bold text-xs shadow-sm transition-all">حفظ إعدادات الشحن <i class="fas fa-save ml-1"></i></button>
                     </form>
                 </div>
             </div>
@@ -652,7 +665,6 @@
 
     <!-- TRANSLATION & JAVASCRIPT LOGIC -->
     <script>
-        // TRANSLATION DICTIONARY (AR -> FR) (Kept exactly as requested)
         const frDict = {
             "المنصة الأقوى": "La plateforme ultime",
             "مرحباً بك مجدداً": "Bon retour",
@@ -694,7 +706,7 @@
             "3. تتبع الإحصائيات": "3. Suivre les statistiques",
             "ستظهر لك في الإحصائيات عدد النقرات الدقيقة على روابطك، وإذا تمت تسجيل طلبية.": "Vous verrez les clics exacts sur vos liens et si une commande a été passée.",
             "4. استلام الأرباح": "4. Recevoir les gains",
-            "بمجرد التسجيل، تصل الطلبية للإدارة، وتقوم بتأكيدها. وبمجرد استلام الزبون، يتم احتساب الأموال فوراً في رصيدك.": "Dès qu'une commande é confirmée et livrée, les fonds sont ajoutés à votre solde.",
+            "بمجرد التسجيل، تصل الطلبية للإدارة، وتقوم بتأكيدها. وبمجرد استلام الزبون، يتم احتساب الأموال فوراً في رصيدك.": "Dès qu'une commande est confirmée et livrée, les fonds sont ajoutés à votre solde.",
             "لماذا تختار": "Pourquoi choisir",
             "بيئة عمل احترافية تضمن نجاحك وتحقيق أعلى الأرباح بشفافية تامة.": "Un environnement professionnel qui garantit votre succès.",
             "عمولة ثابتة ومجزية": "Commission fixe et gratifiante",
@@ -741,7 +753,7 @@
             "إغلاق": "Fermer",
             "لوحة الإدارة": "Panneau d'administration",
             "العمولات المدفوعة": "Commissions payées",
-            "طلبات معلقة": "Commandes en attente",
+            "طلبات معلقة": "Commandes en اتجاه",
             "إضافة منتج": "Ajouter un produit",
             "إدارة المسوقين": "Gérer les affiliés",
             "مراجعة الطلبات": "Révision des commandes",
@@ -789,14 +801,13 @@
             "تم الرفض": "Refusé",
             "محظور": "Banni",
             "نشط": "Actif",
-            "فك حظر": "Débannير",
+            "فك حظر": "Débannir",
             "حظر": "Bannir",
             "دج": "DZD",
             "تراجع": "Retour",
             "حفظ المنتج": "Enregistrer le produit"
         };
 
-        // NEW: Default Shipping Script Data for Algerian Wilayas (Can be customized by Admin)
         const defaultShippingData = {
             "01": { "name": "01 - أدرار - Adrar", "home": 1000, "desk": 800, "municipalities": ["أدرار", "أولاد أحمد تيمي", "تسابيت", "بودا", "فنوغيل"] },
             "02": { "name": "02 - الشلف - Chlef", "home": 600, "desk": 350, "municipalities": ["الشلف", "تنس", "أولاد فارس", "سنجاس", "الشطية"] },
@@ -846,7 +857,6 @@
             location.reload(); 
         };
 
-        // Format Date
         const formatDate = (timestamp) => {
             if(!timestamp) return '';
             const d = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
@@ -877,7 +887,6 @@
         let isAuthReady = false; 
         const FIXED_COMMISSION = 500; 
 
-        // Slider variables for landing page
         let landingImages = [];
         let currentSlideIndex = 0;
         let slideInterval = null;
@@ -909,7 +918,7 @@
                         v.classList.add('active');
                         setTimeout(() => v.style.opacity = '1', 50);
                     }
-                }, 300);
+                }, 200);
             });
             
             history.pushState(null, null, target === 'landing' ? window.location.pathname : '#' + target);
@@ -922,16 +931,15 @@
             
             if(navButtons && heroCta && target === 'landing') {
                 if(currentUser) {
-                    navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-gradient-to-r from-primary to-primaryDark text-white px-5 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(74,222,128,0.4)] hover:shadow-[0_8px_20px_rgba(74,222,128,0.6)] font-bold text-sm md:text-base transition-all transform hover:-translate-y-1">${t('لوحة التحكم')}</button>`;
-                    heroCta.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-[0_10px_25px_rgba(74,222,128,0.5)] hover:shadow-[0_15px_35px_rgba(74,222,128,0.7)] transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-1">${t('الذهاب للوحة التحكم')} <i class="fas fa-arrow-left"></i></button>`;
+                    navButtons.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-xl font-semibold text-xs transition-all shadow-sm">${t('لوحة التحكم')}</button>`;
+                    heroCta.innerHTML = `<button onclick="window.navigate('user-dashboard')" class="bg-primary hover:bg-primaryDark text-white text-base px-8 py-3.5 rounded-xl transition-all font-semibold flex items-center justify-center gap-3 w-full sm:w-auto mx-auto lg:mx-0 shadow-sm">${t('الذهاب للوحة التحكم')} <i class="fas fa-arrow-left"></i></button>`;
                 } else {
-                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-gray-600 dark:text-gray-300 hover:text-primaryDark font-bold px-3 text-sm md:text-base transition-colors">${t('دخول')}</button><button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white px-5 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(74,222,128,0.4)] hover:shadow-[0_8px_20px_rgba(74,222,128,0.6)] font-bold text-sm md:text-base transition-all transform hover:-translate-y-1">${t('إنشاء حساب')}</button>`;
-                    heroCta.innerHTML = `<button onclick="window.openAuthModal(true)" class="bg-gradient-to-r from-primary to-primaryDark text-white text-lg px-10 py-4 rounded-2xl shadow-[0_10px_25px_rgba(74,222,128,0.5)] hover:shadow-[0_15px_35px_rgba(74,222,128,0.7)] transition-all font-bold flex items-center justify-center gap-4 w-full sm:w-auto mx-auto lg:mx-0 transform hover:-translate-y-1">${t('ابدأ الآن مجانا')} <i class="fas fa-arrow-left"></i></button>`;
+                    navButtons.innerHTML = `<button onclick="window.openAuthModal(false)" class="text-slate-600 dark:text-gray-300 hover:text-primaryDark font-semibold px-3 text-sm transition-colors">${t('دخول')}</button><button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-sm">${t('إنشاء حساب')}</button>`;
+                    heroCta.innerHTML = `<button onclick="window.openAuthModal(true)" class="bg-primary hover:bg-primaryDark text-white text-base px-8 py-3.5 rounded-xl shadow-sm hover:shadow-md transition-all font-semibold flex items-center justify-center gap-3 w-full sm:w-auto mx-auto lg:mx-0">${t('ابدأ الآن مجانا')} <i class="fas fa-arrow-left"></i></button>`;
                 }
             }
         };
 
-        // NEW: Load Product Landing page with support for Multiple High Quality Images and Auto-sliding
         async function loadProductLandingPage(prodId, refId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             const lpView = document.getElementById('product-landing-view');
@@ -946,8 +954,6 @@
                 }
                 
                 const p = doc.data();
-                
-                // Get image array or fallback to single image
                 landingImages = p.images && p.images.length > 0 ? p.images : [p.image];
                 currentSlideIndex = 0;
                 setupLPSlider();
@@ -962,7 +968,6 @@
                 document.getElementById('lp-ref-id').value = refId;
                 document.getElementById('lp-prod-name').value = p.name;
 
-                // Setup dynamic Wilayas
                 populateLPShippingStates();
 
                 if(refId) {
@@ -974,7 +979,6 @@
             }
         }
 
-        // NEW: Slider Implementation
         function setupLPSlider() {
             const container = document.getElementById('lp-slider-container');
             const dotsContainer = document.getElementById('lp-slider-dots');
@@ -990,16 +994,15 @@
 
                 const dot = document.createElement('button');
                 dot.type = 'button';
-                dot.className = `lp-dot w-3 h-3 rounded-full transition-all duration-300 ${index === 0 ? 'bg-primary w-8' : 'bg-gray-300'}`;
+                dot.className = `lp-dot w-2 h-2 rounded-full transition-all duration-300 ${index === 0 ? 'bg-primary w-6' : 'bg-slate-300 dark:bg-slate-700'}`;
                 dot.setAttribute('onclick', `window.goToSlide(${index})`);
                 dotsContainer.appendChild(dot);
             });
 
-            // Start Auto slide
             if(slideInterval) clearInterval(slideInterval);
             slideInterval = setInterval(() => {
                 window.nextSlide();
-            }, 4000);
+            }, 5000);
         }
 
         window.goToSlide = (idx) => {
@@ -1008,14 +1011,13 @@
             const offset = currentSlideIndex * 100;
             container.style.transform = `translateX(${offset}%)`;
 
-            // update dots
             document.querySelectorAll('.lp-dot').forEach((dot, i) => {
                 if(i === currentSlideIndex) {
-                    dot.classList.add('bg-primary', 'w-8');
-                    dot.classList.remove('bg-gray-300', 'w-3');
+                    dot.classList.add('bg-primary', 'w-6');
+                    dot.classList.remove('bg-slate-300', 'w-2');
                 } else {
-                    dot.classList.remove('bg-primary', 'w-8');
-                    dot.classList.add('bg-gray-300', 'w-3');
+                    dot.classList.remove('bg-primary', 'w-6');
+                    dot.classList.add('bg-slate-300', 'w-2');
                 }
             });
         };
@@ -1032,7 +1034,6 @@
             window.goToSlide(prevIndex);
         };
 
-        // NEW: Populate Landing Page Wilaya dropdown based on real configuration
         function populateLPShippingStates() {
             const stateSelect = document.getElementById('lp-customer-state-select');
             stateSelect.innerHTML = `<option value="">-- اختر الولاية --</option>`;
@@ -1042,18 +1043,15 @@
                 stateSelect.innerHTML += `<option value="${code}">${state.name}</option>`;
             });
 
-            // Reset municipalities select
             const munSelect = document.getElementById('lp-customer-mun-select');
             munSelect.innerHTML = `<option value="">-- اختر البلدية --</option>`;
             munSelect.disabled = true;
 
-            // Reset pricing summary
             document.getElementById('lp-shipping-cost-display').innerText = '0 دج';
             document.getElementById('lp-shipping-cost-val').value = 0;
             updateTotalLandingPrice();
         }
 
-        // NEW: Event listener for State selection change
         window.onStateChange = () => {
             const code = document.getElementById('lp-customer-state-select').value;
             const munSelect = document.getElementById('lp-customer-mun-select');
@@ -1071,10 +1069,9 @@
             updateTotalLandingPrice();
         };
 
-        // NEW: Live computation of dynamic shipping fees
         window.updateTotalLandingPrice = () => {
             const code = document.getElementById('lp-customer-state-select').value;
-            const shipType = document.getElementById('lp-shipping-type').value; // 'home' or 'desk'
+            const shipType = document.getElementById('lp-shipping-type').value; 
             const prodPrice = Number(document.getElementById('lp-price-val').value || 0);
 
             let shippingCost = 0;
@@ -1092,13 +1089,12 @@
             let prodId = urlParams.get('prod');
             let refId = urlParams.get('ref');
 
-            // Support restructured friendly routing links
             const hash = window.location.hash;
             if (hash.includes('?ref=')) {
                 const [pathPart, queryPart] = hash.split('?');
                 const parts = pathPart.split('/');
                 if(parts.length >= 4) {
-                    prodId = parts[3]; // #/affiliate_name/product_name/productId
+                    prodId = parts[3]; 
                 }
                 refId = new URLSearchParams('?' + queryPart).get('ref');
             }
@@ -1224,11 +1220,11 @@
             document.getElementById('tab-' + tabId).classList.remove('hidden');
             
             document.querySelectorAll('.dash-link').forEach(el => {
-                el.classList.remove('bg-green-50', 'dark:bg-primary/10', 'text-primaryDark', 'border-primary');
-                el.classList.add('text-gray-600', 'border-transparent');
+                el.classList.remove('bg-emerald-50', 'dark:bg-emerald-950/20', 'text-primaryDark', 'border-primary');
+                el.classList.add('text-gray-400', 'border-transparent');
                 if(el.getAttribute('data-tab') === tabId) {
-                    el.classList.add('bg-green-50', 'dark:bg-primary/10', 'text-primaryDark', 'border-primary');
-                    el.classList.remove('text-gray-600', 'border-transparent');
+                    el.classList.add('bg-emerald-50', 'dark:bg-emerald-950/20', 'text-primaryDark', 'border-primary');
+                    el.classList.remove('text-gray-400', 'border-transparent');
                 }
             });
             
@@ -1262,23 +1258,21 @@
                 snap.forEach(doc => orders.push({id: doc.id, ...doc.data()}));
                 orders.sort((a,b) => (b.date?.seconds || 0) - (a.date?.seconds || 0));
 
-                if(orders.length === 0) html = `<div class="text-center py-10 text-gray-400"><i class="fas fa-box-open text-4xl mb-4 opacity-50 block"></i>${t('لا توجد طلبات بعد')}</div>`;
+                if(orders.length === 0) html = `<div class="text-center py-8 text-gray-400"><i class="fas fa-box-open text-2xl mb-2 opacity-50 block"></i>${t('لا توجد طلبات بعد')}</div>`;
                 
                 orders.forEach(o => {
                     if(o.status === 'pending') pend += Number(o.commission);
                     if(o.status === 'confirmed') conf++;
                     
                     let st = '';
-                    if(o.status === 'pending') st = `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-lg text-xs font-bold">${t('معلق')}</span>`;
-                    else if(o.status === 'confirmed') st = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-xs font-bold">${t('تم التوصيل')}</span>`;
-                    else if(o.status === 'cancelled') st = `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-lg text-xs font-bold">${t('ملغاة')}</span>`;
+                    if(o.status === 'pending') st = `<span class="bg-yellow-50 text-yellow-600 dark:bg-yellow-950/25 dark:text-yellow-400 px-2.5 py-1 rounded-lg text-xs font-semibold">${t('معلق')}</span>`;
+                    else if(o.status === 'confirmed') st = `<span class="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/25 dark:text-emerald-400 px-2.5 py-1 rounded-lg text-xs font-semibold">${t('تم التوصيل')}</span>`;
+                    else if(o.status === 'cancelled') st = `<span class="bg-red-50 text-red-600 dark:bg-red-950/25 dark:text-red-400 px-2.5 py-1 rounded-lg text-xs font-semibold">${t('ملغاة')}</span>`;
 
                     const dateStr = formatDate(o.date);
-                    
-                    // Display shipping details in User Dashboard Order List
-                    const shippingDetailText = o.customerMunicipality ? `<div class="text-xs text-primaryDark font-bold mt-1"><i class="fas fa-map-marker-alt"></i> ${o.customerState} - ${o.customerMunicipality} (${o.shippingType === 'home' ? 'توصيل للمنزل' : 'توصيل للمكتب'})</div>` : '';
+                    const shippingDetailText = o.customerMunicipality ? `<div class="text-xs text-primaryDark font-semibold mt-1"><i class="fas fa-map-marker-alt text-[10px]"></i> ${o.customerState} - ${o.customerMunicipality} (${o.shippingType === 'home' ? 'توصيل للمنزل' : 'توصيل للمكتب'})</div>` : '';
 
-                    html += `<div class="p-5 border border-primary/10 dark:border-gray-700 rounded-2xl flex justify-between items-center bg-green-50/20 dark:bg-bgDark/50 mb-3 hover:shadow-md transition-shadow"><div><div class="font-black text-base mb-1 text-gray-800 dark:text-gray-100">${o.customerName}</div><div class="text-xs font-bold text-gray-500 mb-1"><i class="fas fa-box text-primaryDark ml-1"></i> ${o.productName}</div>${shippingDetailText}<div class="text-[11px] text-gray-400 mt-1"><i class="fas fa-clock ml-1"></i> ${dateStr}</div></div><div class="text-left font-black text-lg text-primaryDark">${o.commission} دج<br><div class="mt-2 text-left w-full">${st}</div></div></div>`;
+                    html += `<div class="p-4 border border-slate-100 dark:border-slate-800 rounded-xl flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/40 mb-3"><div><div class="font-bold text-sm text-slate-800 dark:text-slate-100">${o.customerName}</div><div class="text-[11px] font-semibold text-gray-400"><i class="fas fa-box text-primary text-[10px] ml-0.5"></i> ${o.productName}</div>${shippingDetailText}<div class="text-[10px] text-gray-400 mt-1"><i class="fas fa-clock text-[9px] ml-0.5"></i> ${dateStr}</div></div><div class="text-left font-black text-sm text-primaryDark">${o.commission} دج<br><div class="mt-2 text-left w-full">${st}</div></div></div>`;
                 });
                 document.getElementById('user-orders-list').innerHTML = html;
                 document.getElementById('user-pending').innerText = pend;
@@ -1287,7 +1281,7 @@
 
             db.collection("products").onSnapshot(snap => {
                 let html = '';
-                if(snap.empty) html = `<div class="text-center col-span-full py-10 text-gray-400">${t('جاري التحميل...')}</div>`;
+                if(snap.empty) html = `<div class="text-center col-span-full py-8 text-gray-400">${t('جاري التحميل...')}</div>`;
                 snap.forEach(doc => {
                     const p = doc.data();
                     const safeAffName = encodeURIComponent((currentUserData?.name || 'مسوق').replace(/\s+/g, '_'));
@@ -1296,21 +1290,21 @@
                     const productLink = `${window.location.origin}${window.location.pathname}#/${safeAffName}/${safeProdName}/${doc.id}?ref=${currentUser.uid}`;
                     
                     html += `
-                        <div class="border border-primary/20 dark:border-gray-800 rounded-3xl p-5 flex flex-col group bg-white dark:bg-cardDark shadow-sm hover-card-elegant">
-                            <div class="overflow-hidden rounded-2xl mb-5 relative">
-                                <img src="${p.image}" class="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500">
-                                ${p.images && p.images.length > 1 ? `<span class="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] px-2 py-1 rounded-md font-bold"><i class="fas fa-images"></i> +${p.images.length} صور</span>` : ''}
+                        <div class="border border-slate-100 dark:border-slate-800 rounded-2xl p-4 flex flex-col bg-white dark:bg-cardDark shadow-sm hover:shadow-md transition-shadow">
+                            <div class="overflow-hidden rounded-xl mb-4 relative h-40">
+                                <img src="${p.image}" class="w-full h-full object-cover">
+                                ${p.images && p.images.length > 1 ? `<span class="absolute bottom-2 right-2 bg-black/65 text-white text-[9px] px-1.5 py-0.5 rounded font-bold"><i class="fas fa-images"></i> +${p.images.length} صور</span>` : ''}
                             </div>
-                            <h4 class="font-black text-xl text-center mb-3 line-clamp-1 text-gray-800 dark:text-white">${p.name}</h4>
-                            <div class="flex justify-between items-center mb-6">
-                                <span class="text-lg font-black text-gray-800 dark:text-gray-200">${p.price} دج</span>
-                                <span class="text-xs bg-green-50 dark:bg-primary/10 text-primaryDark font-bold px-3 py-1.5 rounded-xl border border-primary/20">${t('عمولة')}: 500 دج</span>
+                            <h4 class="font-bold text-base text-slate-800 dark:text-white mb-2 line-clamp-1">${p.name}</h4>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-sm font-bold text-slate-700 dark:text-slate-300">${p.price} دج</span>
+                                <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-primaryDark font-bold px-2 py-1 rounded border border-emerald-100 dark:border-emerald-900">${t('عمولة')}: 500 دج</span>
                             </div>
                             
-                            <div class="mt-auto bg-green-50/50 dark:bg-bgDark p-2 rounded-xl border border-primary/20 dark:border-gray-700 flex items-center gap-2 group-hover:border-primary/50 transition-colors">
-                                <input type="text" readonly value="${productLink}" class="w-full bg-transparent text-xs outline-none text-gray-500 dir-ltr text-left px-3 font-medium" onclick="this.select()">
-                                <button onclick="window.copyGeneratedLink('${productLink}')" class="bg-gradient-to-r from-primary to-primaryDark text-white w-12 h-10 rounded-lg transition-all transform hover:scale-105 flex items-center justify-center shrink-0 shadow-[0_5px_15px_rgba(74,222,128,0.4)]">
-                                    <i class="fas fa-copy"></i>
+                            <div class="mt-auto bg-slate-50 dark:bg-slate-900 p-1.5 rounded-lg border border-slate-100 dark:border-slate-800 flex items-center gap-1.5">
+                                <input type="text" readonly value="${productLink}" class="w-full bg-transparent text-[11px] outline-none text-gray-400 dir-ltr text-left px-2 font-medium" onclick="this.select()">
+                                <button onclick="window.copyGeneratedLink('${productLink}')" class="bg-primary hover:bg-primaryDark text-white w-9 h-8 rounded-lg transition-all flex items-center justify-center shrink-0">
+                                    <i class="fas fa-copy text-xs"></i>
                                 </button>
                             </div>
                         </div>`;
@@ -1324,22 +1318,22 @@
                 requests.sort((a,b) => (b.date?.seconds || 0) - (a.date?.seconds || 0));
 
                 let html = '';
-                if(requests.length === 0) html = `<div class="text-center py-10 text-gray-400 text-sm"><i class="fas fa-folder-open text-4xl mb-4 opacity-50 block"></i>${t('لا توجد سجلات سحب سابقة')}</div>`;
+                if(requests.length === 0) html = `<div class="text-center py-8 text-gray-400 text-xs"><i class="fas fa-folder-open text-2xl mb-2 opacity-50 block"></i>${t('لا توجد سجلات سحب سابقة')}</div>`;
                 
                 requests.forEach(req => {
                     let statusHtml = '';
-                    if(req.status === 'pending') statusHtml = `<span class="bg-yellow-100 text-yellow-700 px-3 py-1.5 rounded-lg text-xs font-bold">${t('قيد المراجعة')} <i class="fas fa-hourglass-half ml-1"></i></span>`;
-                    else if(req.status === 'paid') statusHtml = `<span class="bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold">${t('تم الدفع')} <i class="fas fa-check ml-1"></i></span>`;
-                    else statusHtml = `<span class="bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold">${t('مرفوض')} <i class="fas fa-times ml-1"></i></span>`;
+                    if(req.status === 'pending') statusHtml = `<span class="bg-yellow-50 text-yellow-600 dark:bg-yellow-950/20 px-2 py-1 rounded-lg text-xs font-semibold">${t('قيد المراجعة')}</span>`;
+                    else if(req.status === 'paid') statusHtml = `<span class="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 px-2 py-1 rounded-lg text-xs font-semibold">${t('تم الدفع')}</span>`;
+                    else statusHtml = `<span class="bg-red-50 text-red-600 dark:bg-red-950/20 px-2 py-1 rounded-lg text-xs font-semibold">${t('مرفوض')}</span>`;
 
                     const dateStr = formatDate(req.date);
 
                     html += `
-                    <div class="bg-white dark:bg-cardDark p-4 rounded-2xl border border-primary/10 dark:border-gray-700 flex justify-between items-center mb-3 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="bg-white dark:bg-cardDark p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex justify-between items-center mb-3">
                         <div>
-                            <div class="font-black text-primaryDark text-lg mb-1">${req.amount} دج</div>
-                            <div class="text-xs font-bold text-gray-500 uppercase tracking-wider" dir="ltr"><i class="fas fa-credit-card ml-1"></i> ${req.method} - ${req.accountDetails}</div>
-                            <div class="text-[11px] text-gray-400 mt-2"><i class="fas fa-clock ml-1"></i> ${dateStr}</div>
+                            <div class="font-bold text-primaryDark text-sm mb-0.5">${req.amount} دج</div>
+                            <div class="text-[10px] text-gray-450 uppercase" dir="ltr"><i class="fas fa-credit-card ml-1"></i> ${req.method} - ${req.accountDetails}</div>
+                            <div class="text-[9px] text-gray-400 mt-1"><i class="fas fa-clock ml-0.5"></i> ${dateStr}</div>
                         </div>
                         <div>${statusHtml}</div>
                     </div>`;
@@ -1351,7 +1345,7 @@
         window.copyGeneratedLink = async (link) => {
             try {
                 await navigator.clipboard.writeText(link);
-                Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'تم النسخ!', showConfirmButton: false, timer: 2000 });
+                Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'تم النسخ!', showConfirmButton: false, timer: 1500 });
             } catch (err) {
                 Swal.fire('خطأ', 'لم نتمكن من نسخ الرابط تلقائياً', 'error');
             }
@@ -1362,7 +1356,7 @@
             const btn = document.getElementById('lp-submit-btn');
             btn.disabled = true; 
             const originalText = btn.innerHTML;
-            btn.innerHTML = `${t('جاري التحميل...')} <div class="loader inline-block align-middle ml-2" style="display:inline-block; border-color: white; border-left-color: transparent; width:16px; height:16px;"></div>`;
+            btn.innerHTML = `${t('جاري التحميل...')} <div class="loader inline-block align-middle ml-2" style="display:inline-block; border-color: white; border-left-color: transparent; width:14px; height:14px;"></div>`;
             
             try {
                 const refId = document.getElementById('lp-ref-id').value;
@@ -1386,10 +1380,10 @@
                     customerName: document.getElementById('lp-customer-name').value, 
                     customerPhone: document.getElementById('lp-customer-phone').value,
                     customerState: selectedStateText, 
-                    customerMunicipality: selectedMunVal, // New Dynamic Field
-                    shippingType: shippingType, // New Dynamic Field
-                    shippingCost: shippingCost, // New Dynamic Field
-                    totalPrice: (priceVal + shippingCost), // Calculated Dynamic Total Price
+                    customerMunicipality: selectedMunVal, 
+                    shippingType: shippingType, 
+                    shippingCost: shippingCost, 
+                    totalPrice: (priceVal + shippingCost), 
                     quantity: 1, 
                     affiliateId: refId || 'direct', 
                     affiliateName: affiliateName, 
@@ -1402,7 +1396,7 @@
                     icon: 'success', 
                     title: 'نجاح', 
                     text: 'تم تسجيل طلبك بنجاح. سيتصل بك فريقنا قريباً لتأكيد التوصيل.', 
-                    confirmButtonColor: '#4ade80'
+                    confirmButtonColor: '#10b981'
                 }).then(() => {
                     window.location.href = window.location.pathname; 
                 });
@@ -1458,7 +1452,7 @@
                 Swal.fire('خطأ', error.message, 'error');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `${t('تأكيد السحب')} <i class="fas fa-paper-plane ml-2"></i>`;
+                btn.innerHTML = `${t('تأكيد السحب')} <i class="fas fa-paper-plane ml-1"></i>`;
             }
         };
 
@@ -1503,25 +1497,25 @@
                     } else if(o.status === 'pending') {
                         pend++;
 
-                        const extraShippingInfo = o.customerMunicipality ? `<br><span class="text-xs text-primaryDark font-bold"><i class="fas fa-map-marker-alt"></i> ${o.customerMunicipality} (${o.shippingType === 'home' ? 'توصيل للمنزل' : 'توصيل للمكتب'})</span>` : '';
-                        const totalOrderPrice = o.totalPrice ? `<br><span class="text-xs text-gray-500 font-bold">إجمالي الفاتورة: ${o.totalPrice} دج</span>` : '';
+                        const extraShippingInfo = o.customerMunicipality ? `<br><span class="text-[10px] text-primaryDark font-semibold"><i class="fas fa-map-marker-alt"></i> ${o.customerMunicipality} (${o.shippingType === 'home' ? 'توصيل للمنزل' : 'توصيل للمكتب'})</span>` : '';
+                        const totalOrderPrice = o.totalPrice ? `<br><span class="text-[10px] text-gray-400">إجمالي الفاتورة: ${o.totalPrice} دج</span>` : '';
 
                         html += `
-                        <tr class="border-b dark:border-gray-800 text-sm hover:bg-green-50 dark:hover:bg-bgDark transition-colors">
-                            <td class="p-4 text-blue-600 font-bold">${o.affiliateName || t('مباشر')}</td>
-                            <td class="p-4">${o.customerName}<br><span class="text-xs text-gray-400" dir="ltr">${o.customerPhone}</span><br><span class="text-xs text-gray-400">${o.customerState}${extraShippingInfo}${totalOrderPrice}</span></td>
-                            <td class="p-4 font-bold text-gray-700 dark:text-gray-300">${o.productName}</td>
-                            <td class="p-4 text-primaryDark font-black text-lg">${o.commission} دج</td>
-                            <td class="p-4 text-center space-y-2">
-                                <button onclick="window.updateAdminOrder(this, '${doc.id}', '${o.affiliateId}', 'confirmed')" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-lg shadow-md w-full block transform hover:scale-105 transition-transform">${t('تأكيد التوصيل')}</button>
-                                <button onclick="window.updateAdminOrder(this, '${doc.id}', '${o.affiliateId}', 'cancelled')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-md w-full block transform hover:scale-105 transition-transform">${t('إلغاء الطلب')}</button>
+                        <tr class="border-b dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+                            <td class="p-3 text-emerald-600 font-bold">${o.affiliateName || t('مباشر')}</td>
+                            <td class="p-3 text-xs">${o.customerName}<br><span class="text-[10px] text-gray-400" dir="ltr">${o.customerPhone}</span><br><span class="text-[10px] text-gray-400">${o.customerState}${extraShippingInfo}${totalOrderPrice}</span></td>
+                            <td class="p-3 font-semibold text-slate-700 dark:text-gray-300">${o.productName}</td>
+                            <td class="p-3 text-primaryDark font-black text-sm">${o.commission} دج</td>
+                            <td class="p-3 text-center space-y-1">
+                                <button onclick="window.updateAdminOrder(this, '${doc.id}', '${o.affiliateId}', 'confirmed')" class="bg-primary hover:bg-primaryDark text-white px-3 py-1 rounded shadow-sm w-full text-[10px] transition-all">${t('تأكيد التوصيل')}</button>
+                                <button onclick="window.updateAdminOrder(this, '${doc.id}', '${o.affiliateId}', 'cancelled')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded shadow-sm w-full text-[10px] transition-all">${t('إلغاء الطلب')}</button>
                             </td>
                         </tr>`;
                     }
                 });
                 document.getElementById('admin-pending-count').innerText = pend;
                 document.getElementById('admin-total-paid').innerText = paid + ' دج';
-                document.getElementById('admin-orders-list').innerHTML = html || `<tr><td colspan="5" class="text-center p-8 text-gray-400"><i class="fas fa-check-circle text-3xl block mb-2 opacity-50"></i>${t('لا توجد طلبات بعد')}</td></tr>`;
+                document.getElementById('admin-orders-list').innerHTML = html || `<tr><td colspan="5" class="text-center p-6 text-gray-400"><i class="fas fa-check-circle text-2xl block mb-1 opacity-50"></i>${t('لا توجد طلبات بعد')}</td></tr>`;
             });
 
             db.collection("products").onSnapshot(snap => {
@@ -1529,7 +1523,7 @@
                 let html = ''; adminProdsCache = {};
                 snap.forEach(doc => {
                     const p = doc.data(); adminProdsCache[doc.id] = p;
-                    html += `<tr class="border-b dark:border-gray-800 hover:bg-green-50 dark:hover:bg-bgDark transition-colors"><td class="p-4"><img src="${p.image}" class="w-14 h-14 rounded-xl object-cover shadow-sm"></td><td class="p-4 font-black">${p.name}</td><td class="p-4 font-black text-primaryDark text-lg">${p.price} دج</td><td class="p-4"><button onclick="window.editProduct('${doc.id}')" class="text-blue-500 hover:text-blue-600 mx-2 text-lg transform hover:scale-110 transition-transform"><i class="fas fa-edit"></i></button><button onclick="window.deleteProduct('${doc.id}')" class="text-red-500 hover:text-red-600 text-lg transform hover:scale-110 transition-transform"><i class="fas fa-trash"></i></button></td></tr>`;
+                    html += `<tr class="border-b dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3"><img src="${p.image}" class="w-10 h-10 rounded-lg object-cover"></td><td class="p-3 font-semibold">${p.name}</td><td class="p-3 font-bold text-primaryDark">${p.price} دج</td><td class="p-3 text-center"><button onclick="window.editProduct('${doc.id}')" class="text-blue-500 hover:text-blue-600 mx-1"><i class="fas fa-edit text-xs"></i></button><button onclick="window.deleteProduct('${doc.id}')" class="text-red-500 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button></td></tr>`;
                 });
                 document.getElementById('admin-products-table-body').innerHTML = html;
             });
@@ -1539,7 +1533,7 @@
                 let html = '';
                 snap.forEach(doc => {
                     const u = doc.data();
-                    html += `<tr class="border-b dark:border-gray-800 hover:bg-green-50 dark:hover:bg-bgDark transition-colors"><td class="p-4 font-black">${u.name}</td><td class="p-4 text-gray-500">${u.email}</td><td class="p-4 font-black text-primaryDark text-lg">${u.balance} دج</td><td class="p-4 text-${u.isBanned?'red':'green'}-500 font-bold">${u.isBanned?t('محظور'):t('نشط')}</td><td class="p-4"><button onclick="window.toggleBanUser('${doc.id}', ${!!u.isBanned})" class="bg-${u.isBanned?'green':'red'}-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow-md transform hover:scale-105 transition-transform">${u.isBanned?t('فك حظر'):t('حظر')}</button></td></tr>`;
+                    html += `<tr class="border-b dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3 font-semibold">${u.name}</td><td class="p-3 text-gray-400 text-[11px]">${u.email}</td><td class="p-3 font-bold text-primaryDark">${u.balance} دج</td><td class="p-3 text-${u.isBanned?'red':'emerald'}-500 font-bold">${u.isBanned?t('محظور'):t('نشط')}</td><td class="p-3 text-center"><button onclick="window.toggleBanUser('${doc.id}', ${!!u.isBanned})" class="bg-${u.isBanned?'emerald':'red'}-500 text-white px-2.5 py-1 rounded text-[10px] font-semibold">${u.isBanned?t('فك حظر'):t('حظر')}</button></td></tr>`;
                 });
                 document.getElementById('admin-users-table-body').innerHTML = html;
             });
@@ -1548,9 +1542,9 @@
                 let html = '';
                 snap.forEach(doc => {
                     const t_ticket = doc.data();
-                    html += `<div class="bg-green-50 dark:bg-bgDark p-5 rounded-2xl border border-primary/20 dark:border-gray-700 shadow-sm"><div class="flex items-center gap-2 mb-2"><i class="fas fa-user-circle text-primaryDark text-2xl"></i><b class="font-black text-lg">${t_ticket.name}</b></div><div class="text-sm text-gray-500 mb-3" dir="ltr"><i class="fas fa-phone mr-1"></i> ${t_ticket.phone}</div><p class="text-sm p-4 bg-white dark:bg-cardDark border border-gray-200 dark:border-gray-600 rounded-xl break-words leading-relaxed font-medium">${t_ticket.description}</p></div>`;
+                    html += `<div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700"><div class="flex items-center gap-1.5 mb-1"><i class="fas fa-user-circle text-primary text-xl"></i><b class="font-bold text-sm">${t_ticket.name}</b></div><div class="text-[11px] text-gray-400 mb-2" dir="ltr"><i class="fas fa-phone mr-0.5 text-[9px]"></i> ${t_ticket.phone}</div><p class="text-xs p-3 bg-white dark:bg-cardDark border border-slate-100 dark:border-slate-800 rounded-lg break-words leading-relaxed font-medium">${t_ticket.description}</p></div>`;
                 });
-                document.getElementById('admin-support-list').innerHTML = html || `<div class="col-span-full text-center text-gray-500 py-8"><i class="fas fa-envelope-open text-3xl mb-2 opacity-50 block"></i>${t('لا توجد طلبات بعد')}</div>`;
+                document.getElementById('admin-support-list').innerHTML = html || `<div class="col-span-full text-center text-gray-400 py-6"><i class="fas fa-envelope-open text-2xl mb-1 opacity-50 block"></i>${t('لا توجد طلبات بعد')}</div>`;
             });
 
             db.collection("withdraw_requests").orderBy('date', 'desc').onSnapshot(snap => {
@@ -1561,38 +1555,37 @@
                     
                     if(req.status === 'pending') {
                         actions = `
-                            <select onchange="window.updateWithdrawStatus('${doc.id}', '${req.uid}', ${req.amount}, this.value, this)" class="bg-white dark:bg-bgDark border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm font-bold w-full outline-none shadow-sm cursor-pointer hover:border-primary transition-colors">
+                            <select onchange="window.updateWithdrawStatus('${doc.id}', '${req.uid}', ${req.amount}, this.value, this)" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-xs font-semibold w-full outline-none shadow-sm cursor-pointer hover:border-primary transition-colors">
                                 <option value="pending" selected>${t('قيد المراجعة')} ⏳</option>
-                                <option value="paid" class="text-green-600 font-black">${t('تم الدفع')} ✔️</option>
-                                <option value="rejected" class="text-red-600 font-black">${t('رفض الدفع')} ❌</option>
+                                <option value="paid" class="text-emerald-600 font-bold">${t('تم الدفع')} ✔️</option>
+                                <option value="rejected" class="text-red-600 font-bold">${t('رفض الدفع')} ❌</option>
                             </select>
                         `;
                     } else if(req.status === 'paid') {
-                        actions = `<span class="bg-green-100 text-green-700 px-4 py-2 rounded-xl text-sm font-black block w-full shadow-sm">${t('دفع مكتمل')} ✔️</span>`;
+                        actions = `<span class="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 px-3 py-1 rounded-lg text-xs font-bold block w-full text-center">${t('دفع مكتمل')} ✔️</span>`;
                     } else {
-                        actions = `<span class="bg-red-100 text-red-700 px-4 py-2 rounded-xl text-sm font-black block w-full shadow-sm">${t('تم الرفض')} ❌</span>`;
+                        actions = `<span class="bg-red-50 text-red-600 dark:bg-red-950/20 px-3 py-1 rounded-lg text-xs font-bold block w-full text-center">${t('تم الرفض')} ❌</span>`;
                     }
 
                     const dateStr = formatDate(req.date);
 
                     html += `
-                    <tr class="border-b dark:border-gray-800 text-sm hover:bg-green-50 dark:hover:bg-bgDark transition-colors">
-                        <td class="p-4">
-                            <div class="font-black text-primaryDark text-base mb-1">${req.userName}</div>
-                            <div class="text-gray-500 text-xs mb-1"><i class="fas fa-envelope ml-1"></i> ${req.userEmail}</div>
-                            <div class="text-gray-500 font-bold text-xs" dir="ltr"><i class="fas fa-phone mr-1"></i> ${req.userPhone}</div>
-                            <div class="text-[11px] text-gray-400 mt-2"><i class="fas fa-calendar ml-1"></i> ${dateStr}</div>
+                    <tr class="border-b dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors text-xs">
+                        <td class="p-3">
+                            <div class="font-bold text-slate-800 dark:text-white mb-0.5">${req.userName}</div>
+                            <div class="text-gray-400 text-[10px]"><i class="fas fa-envelope ml-1"></i> ${req.userEmail}</div>
+                            <div class="text-gray-400 text-[10px]" dir="ltr"><i class="fas fa-phone mr-1"></i> ${req.userPhone}</div>
+                            <div class="text-[9px] text-gray-450 mt-1"><i class="fas fa-calendar ml-0.5"></i> ${dateStr}</div>
                         </td>
-                        <td class="p-4 font-black text-xl text-primaryDark">${req.amount} دج</td>
-                        <td class="p-4 font-bold uppercase tracking-wider"><span class="${req.method === 'flexy' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'} px-3 py-1.5 rounded-lg shadow-sm">${req.method}</span></td>
-                        <td class="p-4 text-gray-800 dark:text-gray-200 font-black tracking-widest text-base" dir="ltr">${req.accountDetails}</td>
-                        <td class="p-4 text-center w-48">${actions}</td>
+                        <td class="p-3 font-bold text-primaryDark text-sm">${req.amount} دج</td>
+                        <td class="p-3"><span class="${req.method === 'flexy' ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-600'} px-2 py-1 rounded font-bold">${req.method}</span></td>
+                        <td class="p-3 font-bold text-slate-800 dark:text-slate-200 tracking-wider" dir="ltr">${req.accountDetails}</td>
+                        <td class="p-3 text-center w-36">${actions}</td>
                     </tr>`;
                 });
-                document.getElementById('admin-withdrawals-list').innerHTML = html || `<tr><td colspan="5" class="text-center p-8 text-gray-500"><i class="fas fa-check-circle text-3xl mb-2 block opacity-50"></i>${t('لا توجد طلبات بعد')}</td></tr>`;
+                document.getElementById('admin-withdrawals-list').innerHTML = html || `<tr><td colspan="5" class="text-center p-6 text-gray-400"><i class="fas fa-check-circle text-2xl mb-1 block opacity-50"></i>${t('لا توجد طلبات بعد')}</td></tr>`;
             });
 
-            // NEW: Fetch and populate current dynamic shipping settings JSON inside Admin Tab
             db.collection('settings').doc('shipping').get().then(doc => {
                 const inputEl = document.getElementById('shipping-json-input');
                 if(doc.exists && doc.data().json) {
@@ -1608,18 +1601,16 @@
             });
         }
 
-        // NEW: Save Shipping Script / JSON Settings to Firestore
         window.saveShippingSettings = async (e) => {
             e.preventDefault();
             const jsonText = document.getElementById('shipping-json-input').value;
             try {
-                // Validate JSON syntax first
                 const parsed = JSON.parse(jsonText);
                 await db.collection('settings').doc('shipping').set({ json: jsonText });
                 currentShippingData = parsed;
                 Swal.fire('نجاح', 'تم حفظ وتحديث سكريبت أسعار الشحن بنجاح.', 'success');
             } catch(err) {
-                Swal.fire('خطأ في الصياغة', 'الملف أو السكريبت المكتوب لا يتوافق مع شروط صياغة JSON البرمجية. يرجى التأكد من الأقواس والفواصل.', 'error');
+                Swal.fire('خطأ في الصياغة', 'الملف لا يتوافق مع شروط صياغة JSON البرمجية. يرجى التأكد من الأقواس والفواصل.', 'error');
             }
         };
 
@@ -1631,7 +1622,7 @@
             const confirm = await Swal.fire({
                 title: 'تأكيد الإجراء', text: actionText, icon: 'warning',
                 showCancelButton: true, confirmButtonText: 'تأكيد', cancelButtonText: t('تراجع'),
-                confirmButtonColor: newStatus === 'paid' ? '#4ade80' : '#ef4444'
+                confirmButtonColor: newStatus === 'paid' ? '#10b981' : '#ef4444'
             });
 
             if(confirm.isConfirmed) {
@@ -1658,11 +1649,10 @@
             }
         };
 
-        // NEW: Updated Product Submission to Compress and Upload Multiple High-Quality Images
         window.submitProduct = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('prod-submit-btn');
-            btn.disabled = true; btn.innerHTML = `${t('جاري...')} <i class="fas fa-spinner fa-spin ml-2"></i>`;
+            btn.disabled = true; btn.innerHTML = `${t('جاري...')} <i class="fas fa-spinner fa-spin ml-1"></i>`;
             try {
                 const id = document.getElementById('prod-id').value;
                 const name = document.getElementById('prod-name').value;
@@ -1680,11 +1670,11 @@
                                 const img = new Image();
                                 img.onload = () => {
                                     const cvs = document.createElement('canvas');
-                                    let w = img.width, h = img.height, max = 600; // Optimal High Quality constraint
+                                    let w = img.width, h = img.height, max = 600; 
                                     if(w>h && w>max){ h*=max/w; w=max; } else if(h>max){ w*=max/h; h=max; }
                                     cvs.width=w; cvs.height=h;
                                     cvs.getContext('2d').drawImage(img,0,0,w,h);
-                                    resolve(cvs.toDataURL('image/jpeg',0.85)); // 0.85 compression ratio
+                                    resolve(cvs.toDataURL('image/jpeg',0.85)); 
                                 };
                                 img.onerror = () => resolve('');
                                 img.src = ev.target.result;
@@ -1699,7 +1689,7 @@
                 
                 if(imagesArray.length > 0) {
                     data.images = imagesArray;
-                    data.image = imagesArray[0]; // set primary cover (maintains backwards compatibility)
+                    data.image = imagesArray[0]; 
                 }
                 
                 if (id) { 
@@ -1716,7 +1706,7 @@
                 document.getElementById('prod-id').value = '';
                 Swal.fire('نجاح', 'تم حفظ المنتج بنجاح', 'success');
             } catch(err) { Swal.fire('خطأ', err.message, 'error'); } 
-            finally { btn.innerHTML = `${t('حفظ المنتج')} <i class="fas fa-save ml-2"></i>`; btn.disabled = false; }
+            finally { btn.innerHTML = `${t('حفظ المنتج')} <i class="fas fa-save ml-1"></i>`; btn.disabled = false; }
         };
 
         window.editProduct = (id) => {
@@ -1746,7 +1736,7 @@
             const text = isConfirm ? 'هل استلم الزبون الطلبية؟ سيتم إضافة العمولة للمسوق.' : 'هل أنت متأكد من إلغاء هذه الطلبية؟';
             const confirmBtn = isConfirm ? t('تأكيد التوصيل') : t('إلغاء الطلب');
 
-            if((await Swal.fire({title: title, text: text, icon: isConfirm?'question':'warning', showCancelButton:true, confirmButtonText:confirmBtn, cancelButtonText:t('تراجع'), confirmButtonColor: isConfirm?'#4ade80':'#ef4444'})).isConfirmed){
+            if((await Swal.fire({title: title, text: text, icon: isConfirm?'question':'warning', showCancelButton:true, confirmButtonText:confirmBtn, cancelButtonText:t('تراجع'), confirmButtonColor: isConfirm?'#10b981':'#ef4444'})).isConfirmed){
                 btn.disabled=true; btn.innerText=t('جاري...');
                 await db.collection("orders").doc(oId).update({ status: status });
                 if(isConfirm && uId !== 'direct') {
@@ -1759,7 +1749,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             autoTranslate();
 
-            // Load global shipping configurations once at startup
             db.collection('settings').doc('shipping').get().then(doc => {
                 if(doc.exists && doc.data().json) {
                     try {
@@ -1783,8 +1772,8 @@
 
             document.querySelectorAll('.reveal-on-scroll').forEach(el => {
                 el.style.opacity = '0';
-                el.style.transform = 'translateY(50px)';
-                el.style.transition = 'all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
                 observer.observe(el);
             });
         });
